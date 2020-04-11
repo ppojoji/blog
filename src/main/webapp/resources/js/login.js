@@ -1,10 +1,6 @@
 $(document).ready(function() {
 	
 	$('#loginForm').submit(function(e) {
-		/*
-		 * default
-		 * <a href="http://ddd">clkc</
-		 */
 		e.preventDefault()
 		$.ajax({
 			url:'/blog/api/login',
