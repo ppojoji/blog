@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BlogPostMapper">
+	<!-- 
+		integer -> java.lang.Integer
+		_int -> int, _long, _double
+		long, double, short -. java.lang.Long ...
+		
+		map : java.util.Map
+	 -->
+	<select id="findPostBySeq" parameterType="integer" resultType="naver.ppojoji.blog.dto.Post">
+	select
+		seq,
+		title,
+		contents,
+		creation_date as creationDate,
+		view_count as viewCount,
+		writer as writerSeq
+	from
+		TB_POST
+	where
+		seq = #{id}
+	</select>
+	
+	<select id="findAllPost" resultType="naver.ppojoji.blog.dto.Post">
+	select
+		seq,
+		title,
+		contents,
+		creation_date as creationDate,
+		view_count as viewCount
+	from
+		TB_POST
+	
+	</select>
+	<insert id="insertPost" parameterType="map">
+		insert into TB_POST (
+			seq,
+			TITLE,
+			contents,
+			writer
+		) values (
+			tb_post_seq.nextval,
+			#{title},
+			#{contents},
+			201
+		)
+	</insert>
+	<update id="updatePost" parameterType="map">
+		update tb_Post
+		set
+			title = #{title}
+			, contents = #{contents}
+		where
+			seq = #{postSeq} 
+	</update>
+	<delete id="deletePost" parameterType="Integer">
+		delete from tb_Post
+		where seq=#{id}
+	</delete>
+	<update id="viewCount" parameterType="Integer">
+		update TB_POST 
+		set view_count = view_count + 1
+		where seq = #{seq}
+	</update>
+</mapper>
