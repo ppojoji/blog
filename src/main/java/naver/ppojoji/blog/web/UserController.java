@@ -3,6 +3,7 @@ package naver.ppojoji.blog.web;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,9 @@ public class UserController {
 			method = RequestMethod.POST , 
 			produces = Value.APPLICATION_JSON_CHARSET_UTF_8 )
 	@ResponseBody
-	public String login(@RequestParam String id ,@RequestParam String pwd, HttpSession session) throws JsonProcessingException {
+	public String login(@RequestParam String id ,@RequestParam String pwd, 
+			HttpServletRequest req,
+			HttpSession session) throws JsonProcessingException {
 		User loginUser = userService.login(id, pwd);
 		
 		Map<String, Object> res = new HashMap<>();
@@ -45,8 +48,16 @@ public class UserController {
 			res.put("success", false);
 		} else {
 			// 로그인 성공 // session에 담아줌!
-			session.setAttribute("LOGIN_USER", loginUser);
+			String nextUrl = (String) session.getAttribute(Value.KEY_NEXT_URL);
+			if(nextUrl == null)
+			{
+				nextUrl = req.getContextPath();
+			}
+			// TODO 세션에는 진짜 꼭 필요한 정보만 담아야 함 - why (세선 클러스터링이라는게 있습니다)
+			session.removeAttribute(Value.KEY_NEXT_URL);
+ 			session.setAttribute(Value.KEY_LOGIN_USER, loginUser);
 			res.put("success", true);
+			res.put("nextUrl",nextUrl);
 		}
 		return om.writeValueAsString(res);
 	}
@@ -67,5 +78,24 @@ public class UserController {
 		res.put("user", user);
 		user.setPwd(null);
 		return om.writeValueAsString(res);
+	}
+	
+	@RequestMapping(value="/article/api/userDelete", method= RequestMethod.POST, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@ResponseBody
+	public String userDelete(@RequestParam String id ,@RequestParam String email) throws JsonProcessingException {
+		this.userService.userDelete(id,email);
+		Map<String, Object> res = new HashMap<>();
+		res.put("success",true);
+		return om.writeValueAsString(res); 
+	}
+	
+	@RequestMapping(value="/logout", method= RequestMethod.GET)
+	@ResponseBody
+	public String logout(HttpSession session) throws JsonProcessingException {
+		session.invalidate();
+		// FIXME 로그인 한 시간, 로그아웃한 시간을 기록하고 싶습니다. 
+		// 사용시간을 지원하려면 테이블을 어떻게 만들어야 할지....
+//		this.userService.userDelete(id);
+		return "logout"; 
 	}
 }

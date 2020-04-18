@@ -3,7 +3,13 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="UserMapper">
-	<select id="findUser" parameterType="Integer" resultType="naver.ppojoji.blog.dto.User">
+	<resultMap type="User" id="UserMap">
+		<id column="seq" property="seq"/>
+		<result column="id" property="id"/>
+		<result column="pwd" property="pwd"/>
+		<result column="email" property="email"/>
+	</resultMap>
+	<select id="findUser" parameterType="Integer" resultType="User">
 		select 
 			seq,
 			id,
@@ -12,7 +18,16 @@
 		from tb_user
 		where seq = #{id}	
 	</select>
-	<select id="login" parameterType="map" resultType="naver.ppojoji.blog.dto.User">
+	<select id="findUserV1" parameterType="Integer" resultMap="UserMap">
+		select 
+			seq,
+			id,
+			pwd,
+			email
+		from tb_user
+		where seq = #{id}	
+	</select>
+	<select id="login" parameterType="map" resultType="User">
 		select 
 		 	seq,
 		 	id,
@@ -22,4 +37,9 @@
 		 where id = #{id}
 		 and pwd = #{pwd}	
 	</select>
+	<delete id="userDelete" parameterType="map">
+		delete from tb_user
+			where id = #{id}
+				and email = #{email}
+	</delete>
 </mapper>

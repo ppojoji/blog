@@ -20,4 +20,7 @@ public class UserService {
 		System.out.println("로그인? " + user);
 		return user;  
 	}
+	public void userDelete(String id , String email) {
+		userDao.userDelete(id,email);
+	}
 }

@@ -2,8 +2,6 @@ package naver.ppojoji.blog.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,22 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import naver.ppojoji.blog.dao.BlogDao;
-import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations ={"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-public class TestBlogRepository {
+public class TestUserDao {
 
 	@Autowired
-	BlogDao blogRepo; 
+	UserDao userDao;
 	
 	@Test
 	public void test() {
-		Post post = blogRepo.findPostBySeq(5010);
-		assertNotNull(post);
-		assertEquals(5010, post.getSeq().intValue());
-		assertNotNull(post.getWriter());
-		System.out.println(post);
+		User user = userDao.findUser(204);
+		assertNotNull(user);
+		assertEquals(204, user.getSeq());
+		assertEquals("test2@naver.com", user.getEmail());
+		
 	}
+
 }

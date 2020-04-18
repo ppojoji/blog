@@ -3,9 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<jsp:include page="/WEB-INF/views/common/common-meta.jsp"></jsp:include>
 <title>Insert title here</title>
 <jsp:include page="/WEB-INF/views/common/common-import.jsp"></jsp:include>
+
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 
 <!-- <link href="/blog/resources/css/read.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/blog/resources/js/read.js"></script> -->
@@ -73,6 +77,10 @@ $("#btnSubmit").click( function(){
 		}
 	})
 } )
+
+$(document).ready(function() {
+  $('#content').summernote();
+});
 </script>
 
 </html>

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<jsp:include page="/WEB-INF/views/common/common-meta.jsp"></jsp:include>
 <title>Insert title here</title>
 <jsp:include page="/WEB-INF/views/common/common-import.jsp"></jsp:include>
 
@@ -30,6 +30,7 @@
 	<jsp:include page="/WEB-INF/views/common/common-header.jsp"></jsp:include>
 		<%-- <input type="hidden" id="pid" value="${ppp.seq}"> --%>
 	<div id="blog-detail">
+		<!-- FIXME  글제목, 글내용, 작성자, 조회수, 작성일 정보를 화면에 추가해봅니다. -->
 		<div id="blog-detail-body">
 			<div id="title"></div>
 			<div id="content"></div>

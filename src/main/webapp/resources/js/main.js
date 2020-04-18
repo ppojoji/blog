@@ -30,7 +30,13 @@ $(document).ready(function(){
 				
 				// $('#blog-list-body').append('<div><a href="/blog/article/' + res[i].seq + '">'+ res[i].title + '</a></div>')
 				// es6 multiline text 문법
-				$('#blog-list-body').append(`<div><a href="/blog/article/pageReadPost/${res[i].seq}">${res[i].title}</a></div>`)
+				// $('#blog-list-body').append(`<div><a href="/blog/article/pageReadPost/${res[i].seq}">${res[i].title}</a></div>`)
+				$('#blog-list-body').append(
+					`<tr>
+						<td><a href="/blog/article/pageReadPost/${res[i].seq}">${res[i].title}</a></td>
+						<td>${res[i].viewCount}</td>
+						<td>${res[i].writer.id}</td>
+					</tr>`)
 			}
 		},
 		error(e, res){

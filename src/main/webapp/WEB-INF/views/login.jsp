@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<jsp:include page="/WEB-INF/views/common/common-meta.jsp"></jsp:include>
 <title>로그인</title>
 <jsp:include page="/WEB-INF/views/common/common-import.jsp"></jsp:include>
 

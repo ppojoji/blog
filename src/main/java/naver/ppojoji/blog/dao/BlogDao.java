@@ -39,9 +39,6 @@ public class BlogDao {
 	*/
 	public Post findPostBySeq(int postSeq) {
 		Post post = session.selectOne("BlogPostMapper.findPostBySeq", postSeq);
-		Integer writerSeq = post.getWriterSeq();
-		User writer = userDao.findUser(writerSeq); // !!!
-		post.setWriter(writer);
 		return post;
 		// 쌩 쿼리 - XXXXXXXXX
 		/*

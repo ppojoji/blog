@@ -16,8 +16,7 @@ public class Post {
 	private int viewCount;
 	
 	private User writer;
-	/* FIXME 아래 멤버변수는 일단 임시로 존재합니다. 나중에 resultMap 을 적용해서 없앨겁니다.*/
-	private Integer writerSeq;
+	
 	public Post() {
 	}
 	
@@ -66,14 +65,13 @@ public class Post {
 	public void setWriter(User writer) {
 		this.writer = writer;
 	}
-	/* FIXME 아래 메소드는 일단 임시로 존재합니다. 나중에 resultMap 을 적용해서 없을겁니다.*/
-	public Integer getWriterSeq() {
-		return writerSeq;
-	}
 
-	/* FIXME 아래 메소드는 일단 임시로 존재합니다. 나중에 resultMap 을 적용해서 없을겁니다.*/
-	public void setWriterSeq(Integer writeSeq) {
-		this.writerSeq = writeSeq;
+	@Override
+	public String toString() {
+		return "Post [seq=" + seq + ", title=" + title + ", contents=" + contents + ", creationDate=" + creationDate
+				+ ", viewCount=" + viewCount + ", writer=" + writer + "]";
 	}
+	
+	
 	
 }

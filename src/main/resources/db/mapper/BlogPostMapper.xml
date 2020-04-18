@@ -3,6 +3,24 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="BlogPostMapper">
+	<resultMap type="Post" id="PostMap">
+		<id column="seq" property="seq"/>
+		<result column="title" property="title" />
+		<result column="contents" property="contents"/>
+		<result column="creation_date" property="creationDate"/>
+		<result column="view_count" property="viewCount"/>
+		<!-- <result column="writer" property="writerSeq"/> -->
+		<association 
+			column="writer" 
+			property="writer" 
+			select="UserMapper.findUserV1"/>
+		<!-- join query!!! FIXME
+		<association 
+			column="writer" 
+			property="writer" 
+			resultMap="UserMapper.UserMap"/>
+		 -->
+	</resultMap>
 	<!-- 
 		integer -> java.lang.Integer
 		_int -> int, _long, _double
@@ -10,7 +28,7 @@
 		
 		map : java.util.Map
 	 -->
-	<select id="findPostBySeq" parameterType="integer" resultType="naver.ppojoji.blog.dto.Post">
+	<!-- <select id="findPostBySeq" parameterType="integer" resultType="naver.ppojoji.blog.dto.Post">
 	select
 		seq,
 		title,
@@ -22,15 +40,28 @@
 		TB_POST
 	where
 		seq = #{id}
-	</select>
-	
-	<select id="findAllPost" resultType="naver.ppojoji.blog.dto.Post">
-	select
+	</select> -->
+	<sql id="select_post">
 		seq,
 		title,
 		contents,
-		creation_date as creationDate,
-		view_count as viewCount
+		creation_date,
+		view_count,
+		writer
+	</sql>
+	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
+	select
+		<include refid="select_post"></include>
+	from
+		TB_POST
+	
+	where
+		seq = #{id}
+	</select>
+	
+	<select id="findAllPost" resultMap="PostMap">
+	select
+		<include refid="select_post"></include>
 	from
 		TB_POST
 	

@@ -13,7 +13,7 @@ import naver.ppojoji.blog.dto.User;
 public class UserDao {
 	@Autowired SqlSession session;
 	public User findUser(int userSeq) {
-		return session.selectOne("UserMapper.findUser",userSeq);
+		return session.selectOne("UserMapper.findUserV1",userSeq);
 	}
 	public User login(String id, String pwd) {
 		Map<String, Object> map = new HashMap<>();
@@ -21,5 +21,11 @@ public class UserDao {
 		map.put("pwd", pwd);
 		return session.selectOne("UserMapper.login", map);
 		
+	}
+	public void userDelete(String id, String email) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("id", id);
+		map.put("email", email);
+		session.delete("UserMapper.userDelete", map);
 	}
 }
