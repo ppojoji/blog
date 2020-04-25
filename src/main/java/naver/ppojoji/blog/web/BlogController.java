@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -100,11 +101,12 @@ public class BlogController {
 	@ResponseBody
 	public String insertPost(
 			@RequestParam String title,
-			@RequestParam String contents) throws JsonProcessingException {
+			@RequestParam String contents,
+			@RequestParam List<MultipartFile> files) throws JsonProcessingException {
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다.
 		System.out.println(title);
 		System.out.println(contents);
-		blogServise.insertPost(title, contents);
+		blogServise.insertPost(title, contents, files);
 		
 		Map<String, Object> res = new HashMap<>();
 		res.put("success",true);

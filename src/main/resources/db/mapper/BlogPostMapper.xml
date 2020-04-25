@@ -76,8 +76,11 @@
 			tb_post_seq.nextval,
 			#{title},
 			#{contents},
-			201
+			204
 		)
+		<selectKey keyProperty="seq" resultType="integer" order="AFTER">
+			SELECT TB_POST_SEQ.currval FROM dual
+		</selectKey>
 	</insert>
 	<update id="updatePost" parameterType="map">
 		update tb_Post

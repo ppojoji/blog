@@ -43,7 +43,9 @@
 		<div>
 			<textarea class="form-elem" id="content">${ppp.contents}</textarea>
 		</div>
-		
+		<div>
+			<input type="file" name="files" id="file">
+		</div>
 		<div>
 			<button id="btnSubmit">글작성</button>
 		</div>
@@ -61,14 +63,24 @@ $("#btnSubmit").click( function(){
 	} else {
 		url = '/blog/article/api/write'
 	}
+	var form = new FormData()
+	
+	form.append('title',$("#title").val())
+	form.append('contents', $("#content").val())
+	form.append('postSeq', $("#postSeq").val())
+	form.append('files', $('#file')[0].files[0])
+	
 	$.ajax({
 		url: url,
 		method:'POST',
-		data: {
-			title: $("#title").val(), // input, select, textarea..
-			contents:$("#content").val(),
-			postSeq:$("#postSeq").val()
-		},
+		data: form,
+		// data: {
+		//	title: $("#title").val(), // input, select, textarea..
+		//	contents:$("#content").val(),
+		//	postSeq:$("#postSeq").val()
+		//},
+		processData : false,
+        contentType : false,
 		success: function(res){
 			if(res.success)
 			{

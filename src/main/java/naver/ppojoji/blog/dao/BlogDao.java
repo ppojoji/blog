@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.User;
@@ -66,13 +67,19 @@ public class BlogDao {
 		return session.selectList("BlogPostMapper.findAllPost");
 	}
 
-	public void insertPost(String title, String contents) {
+	public Integer insertPost(String title, String contents) {
 		// FIXME 글쓴 사람에 대한 연결 정보가 없어서 BlogMapper.xml 파일에 201번 사용자를 지정해 놓았습니다.
 		// 1. map 으로 감싸서 보내기
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("title", title);
 		param.put("contents", contents);
 		session.insert("BlogPostMapper.insertPost", param);
+		
+		System.out.println("gen seq: " + param.get("seq"));
+		for (String k : param.keySet()) {
+			System.out.println(" >> " + k + " : " + param.get(k));
+		}
+		return (Integer) param.get("seq");
 		// 
 //		Post p = new Post();
 //		p.setTitle(title);

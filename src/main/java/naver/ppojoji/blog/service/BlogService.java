@@ -6,14 +6,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.dao.BlogDao;
+import naver.ppojoji.blog.dao.FileDao;
 import naver.ppojoji.blog.dto.Post;
 
 @Service
 public class BlogService {
 	@Autowired
 	BlogDao blogDao;
+	
+	@Autowired
+	FileUploadService fileService;
 	/*
 	List<Post> list = new ArrayList<>();
 	{
@@ -51,8 +56,11 @@ public class BlogService {
 	 * @param title
 	 * @param contents
 	 */
-	public void insertPost(String title, String contents) {
-		blogDao.insertPost(title,contents);
+	public void insertPost(String title, String contents, List<MultipartFile> files) {
+		Integer postSeq = blogDao.insertPost(title,contents);
+//		Integer postSeq = -1;
+		fileService.uploadSave(postSeq, files);
+		
 		//long seq = nextSeq();
 		//list.add(new Post(seq, title, contents, new Date(), 0));
 	}

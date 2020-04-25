@@ -32,6 +32,8 @@
 
 	<context:component-scan base-package="naver.ppojoji.blog.web" />
 	
-	
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="5242880"></beans:property><!-- max 5M -->
+	</beans:bean>
 	
 </beans:beans>
