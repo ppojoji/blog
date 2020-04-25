@@ -15,10 +15,22 @@ var seq = token[token.length-1]
 			// var 
 			console.log('응답', res)
 			if(res.success) {
-				$("#title").html(res.post.title);
-				$("#content").html(res.post.contents);
-				$('#update-url').attr('href', '/blog//article/update?pid=' + res.post.seq );
-				//$('#delete-url').attr('href', '/blog//article/delete?pid=' + res.post.seq );
+				var t = res.post.creationDate
+				var time = timeDiff(t, new Date().getTime())
+				$('#blog-detail-body').append
+				(
+					`<tr>
+						<td>${res.post.title}</td>
+						<td>${res.post.contents}</td>
+						<td>${res.post.writer.id}</td>
+						<td>${res.post.viewCount}</td>
+						<td>${time}</td>
+					</tr>`
+				)
+				$('#update-url').attr('href', '/blog/article/update?pid=' + res.post.seq );
+//				$("#title").html(res.post.title);
+//				$("#content").html(res.post.contents);
+
 			} else {
 				alert(res.cause)
 			}

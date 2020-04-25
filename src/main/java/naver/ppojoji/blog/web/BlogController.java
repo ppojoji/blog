@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.web;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +28,8 @@ import naver.ppojoji.blog.service.BlogService;
 
 @Controller
 public class BlogController {
+
+	SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -72,6 +75,8 @@ public class BlogController {
 		} else {
 			res.put("cause", "NO_SUCH_POST");
 		}
+		res.put("time", 
+				df.format(post.getCreationDate()));
 		return om.writeValueAsString(res); // jsp 이름이 아님
 	}
 	

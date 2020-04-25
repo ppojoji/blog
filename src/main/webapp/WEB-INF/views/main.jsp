@@ -6,7 +6,7 @@
 <jsp:include page="/WEB-INF/views/common/common-meta.jsp"></jsp:include>
 <title>Insert title here</title>
 <jsp:include page="/WEB-INF/views/common/common-import.jsp"></jsp:include>
-
+<script type="text/javascript" src="/blog/resources/js/common/time-util.js"></script>
 <script type="text/javascript" src="/blog/resources/js/main.js"></script>
 
 </head>
@@ -28,6 +28,7 @@
 				<td>제목</td>
 				<td>조회수</td>
 				<td>작성자</td>
+				<td>작성일</td>
 			</tr>
 		</thead>
 		<tbody id="blog-list-body">
@@ -37,44 +38,6 @@
 			 -->
 		</tbody>
 	</table>
-<!-- 	<div id="blog-list">
-		<div id="blog-list-body">
-			<table class="table">
-			  <thead class="thead-light">
-			    <tr>
-			      <th scope="col">#</th>
-			      <th scope="col">First</th>
-			      <th scope="col">Last</th>
-			      <th scope="col">Handle</th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			    <tr>
-			      <th scope="row">1</th>
-			      <td>Mark</td>
-			      <td>Otto</td>
-			      <td>@mdo</td>
-			    </tr>
-			    <tr>
-			      <th scope="row">2</th>
-			      <td>Jacob</td>
-			      <td>Thornton</td>
-			      <td>@fat</td>
-			    </tr>
-			    <tr>
-			      <th scope="row">3</th>
-			      <td>Larry</td>
-			      <td>the Bird</td>
-			      <td>@twitter</td>
-			    </tr>
-			  </tbody>
-			</table>
-		</div>
-		
-		<div id="pgn"></div>
-	</div> -->
-	
-	
 </div>
 </body>
 </html>

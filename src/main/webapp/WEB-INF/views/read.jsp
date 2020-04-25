@@ -8,6 +8,7 @@
 <jsp:include page="/WEB-INF/views/common/common-import.jsp"></jsp:include>
 
 <!-- <link href="/blog/resources/css/read.css" rel="stylesheet" type="text/css"> -->
+<script type="text/javascript" src="/blog/resources/js/common/time-util.js"></script>
 <script type="text/javascript" src="/blog/resources/js/read.js"></script>
 <style type="text/css">
 .err {
@@ -28,13 +29,29 @@
 	       <!-- 답글 영역 -->
 	       
 	<jsp:include page="/WEB-INF/views/common/common-header.jsp"></jsp:include>
-		<%-- <input type="hidden" id="pid" value="${ppp.seq}"> --%>
+	<table class="table">
+		<thead>
+			<tr>
+				<td>제목</td>
+				<td>내용</td>
+				<td>작성자</td>
+				<td>조회수</td>
+				<td>작성일</td>
+			</tr>
+		</thead>
+		<tbody id="blog-detail-body">
+			<!-- <tr>
+				<td>글제목</td>
+			</tr> -->
+			 
+		</tbody>
+	</table>	
 	<div id="blog-detail">
 		<!-- FIXME  글제목, 글내용, 작성자, 조회수, 작성일 정보를 화면에 추가해봅니다. -->
-		<div id="blog-detail-body">
+		<!-- <div id="blog-detail-body">
 			<div id="title"></div>
 			<div id="content"></div>
-		</div>
+		</div> -->
 		<div class="err no_such_post">글이 존재하지 않습니다.</div>
 		<div id="pgn">
 			<a href="${pageContext.request.contextPath}">목록으로</a>
