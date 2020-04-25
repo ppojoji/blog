@@ -11,7 +11,7 @@
 <body>
 <div>
 	<jsp:include page="/WEB-INF/views/common/common-header.jsp"></jsp:include>
-	<div class="container-fluid">
+<%-- 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 			
@@ -32,6 +32,35 @@
 			
 			</div>
 		</div>
+	</div> --%>
+	<ul class="nav nav-tabs">
+	  <li class="nav-item">
+	    <a class="nav-link active" data-toggle="tab" href="#id">아이디</a>
+	    <div class="form-group">
+		</div>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#email">이메일</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#leave">탈퇴</a>
+	  </li>
+	</ul>
+
+	<!-- Tab panes -->
+	<div class="tab-content">
+	  <div class="tab-pane container active" id="id">
+	  	<label>아이디</label>
+		<input id="id" class="form-control" type="text" value="${LOGIN_USER.id}" readonly>
+	  </div>
+	  <div class="tab-pane container fade" id="email">
+	  	<label>이메일</label>
+		<input id="email" class="form-control" type="text" value="${LOGIN_USER.email}" readonly>
+	  </div>
+	  <div class="tab-pane container fade" id="leave">
+	  	<label>탈퇴합니다</label>
+		<input type="button" id="userDelete" class="form-control" value="탈퇴">
+	  </div>
 	</div>
 </div>
 </body>
