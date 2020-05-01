@@ -90,7 +90,7 @@
 			tb_post_seq.nextval,
 			#{title},
 			#{contents},
-			204
+			#{writeSeq}
 		)
 		<selectKey keyProperty="seq" resultType="integer" order="AFTER">
 			SELECT TB_POST_SEQ.currval FROM dual

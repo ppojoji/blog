@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.FileDao;
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.User;
+import naver.ppojoji.blog.web.Value;
 
 @Service
 public class BlogService {
@@ -56,9 +60,12 @@ public class BlogService {
 	 * @param title
 	 * @param contents
 	 */
-	public void insertPost(String title, String contents, List<MultipartFile> files) {
-		Integer postSeq = blogDao.insertPost(title,contents);
-//		Integer postSeq = -1;
+	public void insertPost(String title, 
+			String contents, 
+			List<MultipartFile> files,
+			Integer writerSeq) {
+			// HttpSession session) {
+		Integer postSeq = blogDao.insertPost(title,contents, writerSeq);
 		fileService.uploadSave(postSeq, files);
 		
 		//long seq = nextSeq();

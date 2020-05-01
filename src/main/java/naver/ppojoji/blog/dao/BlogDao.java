@@ -67,12 +67,13 @@ public class BlogDao {
 		return session.selectList("BlogPostMapper.findAllPost");
 	}
 
-	public Integer insertPost(String title, String contents) {
+	public Integer insertPost(String title, String contents, int writeSeq) {
 		// FIXME 글쓴 사람에 대한 연결 정보가 없어서 BlogMapper.xml 파일에 201번 사용자를 지정해 놓았습니다.
 		// 1. map 으로 감싸서 보내기
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("title", title);
 		param.put("contents", contents);
+		param.put("writeSeq", writeSeq);
 		session.insert("BlogPostMapper.insertPost", param);
 		
 		System.out.println("gen seq: " + param.get("seq"));
