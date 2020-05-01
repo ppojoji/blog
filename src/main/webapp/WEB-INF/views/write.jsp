@@ -45,6 +45,8 @@
 		</div>
 		<div>
 			<input type="file" name="files" id="file">
+			<input type="file" name="files" id="file0">
+			<input type="file" name="files" id="file1">
 		</div>
 		<div>
 			<button id="btnSubmit">글작성</button>
@@ -69,7 +71,8 @@ $("#btnSubmit").click( function(){
 	form.append('contents', $("#content").val())
 	form.append('postSeq', $("#postSeq").val())
 	form.append('files', $('#file')[0].files[0])
-	
+	form.append('files', $('#file0')[0].files[0])
+	form.append('files', $('#file1')[0].files[0])
 	$.ajax({
 		url: url,
 		method:'POST',

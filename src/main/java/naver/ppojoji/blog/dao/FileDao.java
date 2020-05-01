@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import naver.ppojoji.blog.dto.LocalUpFile;
+
 @Repository
 public class FileDao {
 	@Autowired 
@@ -21,5 +23,8 @@ public class FileDao {
 			map.put("contentType", file.getContentType());
 			map.put("post",postSeq);
 		return session.insert("FileMapper.fileSave",map);
+	}
+	public LocalUpFile FindFile(String genName) {
+		return session.selectOne("FileMapper.FindFile", genName);
 	}
 }

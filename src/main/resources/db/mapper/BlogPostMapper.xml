@@ -3,8 +3,17 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="BlogPostMapper">
-	<resultMap type="Post" id="PostMap">
+	<resultMap type="LocalUpFile" id="upFileMap">
 		<id column="seq" property="seq"/>
+		<result column="originName" property="originalName"/>
+		<result column="genName" property="genName"/>
+		<result column="fileSize" property="fileSize"/>
+		<result column="contentType" property="contentType"/>
+		<result column="post" property="post"/>
+		<result column="origin" property="origin"/>
+	</resultMap>
+	<resultMap type="Post" id="PostMap">
+		<id column="pseq" property="seq"/>
 		<result column="title" property="title" />
 		<result column="contents" property="contents"/>
 		<result column="creation_date" property="creationDate"/>
@@ -14,6 +23,7 @@
 			column="writer" 
 			property="writer" 
 			select="UserMapper.findUserV1"/>
+		<collection property="upFiles" ofType="LocalUpFile" resultMap="upFileMap"/>
 		<!-- join query!!! FIXME
 		<association 
 			column="writer" 
@@ -42,28 +52,32 @@
 		seq = #{id}
 	</select> -->
 	<sql id="select_post">
-		seq,
-		title,
-		contents,
-		creation_date,
-		view_count,
-		writer
+		p.seq as pseq,
+		p.title,
+		p.contents,
+		p.creation_date,
+		p.view_count,
+		p.writer
 	</sql>
 	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
 	select
 		<include refid="select_post"></include>
+		, f.*
 	from
-		TB_POST
-	
+		TB_POST p
+	left join 
+		tb_files f
+	on
+		p.seq = f.post
 	where
-		seq = #{id}
+		p.seq = #{id}
 	</select>
 	
 	<select id="findAllPost" resultMap="PostMap">
 	select
 		<include refid="select_post"></include>
 	from
-		TB_POST
+		TB_POST p
 	
 	</select>
 	<insert id="insertPost" parameterType="map">

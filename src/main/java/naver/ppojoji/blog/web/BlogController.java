@@ -59,7 +59,9 @@ public class BlogController {
 	}
 	@RequestMapping(value="/api/readPosts/{postSeq}", method= RequestMethod.GET, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
-	public String readPosts(@PathVariable int postSeq) throws JsonProcessingException {
+	public String readPosts(@PathVariable int postSeq
+			) 
+			throws JsonProcessingException {
 		Post post = blogServise.readPosts(postSeq, true);
 		/*
 		 * FIXME 반환하는 방식이 아주 좋지는 않습니다.
@@ -69,6 +71,7 @@ public class BlogController {
 		 *  
 		 *  { success: false, cause: NO_SUCH_POST}
 		 */
+		/* System.out.println("##file"+files); */
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", post != null);
 		if(post != null) {
@@ -107,7 +110,6 @@ public class BlogController {
 		System.out.println(title);
 		System.out.println(contents);
 		blogServise.insertPost(title, contents, files);
-		
 		Map<String, Object> res = new HashMap<>();
 		res.put("success",true);
 		

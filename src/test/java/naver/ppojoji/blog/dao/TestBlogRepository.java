@@ -2,16 +2,17 @@ package naver.ppojoji.blog.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import naver.ppojoji.blog.dao.BlogDao;
+import naver.ppojoji.blog.dto.LocalUpFile;
 import naver.ppojoji.blog.dto.Post;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,10 +24,13 @@ public class TestBlogRepository {
 	
 	@Test
 	public void test() {
-		Post post = blogRepo.findPostBySeq(5010);
+		Post post = blogRepo.findPostBySeq(5025);
 		assertNotNull(post);
-		assertEquals(5010, post.getSeq().intValue());
+		assertEquals(5025, post.getSeq().intValue());
 		assertNotNull(post.getWriter());
+		List<LocalUpFile>upfiles = post.getUpFiles();
+		assertEquals(1, upfiles.size());
+		System.out.println(upfiles.get(0));
 		System.out.println(post);
 	}
 }

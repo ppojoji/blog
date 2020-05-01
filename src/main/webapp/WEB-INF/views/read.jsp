@@ -29,23 +29,25 @@
 	       <!-- 답글 영역 -->
 	       
 	<jsp:include page="/WEB-INF/views/common/common-header.jsp"></jsp:include>
-	<table class="table">
-		<thead>
-			<tr>
-				<td>제목</td>
-				<td>내용</td>
-				<td>작성자</td>
-				<td>조회수</td>
-				<td>작성일</td>
-			</tr>
-		</thead>
-		<tbody id="blog-detail-body">
-			<!-- <tr>
-				<td>글제목</td>
-			</tr> -->
-			 
-		</tbody>
-	</table>	
+	<%-- <form action="${pageContext.request.contextPath}/upload/single" method="post" enctype="multipart/form-data"> --%>
+		<table class="table">
+			<thead>
+				<tr>
+					<td>제목</td>
+					<td>내용</td>
+					<td>작성자</td>
+					<td>조회수</td>
+					<td>작성일</td>
+				</tr>
+			</thead>
+			<tbody id="blog-detail-body">
+				<!-- <tr>
+					<td>글제목</td>
+				</tr> -->
+				 
+			</tbody>
+		</table>
+	<!-- </form> -->		
 	<div id="blog-detail">
 		<!-- FIXME  글제목, 글내용, 작성자, 조회수, 작성일 정보를 화면에 추가해봅니다. -->
 		<!-- <div id="blog-detail-body">

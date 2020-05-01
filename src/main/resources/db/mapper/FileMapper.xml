@@ -17,4 +17,9 @@
 			SELECT TB_FILES_SEQ.currval FROM dual
 		</selectKey>
 	</insert>
+	<select id="FindFile" parameterType="String" resultMap="BlogPostMapper.upFileMap">
+		select * 
+		from tb_files 
+		where GENNAME = #{id}
+	</select>
 </mapper>

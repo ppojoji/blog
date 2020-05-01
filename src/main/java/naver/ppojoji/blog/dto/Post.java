@@ -7,6 +7,7 @@ package naver.ppojoji.blog.dto;
  */
 
 import java.util.Date;
+import java.util.List;
 
 public class Post {
 	private Long seq; // 테이블의 PK를 담습니다.
@@ -16,6 +17,7 @@ public class Post {
 	private int viewCount;
 	
 	private User writer;
+	private List<LocalUpFile> upfiles;
 	
 	public Post() {
 	}
@@ -71,7 +73,12 @@ public class Post {
 		return "Post [seq=" + seq + ", title=" + title + ", contents=" + contents + ", creationDate=" + creationDate
 				+ ", viewCount=" + viewCount + ", writer=" + writer + "]";
 	}
-	
-	
+
+	public List<LocalUpFile> getUpFiles() {
+		return this.upfiles;
+	}
+	public void setUpFiles(List<LocalUpFile> upfiles) {
+		this.upfiles = upfiles;
+	}
 	
 }

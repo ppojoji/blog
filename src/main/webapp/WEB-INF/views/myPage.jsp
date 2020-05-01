@@ -36,8 +36,6 @@
 	<ul class="nav nav-tabs">
 	  <li class="nav-item">
 	    <a class="nav-link active" data-toggle="tab" href="#id">아이디</a>
-	    <div class="form-group">
-		</div>
 	  </li>
 	  <li class="nav-item">
 	    <a class="nav-link" data-toggle="tab" href="#email">이메일</a>
