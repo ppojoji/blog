@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BlogService;
 
 @Controller
@@ -54,7 +55,15 @@ public class BlogController {
 	public String listPosts() throws JsonProcessingException {
 		// ctrl + alt + 아래/위 화살표 : 복사해서 만듬
 		List<Post> list = blogServise.findAllPosts();
-		return om.writeValueAsString(list);
+		Map<String, Object> map = new HashMap<String, Object>();
+		/*
+		 * TODO 2020-05-01 LIMIT 시간을 디비에서 읽어들임
+		 * => 관리자 페이지에서 내가 설정을 바꿀 수 있게 해봄
+		 * => 
+		 */
+		map.put("limit", 6*60*60*1000); // 6시간 밀리세컨드로 ...
+		map.put("posts", list);
+		return om.writeValueAsString(map);
 		// { "seq": 3000, "title": "ㅇㅇㅇㅇ", "content": "ㅇ미암리ㅏㅇ", viewCount: 1}
 	}
 	@RequestMapping(value="/api/readPosts/{postSeq}", method= RequestMethod.GET, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
@@ -103,13 +112,15 @@ public class BlogController {
 	@RequestMapping(value="/article/api/write",method=RequestMethod.POST,produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
 	public String insertPost(
+			HttpSession session,
 			@RequestParam String title,
 			@RequestParam String contents,
 			@RequestParam List<MultipartFile> files) throws JsonProcessingException {
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다.
+		User loginUser = (User) session.getAttribute(Value.KEY_LOGIN_USER);
 		System.out.println(title);
 		System.out.println(contents);
-		blogServise.insertPost(title, contents, files);
+		blogServise.insertPost(title, contents, files, loginUser.getSeq());
 		Map<String, Object> res = new HashMap<>();
 		res.put("success",true);
 		
