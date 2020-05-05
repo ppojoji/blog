@@ -35,7 +35,15 @@ public class BlogService {
 	blogService.findAllPosts("N");
 	*/
 	public List<Post> findAllPosts(String isOpen) {
-		return blogDao.findAllPost(isOpen);
+		List<Post> posts = blogDao.findAllPost(isOpen);
+		// 1 비번을 "*****" 로 뭉게버림
+		for(int i=0;i<posts.size();i++) {
+			posts.get(i);
+			if(posts.get(i).getViewPass() != null) {
+				posts.get(i).setViewPass("*************");
+			}
+		}
+		return posts;
 	}
 
 	public Post readPosts(int seq, boolean updateCount) {

@@ -5,6 +5,58 @@ var url = location.href
 var token = url.split('/')
 var seq = token[token.length-1]
 
+function renderPost(post) {
+	var t = post.creationDate
+	var time = timeDiff(t, new Date().getTime())
+	
+	var myDate = new Date(t);
+	var date = myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate() +
+	" " + myDate.getHours() + "h" + myDate.getMinutes() + "m";
+	
+	$('#blog-detail-body').append
+	(
+		`<tr>
+			<td>${post.title}</td>
+		</tr>
+		<tr>	
+			<td>${post.contents}</td>	
+		</tr>
+		<tr>	
+			<td>${post.writer.id}</td>
+		</tr>
+		<tr>	
+			<td>${post.viewCount}</td>
+		</tr>
+		<tr>	
+			<td id="time">${time}</td>
+		</tr>
+		<tr>	
+			<td id="myDate">${date}</td>
+		</tr>`
+	)
+	
+	var html = '<tr><td colspan="5">'
+	for(var i=0; i<post.upFiles.length; i++)
+	{
+		html += `<div><a href="${ctxpath}/upfile/${post.upFiles[i].genName}">${post.upFiles[i].originalName}</a>(${post.upFiles[i].fileSize}byte)</div>`
+	}
+	html += '</td></tr>'
+		
+	$('#blog-detail-body').append(html)
+	
+	$('#update-url').attr('href', '/blog/article/update?pid=' + post.seq );
+//	$("#title").html(post.title);
+//	$("#content").html(post.contents);
+	$('#myDate').hide();
+	$('#time').click(function(){
+		$('#time').hide();
+		$('#myDate').show();
+	});
+	$('#myDate').click(function(){
+		$('#myDate').hide();
+		$('#time').show();
+	});
+}
 	$.ajax ({
 		//    /blog/api/posts
 		url: '/blog/api/readPosts/' + seq,
@@ -17,58 +69,30 @@ var seq = token[token.length-1]
 			// var 
 			console.log('응답', res)
 			if(res.success) {
-				var t = res.post.creationDate
-				var time = timeDiff(t, new Date().getTime())
-				
-				var myDate = new Date(t);
-				var date = myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate() +
-				" " + myDate.getHours() + "h" + myDate.getMinutes() + "m";
-				
-				$('#blog-detail-body').append
-				(
-					`<tr>
-						<td>${res.post.title}</td>
-					</tr>
-					<tr>	
-						<td>${res.post.contents}</td>	
-					</tr>
-					<tr>	
-						<td>${res.post.writer.id}</td>
-					</tr>
-					<tr>	
-						<td>${res.post.viewCount}</td>
-					</tr>
-					<tr>	
-						<td id="time">${time}</td>
-					</tr>
-					<tr>	
-						<td id="myDate">${date}</td>
-					</tr>`
-				)
-				
-				var html = '<tr><td colspan="5">'
-				for(var i=0; i<res.post.upFiles.length; i++)
-				{
-					html += `<div><a href="${ctxpath}/upfile/${res.post.upFiles[i].genName}">${res.post.upFiles[i].originalName}</a>(${res.post.upFiles[i].fileSize}byte)</div>`
-				}
-				html += '</td></tr>'
-					
-				$('#blog-detail-body').append(html)
-				
-				$('#update-url').attr('href', '/blog/article/update?pid=' + res.post.seq );
-//				$("#title").html(res.post.title);
-//				$("#content").html(res.post.contents);
-				$('#myDate').hide();
-				$('#time').click(function(){
-					$('#time').hide();
-					$('#myDate').show();
-				});
-				$('#myDate').click(function(){
-					$('#myDate').hide();
-					$('#time').show();
+				renderPost(res.post)
+			} else if(res.cause === 'VIEW_PASS'){
+				// 비번 입력 양식을 화면에 끼워넣음
+				$('#pass-wrapper').show()
+				$('#btnPass').click(function(){
+					var passwd = $('#pass').val();
+					$.ajax({
+						url:"/blog/api/post/pass/" + seq,
+						method:"POST",
+						data:{
+							pass: passwd
+						},
+						success : function(res) {
+							if(res.success) {
+								renderPost(res.post);
+								$('#pass-wrapper').remove()
+							} else {
+								alert('틀렸다')
+							}
+						}
+					})
 				});
 			} else {
-				alert(res.cause)
+				alert(res.cause)				
 			}
 		},
 		error(e, res){

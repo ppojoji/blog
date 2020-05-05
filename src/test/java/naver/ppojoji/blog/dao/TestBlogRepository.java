@@ -33,5 +33,6 @@ public class TestBlogRepository {
 		System.out.println(upfiles.get(0));
 		System.out.println(post);
 		System.out.println(post.getOpen());
+		System.out.println("view pass " + post.getViewPass());
 	}
 }

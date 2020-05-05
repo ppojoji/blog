@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,26 +67,53 @@ public class BlogController {
 		return om.writeValueAsString(map);
 		// { "seq": 3000, "title": "ㅇㅇㅇㅇ", "content": "ㅇ미암리ㅏㅇ", viewCount: 1}
 	}
+	
+	@RequestMapping(value="/api/post/pass/{postSeq}", method= RequestMethod.POST, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@ResponseBody
+	public String readPostWithPass(
+			@PathVariable Integer postSeq,
+			@RequestParam String pass) throws JsonProcessingException {
+		Post post = blogServise.readPosts(postSeq, false);
+		Map <String,Object> map = new HashMap<String, Object>(); 
+		if(pass.equals(post.getViewPass())) {
+			// OK!
+			map.put("success", true); 
+			map.put("post", post);
+		} else {
+			// FAIL!
+			map.put("success", false); 
+			map.put("cause","fail");
+		}
+		return om.writeValueAsString(map);
+	}
+	/**
+	 *    메소드는 딱 한가지 일만 해야함!
+	 *    
+	 *  "/api/readPosts/3323
+	 * @param postSeq
+	 * @param pass
+	 * @return
+	 * @throws JsonProcessingException
+	 */
 	@RequestMapping(value="/api/readPosts/{postSeq}", method= RequestMethod.GET, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
-	public String readPosts(@PathVariable int postSeq
-			) 
+	public String readPosts(
+			@PathVariable int postSeq) 
 			throws JsonProcessingException {
+		
 		Post post = blogServise.readPosts(postSeq, true);
-		/*
-		 * FIXME 반환하는 방식이 아주 좋지는 않습니다.
-		 */
-		/*
-		 *  { success: true, post: { ....} }
-		 *  
-		 *  { success: false, cause: NO_SUCH_POST}
-		 */
-		/* System.out.println("##file"+files); */
+		
 		Map<String, Object> res = new HashMap<>();
-		res.put("success", post != null);
 		if(post != null) {
-			res.put("post", post);
+			if(post.getViewPass() != null) {
+				res.put("success", false);
+				res.put("cause", "VIEW_PASS");
+			} else {
+				res.put("success", true);
+				res.put("post", post);				
+			}
 		} else {
+			res.put("success", false);
 			res.put("cause", "NO_SUCH_POST");
 		}
 		res.put("time", 

@@ -19,6 +19,7 @@
 		<result column="creation_date" property="creationDate"/>
 		<result column="view_count" property="viewCount"/>
 		<result column="open" property="open"/>
+		<result column="view_pass" property="viewPass"/>
 		<!-- <result column="writer" property="writerSeq"/> -->
 		<association 
 			column="writer" 
@@ -59,7 +60,8 @@
 		p.creation_date,
 		p.view_count,
 		p.writer,
-		p.open
+		p.open,
+		p.view_pass
 	</sql>
 	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
 	select

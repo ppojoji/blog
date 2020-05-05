@@ -15,7 +15,7 @@ public class Post {
 	private String contents;
 	private Date creationDate  ;
 	private int viewCount;
-	
+	private String viewPass;
 	private User writer;
 	private List<LocalUpFile> upfiles;
 	private String open;
@@ -73,6 +73,14 @@ public class Post {
 	}
 	public void setOpen(String open) {
 		this.open = open;
+	}
+	
+	public String getViewPass() {
+		return viewPass;
+	}
+
+	public void setViewPass(String viewPass) {
+		this.viewPass = viewPass;
 	}
 
 	@Override

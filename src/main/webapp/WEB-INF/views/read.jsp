@@ -14,6 +14,9 @@
 .err {
 	display: none;
 }
+#pass-wrapper {
+	display: none;
+}
 </style>
 </head>
 <body>
@@ -47,7 +50,15 @@
 				 
 			</tbody>
 		</table>
-	<!-- </form> -->		
+	<!-- </form> -->
+	<div id="pass-wrapper">
+		<table>
+			<tr>
+				<td><input type="password" placeholder="비밀번호" id="pass"></td>
+				<td><input type="button" value="입력" id="btnPass"></td>
+			</tr>
+		</table>
+	</div>	
 	<div id="blog-detail">
 		<!-- FIXME  글제목, 글내용, 작성자, 조회수, 작성일 정보를 화면에 추가해봅니다. -->
 		<!-- <div id="blog-detail-body">
