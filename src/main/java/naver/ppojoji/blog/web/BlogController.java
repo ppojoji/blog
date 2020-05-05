@@ -50,11 +50,11 @@ public class BlogController {
 	@Autowired
 	BlogService blogServise;
 	
-	@RequestMapping(value="/api//posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@RequestMapping(value="/api/posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
 	public String listPosts() throws JsonProcessingException {
 		// ctrl + alt + 아래/위 화살표 : 복사해서 만듬
-		List<Post> list = blogServise.findAllPosts();
+		List<Post> list = blogServise.findAllPosts("Y");
 		Map<String, Object> map = new HashMap<String, Object>();
 		/*
 		 * TODO 2020-05-01 LIMIT 시간을 디비에서 읽어들임
@@ -178,20 +178,6 @@ public class BlogController {
 		res.put("success",true);
 		return om.writeValueAsString(res); 
 	}
-	/*
-	@RequestMapping(value="/article/delete", method = RequestMethod.POST ,produces = APPLICATION_JSON_CHARSET_UTF_8 )
-	public String delete(@RequestParam Integer pid, Model model) {
-		// /article/update?pid=323333
-		System.out.println("###post id: " + pid);
-		Post post = blogServise.readPosts(pid);
-		this.blogServise.deletePost(pid);
-		 
-		System.out.println("###post: " + post.toString());
-		model.addAttribute("ppp", post);
-		return "read";
-		
-	}
-	*/
 	/**
 	 * FIXME 글을 비공개 처리함
 	 * @return

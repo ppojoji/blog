@@ -63,8 +63,8 @@ public class BlogDao {
 		 */
 	}
 
-	public List<Post> findAllPost() {
-		return session.selectList("BlogPostMapper.findAllPost");
+	public List<Post> findAllPost(String isOpen) {
+		return session.selectList("BlogPostMapper.findAllPost",isOpen);
 	}
 
 	public Integer insertPost(String title, String contents, int writeSeq) {
@@ -104,6 +104,21 @@ public class BlogDao {
 
 	public void viewCount(Integer pid) {
 		session.update("BlogPostMapper.viewCount",pid);
+		
+	}
+
+	public List<Post> readPosts(boolean open) {
+		// FIXME 타입핸들러 넣으면 없어질 코드입니다.
+		String openChar = open ? "Y" : "N";
+		return session.selectList("BlogPostMapper.open",openChar);
+	}
+
+	public void updateOpen(Integer postSeq, boolean isOpen) {
+		String openChar = isOpen ? "Y" : "N";
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("postSeq", postSeq);
+		map.put("isOpen", openChar);
+		session.update("BlogPostMapper.updateOpen",map);
 		
 	}
 

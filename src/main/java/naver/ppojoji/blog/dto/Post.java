@@ -18,6 +18,7 @@ public class Post {
 	
 	private User writer;
 	private List<LocalUpFile> upfiles;
+	private String open;
 	
 	public Post() {
 	}
@@ -66,6 +67,12 @@ public class Post {
 	}
 	public void setWriter(User writer) {
 		this.writer = writer;
+	}
+	public String getOpen() {
+		return open;
+	}
+	public void setOpen(String open) {
+		this.open = open;
 	}
 
 	@Override

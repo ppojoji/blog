@@ -18,6 +18,7 @@
 		<result column="contents" property="contents"/>
 		<result column="creation_date" property="creationDate"/>
 		<result column="view_count" property="viewCount"/>
+		<result column="open" property="open"/>
 		<!-- <result column="writer" property="writerSeq"/> -->
 		<association 
 			column="writer" 
@@ -57,7 +58,8 @@
 		p.contents,
 		p.creation_date,
 		p.view_count,
-		p.writer
+		p.writer,
+		p.open
 	</sql>
 	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
 	select
@@ -73,12 +75,12 @@
 		p.seq = #{id}
 	</select>
 	
-	<select id="findAllPost" resultMap="PostMap">
+	<select id="findAllPost" resultMap="PostMap" parameterType="String">
 	select
 		<include refid="select_post"></include>
 	from
 		TB_POST p
-	
+	where open = #{open}
 	</select>
 	<insert id="insertPost" parameterType="map">
 		insert into TB_POST (
@@ -112,5 +114,17 @@
 		update TB_POST 
 		set view_count = view_count + 1
 		where seq = #{seq}
+	</update>
+	<select id="open" parameterType="String" resultMap="PostMap">
+		select
+		<include refid="select_post"></include>
+		from
+			TB_POST p
+		where open=#{id}
+	</select>
+	<update id="updateOpen" parameterType="map">
+		update tb_post 
+		set open = #{isOpen}
+		where seq = #{postSeq}
 	</update>
 </mapper>

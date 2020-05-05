@@ -27,10 +27,11 @@ public class TestBlogRepository {
 		Post post = blogRepo.findPostBySeq(5025);
 		assertNotNull(post);
 		assertEquals(5025, post.getSeq().intValue());
-		assertNotNull(post.getWriter());
+		assertNotNull(post.getWriter()); 
 		List<LocalUpFile>upfiles = post.getUpFiles();
 		assertEquals(1, upfiles.size());
 		System.out.println(upfiles.get(0));
 		System.out.println(post);
+		System.out.println(post.getOpen());
 	}
 }

@@ -32,9 +32,10 @@ public class BlogService {
 		list.add(fakePost0);
 		list.add(fakePost1);
 	}
+	blogService.findAllPosts("N");
 	*/
-	public List<Post> findAllPosts() {
-		return blogDao.findAllPost();
+	public List<Post> findAllPosts(String isOpen) {
+		return blogDao.findAllPost(isOpen);
 	}
 
 	public Post readPosts(int seq, boolean updateCount) {
@@ -90,5 +91,14 @@ public class BlogService {
 
 	public void deletePost(Integer pid) {
 		blogDao.deletePost(pid);
+	}
+
+	public List<Post> readPosts(boolean open) {
+		return blogDao.readPosts(open);
+	}
+
+	public void updateOpen(Integer postSeq, boolean isOpen) {
+		blogDao.updateOpen(postSeq,isOpen);
+		
 	}
 }

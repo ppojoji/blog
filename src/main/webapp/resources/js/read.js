@@ -28,11 +28,20 @@ var seq = token[token.length-1]
 				(
 					`<tr>
 						<td>${res.post.title}</td>
-						<td>${res.post.contents}	
-						</td>
+					</tr>
+					<tr>	
+						<td>${res.post.contents}</td>	
+					</tr>
+					<tr>	
 						<td>${res.post.writer.id}</td>
+					</tr>
+					<tr>	
 						<td>${res.post.viewCount}</td>
+					</tr>
+					<tr>	
 						<td id="time">${time}</td>
+					</tr>
+					<tr>	
 						<td id="myDate">${date}</td>
 					</tr>`
 				)
