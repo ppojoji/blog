@@ -43,18 +43,31 @@ public class AdminController {
 	 * @PathVariable 로 public, private 부분을 변수로 받아낼 수 있습니다.
 	 * 
 	 */
-	@RequestMapping(value="/posts/public", method = RequestMethod.GET ,produces = Value.APPLICATION_JSON_CHARSET_UTF_8 )
+//	@RequestMapping(value="/posts/public", method = RequestMethod.GET ,produces = Value.APPLICATION_JSON_CHARSET_UTF_8 )
+//	@ResponseBody
+//	public String openPost() throws JsonProcessingException {
+//		List<Post> post = blogService.readPosts(true);
+//		return om.writeValueAsString(post);
+//	}
+//	@RequestMapping(value="/posts/private",method = RequestMethod.GET,produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
+//	@ResponseBody
+//	public String privPost() throws JsonProcessingException {
+//		List<Post> post = blogService.readPosts(false);
+//		return om.writeValueAsString(post);
+//	}
+	@RequestMapping(value="/posts/{publicYn}", method = RequestMethod.GET ,produces = Value.APPLICATION_JSON_CHARSET_UTF_8 )
 	@ResponseBody
-	public String openPost() throws JsonProcessingException {
-		List<Post> post = blogService.readPosts(true);
+	public String PostOpenPrivate(@PathVariable String publicYn) throws JsonProcessingException {
+		boolean ispublic = "public".equals(publicYn);
+		if(ispublic)
+		{
+			List<Post> post = blogService.readPosts(true);
+		}else {
+			List<Post> post = blogService.readPosts(false);
+		}
 		return om.writeValueAsString(post);
 	}
-	@RequestMapping(value="/posts/private",method = RequestMethod.GET,produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
-	@ResponseBody
-	public String privPost() throws JsonProcessingException {
-		List<Post> post = blogService.readPosts(false);
-		return om.writeValueAsString(post);
-	}
+	
 	/**
 	 * 포스트 공개/비공개 전환
 	 * @param postSeq - 글번호 PK
