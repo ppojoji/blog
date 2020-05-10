@@ -11,6 +11,9 @@
 		<result column="contentType" property="contentType"/>
 		<result column="post" property="post"/>
 		<result column="origin" property="origin"/>
+		<!-- 변환에 사용될 핸들러 클래스 지정 -->
+		<result property="open" column="open" jdbcType="VARCHAR"
+			typeHandler="naver.ppojoji.blog.typehandler" />
 	</resultMap>
 	<resultMap type="Post" id="PostMap">
 		<id column="pseq" property="seq"/>
@@ -21,6 +24,9 @@
 		<result column="open" property="open"/>
 		<result column="view_pass" property="viewPass"/>
 		<!-- <result column="writer" property="writerSeq"/> -->
+		<!-- 변환에 사용될 핸들러 클래스 지정 -->
+		<result property="open" column="open" jdbcType="VARCHAR"
+			typeHandler="naver.ppojoji.blog.typehandler" />
 		<association 
 			column="writer" 
 			property="writer" 
