@@ -18,7 +18,7 @@ public class Post {
 	private String viewPass;
 	private User writer;
 	private List<LocalUpFile> upfiles;
-	private String open;
+	private boolean open;
 	
 	public Post() {
 	}
@@ -68,10 +68,10 @@ public class Post {
 	public void setWriter(User writer) {
 		this.writer = writer;
 	}
-	public String getOpen() {
+	public Boolean getOpen() {
 		return open;
 	}
-	public void setOpen(String open) {
+	public void setOpen(Boolean open) {
 		this.open = open;
 	}
 	

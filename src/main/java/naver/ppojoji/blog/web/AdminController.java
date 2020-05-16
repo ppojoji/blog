@@ -59,11 +59,12 @@ public class AdminController {
 	@ResponseBody
 	public String PostOpenPrivate(@PathVariable String publicYn) throws JsonProcessingException {
 		boolean ispublic = "public".equals(publicYn);
+		List<Post> post = null;
 		if(ispublic)
 		{
-			List<Post> post = blogService.readPosts(true);
+			 post = blogService.readPosts(true);
 		}else {
-			List<Post> post = blogService.readPosts(false);
+			post = blogService.readPosts(false);
 		}
 		return om.writeValueAsString(post);
 	}

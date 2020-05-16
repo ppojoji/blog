@@ -9,11 +9,12 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StringYnTypeHandler implements TypeHandler<Boolean> {
 
-	private Logger logger = Logger.getLogger(getClass());
-
+	private Logger logger = LoggerFactory.getLogger(StringYnTypeHandler.class);
+	
 	public Boolean getResult(ResultSet rs, String columnName)
 			throws SQLException {
 		String s = rs.getString(columnName);

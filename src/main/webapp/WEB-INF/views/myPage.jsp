@@ -43,6 +43,9 @@
 	  <li class="nav-item">
 	    <a class="nav-link" data-toggle="tab" href="#leave">탈퇴</a>
 	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" id="mypost-tab" data-toggle="tab" href="#mypost">내가쓴글</a>
+	  </li>
 	</ul>
 
 	<!-- Tab panes -->
@@ -58,6 +61,25 @@
 	  <div class="tab-pane container fade" id="leave">
 	  	<label>탈퇴합니다</label>
 		<input type="button" id="userDelete" class="form-control" value="탈퇴">
+	  </div>
+	  <div class="tab-pane container fade" id="mypost">
+	  	<label>내글</label>
+		<input type="button" id="mypost" class="form-control" value="내글">
+		<table class="table">
+			<thead>
+				<tr>
+					<td>제목</td>
+					<td>상태</td>
+					<td>삭제</td>
+				</tr>
+			</thead>
+			<tbody id="blog-list-body">
+				<!-- <tr>
+					<td><a href="/blog/article/sddddd">글제목</a></td>
+				</tr>
+				 -->
+			</tbody>
+		</table>
 	  </div>
 	</div>
 </div>

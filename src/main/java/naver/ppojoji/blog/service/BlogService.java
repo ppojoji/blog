@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.dao.BlogDao;
@@ -34,7 +35,13 @@ public class BlogService {
 	}
 	blogService.findAllPosts("N");
 	*/
-	public List<Post> findAllPosts(String isOpen) {
+	//public List<Post> findAllPosts(String isOpen) {
+	/**
+	 * 공개글을 조회함
+	 * @param isOpen
+	 * @return
+	 */
+	public List<Post> findAllPosts(boolean isOpen) {
 		List<Post> posts = blogDao.findAllPost(isOpen);
 		// 1 비번을 "*****" 로 뭉게버림
 		for(int i=0;i<posts.size();i++) {
@@ -45,7 +52,14 @@ public class BlogService {
 		}
 		return posts;
 	}
-
+	/**
+	 * 주어진 사용자가 작성한 글을 조회함
+	 * @return
+	 */
+	public List<Post> findPostsByWriter(Integer writerSeq) {
+		return blogDao.findPostByWriter(writerSeq);
+		// writeSeq-1-string
+	}
 	public Post readPosts(int seq, boolean updateCount) {
 		if (updateCount) {
 			blogDao.viewCount(seq);			
@@ -69,6 +83,7 @@ public class BlogService {
 	 * @param title
 	 * @param contents
 	 */
+	@Transactional
 	public void insertPost(String title, 
 			String contents, 
 			List<MultipartFile> files,
@@ -98,6 +113,7 @@ public class BlogService {
 	}
 
 	public void deletePost(Integer pid) {
+		// FIXME 자기가 쓴 글인지 확인해야함
 		blogDao.deletePost(pid);
 	}
 
@@ -108,5 +124,27 @@ public class BlogService {
 	public void updateOpen(Integer postSeq, boolean isOpen) {
 		blogDao.updateOpen(postSeq,isOpen);
 		
+	}
+	public Post togglePost(Integer seq,User user) {
+		// 1. seq 로 글을 가져옴
+		Post post = blogDao.findPostBySeq(seq);
+		
+		// 1.1. 이 글을 쓴 사람하고 지금 로그인한 사람이 같아야 함
+		// "==" VS equals()
+		// if(post.getWriter().getId().equals(user.getId()))
+		if(post.getWriter().getSeq() != user.getSeq())
+		{
+			throw new RuntimeException("니글 아님");
+		}
+		// 2.1 글이 공개상태이면 비공개로, 비공개 상태이면 공개로,
+		if(post.getOpen()) {
+			post.setOpen(false);
+		}else {
+			post.setOpen(true);
+		}
+		// 3. dao로 보내서 업데이트해줌
+		blogDao.updateOpen(seq,post.getOpen());
+		
+		return post;
 	}
 }

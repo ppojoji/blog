@@ -55,7 +55,8 @@ public class BlogController {
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
 	public String listPosts() throws JsonProcessingException {
 		// ctrl + alt + 아래/위 화살표 : 복사해서 만듬
-		List<Post> list = blogServise.findAllPosts("Y");
+		//List<Post> list = blogServise.findAllPosts("Y");
+		List<Post> list = blogServise.findAllPosts(true);
 		Map<String, Object> map = new HashMap<String, Object>();
 		/*
 		 * TODO 2020-05-01 LIMIT 시간을 디비에서 읽어들임
@@ -212,5 +213,27 @@ public class BlogController {
 	 */
 	public String setAsSecret() {
 		return null;
+	}
+	@RequestMapping(value = "/api/mypost",method = RequestMethod.GET, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@ResponseBody
+	public String userPost(HttpSession session) throws JsonProcessingException {
+		User loginUser =(User)session.getAttribute(Value.KEY_LOGIN_USER);
+		int writerSeq = loginUser.getSeq();
+		List<Post> writerPost = blogServise.findPostsByWriter(writerSeq); // writeSeq-1-integer
+		Map<String, Object> res = new HashMap<>();
+		res.put("writerPost", writerPost);
+		res.put("success", true);
+		return om.writeValueAsString(res);
+	}
+	@RequestMapping(value = "/api/toggle", method = RequestMethod.POST, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@ResponseBody
+	public String togglePost(HttpSession session,@RequestParam Integer seq) throws JsonProcessingException {
+		User loginUser =(User)session.getAttribute(Value.KEY_LOGIN_USER);
+		Post post = blogServise.togglePost(seq,loginUser);
+
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		res.put("open",post.getOpen());
+		return om.writeValueAsString(res);
 	}
 }
