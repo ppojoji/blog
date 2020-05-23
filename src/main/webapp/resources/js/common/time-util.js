@@ -1,7 +1,7 @@
 
 function timeDiff(millis, curMillis) {
 	var diffMillis = curMillis - millis // 밀리세컨드
-	var sec = diffMillis / 1000 // 초단위
+	var sec = parseInt(diffMillis / 1000) // 초단위
 	var min = parseInt(sec / 60) // 분단위
 	if(min === 0) {
 		return sec + '초전'

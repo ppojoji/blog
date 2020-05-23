@@ -74,7 +74,19 @@
 			<!-- <a id="delete-url" href="#">글삭제</a> -->
 		</div>
 		<div>
-			 <button id="btnDelete">글삭제</button> 
+			 <button id="btnDelete">글삭제</button>
+			 
+			 <button id="btnReply">댓글</button>
+			  
+		</div>
+		<div>
+		 	<ul id="reply-area">
+		 		<!-- 
+		 		<li><span>이것은 답글입니다.</span> - <span>글쓴이</span><span>(2020-03-03)</span></li>
+		 		<li><span>이것은 답글입니다.</span> - <span>글쓴이</span><span>(2020-03-03)</span></li>
+		 		<li><span>이것은 답글입니다.</span> - <span>글쓴이</span><span>(2020-03-03)</span></li>
+		 		 -->
+		 	</ul>
 		</div>
 	</div>
 </div>
@@ -99,7 +111,6 @@
 			})
 		}	
 	})	
-		
 ;
 </script>
 </html>

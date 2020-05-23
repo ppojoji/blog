@@ -5,6 +5,22 @@ var url = location.href
 var token = url.split('/')
 var seq = token[token.length-1]
 
+function loadReply() {
+	$.ajax({
+		url:'/blog/article/replies/'+seq,
+		method:'GET',
+		success:function(res){
+			console.log(res);
+			for(var i=0; i<res.length; i++){
+				var t = res[i].replyTime
+				var time = timeDiff(t, new Date().getTime())
+				$("#reply-area").append(
+					`<li><span>${res[i].title}</span> - <span>${res[i].writer}</span><span>(${time})</span></li>`
+				)
+			}
+		}
+	})
+}
 function renderPost(post) {
 	var t = post.creationDate
 	var time = timeDiff(t, new Date().getTime())
@@ -56,6 +72,8 @@ function renderPost(post) {
 		$('#myDate').hide();
 		$('#time').show();
 	});
+	
+	loadReply()
 }
 	$.ajax ({
 		//    /blog/api/posts
@@ -99,3 +117,10 @@ function renderPost(post) {
 			;
 		}
 	})
+
+	
+$(document).ready(function() {
+	$("#btnReply").click(function(){
+		document.location.href = '/blog/article/reply?pid='+seq; // [GET]
+	})
+})

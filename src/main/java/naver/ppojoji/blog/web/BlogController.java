@@ -26,8 +26,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.Reply;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BlogService;
+import naver.ppojoji.blog.service.ReplyService;
 
 @Controller
 public class BlogController {
@@ -50,6 +52,8 @@ public class BlogController {
 	
 	@Autowired
 	BlogService blogServise;
+	@Autowired
+	ReplyService replyServise;
 	
 	@RequestMapping(value="/api/posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
@@ -235,5 +239,33 @@ public class BlogController {
 		res.put("success", true);
 		res.put("open",post.getOpen());
 		return om.writeValueAsString(res);
+	}
+	@RequestMapping(value="/article/reply" ,method = RequestMethod.GET)
+	public String reply(HttpServletRequest req, HttpSession session, @RequestParam Integer pid) {
+		Post post = blogServise.readPosts(pid, false);
+		// model.setAttribute("", post);
+		req.setAttribute("post", post);
+		return "reply";
+	}
+	@RequestMapping(value = "/article/replyPost",method = RequestMethod.POST)
+	public String replyPost(
+			@RequestParam Integer parent,
+			@RequestParam String title,
+			@RequestParam String contents,
+			@RequestParam String writer,
+			@RequestParam String pwd
+			){
+		Reply reply = new Reply(null, title, contents, writer, pwd, parent);
+		replyServise.replyInsert(reply);
+		/*
+		 * http://localhost:8080/blog/article/pageReadPost/5013
+		 */
+		return "redirect:/article/pageReadPost/" + parent;		
+	}
+	@RequestMapping(value = "article/replies/{seq}" , method = RequestMethod.GET)
+	@ResponseBody
+	public List<Reply> selectReply(@PathVariable Integer seq) {
+		List<Reply> reply = replyServise.selectReply(seq);
+		return reply;
 	}
 }

@@ -41,7 +41,7 @@ $(document).ready(function(){
 				}
 				$('#blog-list-body').append(
 					`<tr>
-						<td>${imgTag}<a href="/blog/article/pageReadPost/${res.posts[i].seq}">${res.posts[i].title}</a></td>
+						<td>${imgTag}<a href="/blog/article/pageReadPost/${res.posts[i].seq}">${res.posts[i].title}(${res.post})</a></td>
 						<td>${res.posts[i].viewCount}</td>
 						<td>${res.posts[i].writer.id}</td>
 						<td>${time}</td>
