@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
 
 /**
@@ -129,6 +130,11 @@ public class BlogDao {
 
 	public void togglePost(Integer seq) {
 		session.selectOne("BlogPostMapper.togglePost",seq);
+		
+	}
+
+	public List<Post> searchPost(Search search) {
+		return session.selectList("BlogPostMapper.SearchPost",search);
 		
 	}
 

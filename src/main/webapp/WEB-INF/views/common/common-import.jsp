@@ -8,3 +8,4 @@
 	var ctxpath = '${pageContext.request.contextPath}'
 </script>
 <link href="/blog/resources/css/common.css" rel="stylesheet" type="text/css">
+

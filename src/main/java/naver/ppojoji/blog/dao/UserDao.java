@@ -28,4 +28,7 @@ public class UserDao {
 		map.put("email", email);
 		session.delete("UserMapper.userDelete", map);
 	}
+	public User findUserById(String userId) {
+		return session.selectOne("UserMapper.findUserId", userId);
+	}
 }

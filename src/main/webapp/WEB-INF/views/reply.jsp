@@ -22,6 +22,12 @@
 		 	<input class="form-control" style="width:auto; display:inline-block;" name="writer" type="text" placeholder="이름"> 
 		 	<input class="form-control" style="width:auto; display:inline-block;"  name="pwd" type="text" placeholder="비밀번호"> 
 		 </div>
+		 <div class="form-check" style="top: -43px;left: 420px">
+			<input class="form-check-input" type="checkbox" value="" id="defaultCheck">
+			<label class="form-check-label" for="defaultCheck1">
+			    secret
+			 </label>
+		 </div>
 		 <div class="form-group">
 		 	<input class="form-control btn btn-primary" type="submit" value="입력">
 		 </div>

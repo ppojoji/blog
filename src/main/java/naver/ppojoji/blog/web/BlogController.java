@@ -1,8 +1,6 @@
 package naver.ppojoji.blog.web;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -11,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Reply;
+import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BlogService;
 import naver.ppojoji.blog.service.ReplyService;
@@ -57,11 +55,17 @@ public class BlogController {
 	
 	@RequestMapping(value="/api/posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
-	public String listPosts() throws JsonProcessingException {
+	public String listPosts(
+			@RequestParam(required = false) String searchType ,
+			@RequestParam(required = false) String keyword) throws JsonProcessingException {
+	//public String listPosts() throws JsonProcessingException {
 		// ctrl + alt + 아래/위 화살표 : 복사해서 만듬
 		//List<Post> list = blogServise.findAllPosts("Y");
+		
+		
 		List<Post> list = blogServise.findAllPosts(true);
 		Map<String, Object> map = new HashMap<String, Object>();
+		
 		/*
 		 * TODO 2020-05-01 LIMIT 시간을 디비에서 읽어들임
 		 * => 관리자 페이지에서 내가 설정을 바꿀 수 있게 해봄
@@ -69,10 +73,25 @@ public class BlogController {
 		 */
 		map.put("limit", 6*60*60*1000); // 6시간 밀리세컨드로 ...
 		map.put("posts", list);
+		//map.put("search", search);
 		return om.writeValueAsString(map);
 		// { "seq": 3000, "title": "ㅇㅇㅇㅇ", "content": "ㅇ미암리ㅏㅇ", viewCount: 1}
 	}
-	
+	@RequestMapping(value="/api/search", method = RequestMethod.GET , produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@ResponseBody
+	public String SearchPost(@RequestParam String searchType , @RequestParam String keyword) throws JsonProcessingException {
+		
+		
+		Search search = new Search();
+
+		search.setSearchType(searchType);
+		search.setKeyword(keyword);
+		
+		List<Post> list = blogServise.searchPost(search);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search",list);
+		return om.writeValueAsString(map);
+	}
 	@RequestMapping(value="/api/post/pass/{postSeq}", method= RequestMethod.POST, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
 	public String readPostWithPass(

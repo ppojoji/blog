@@ -9,11 +9,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.FileDao;
+import naver.ppojoji.blog.dao.UserDao;
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.web.Value;
 
@@ -24,6 +27,9 @@ public class BlogService {
 	
 	@Autowired
 	FileUploadService fileService;
+	
+	@Autowired 
+	UserDao userDao;
 	/*
 	List<Post> list = new ArrayList<>();
 	{
@@ -146,5 +152,14 @@ public class BlogService {
 		blogDao.updateOpen(seq,post.getOpen());
 		
 		return post;
+	}
+	
+	public List<Post> searchPost(Search search) {
+		if("writer".equals(search.getSearchType())) {
+			User user = userDao.findUserById(search.getKeyword());
+			search.setKeyword("" + user.getSeq()); // "204"
+		}
+		return blogDao.searchPost(search);
+		
 	}
 }

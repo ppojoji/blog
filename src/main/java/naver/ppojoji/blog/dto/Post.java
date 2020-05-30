@@ -20,6 +20,8 @@ public class Post {
 	private List<LocalUpFile> upfiles;
 	private boolean open;
 	
+	private Integer replyCount;
+	
 	public Post() {
 	}
 	
@@ -81,6 +83,14 @@ public class Post {
 
 	public void setViewPass(String viewPass) {
 		this.viewPass = viewPass;
+	}
+
+	public Integer getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(Integer replyCount) {
+		this.replyCount = replyCount;
 	}
 
 	@Override

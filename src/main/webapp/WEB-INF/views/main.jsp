@@ -22,6 +22,9 @@
 	       <!-- 글 내용 추가 -->
 	       <!-- 답글 영역 -->
 	<jsp:include page="/WEB-INF/views/common/common-header.jsp"></jsp:include>
+	<div id="searchOutput">
+		검색 결과 : <span id="cnt"></span> <a href="#" id="searchClose">닫기</a>
+	</div>
 	<table class="table">
 		<thead>
 			<tr>
@@ -38,6 +41,23 @@
 			 -->
 		</tbody>
 	</table>
+	<!-- search -->
+	<div class="form-group row justify-content-center">
+		<div class="w100" style="padding-right:10px">
+			<select class="form-control form-control-sm" name="searchType" id="searchType">
+				<option value="title">제목</option>
+				<option value="Contents">본문</option>
+				<option value="writer">작성자</option>
+			</select>
+		</div>
+		<div class="w300" style="padding-right:10px">
+			<input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
+		</div>
+		<div>
+			<button class="btn btn-sm btn-primary" name="btnSearch" id="btnSearch">검색</button>
+		</div>
+	</div>
+	<!-- search -->
 </div>
 </body>
 </html>

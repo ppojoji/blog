@@ -40,6 +40,9 @@
 			resultMap="UserMapper.UserMap"/>
 		 -->
 	</resultMap>
+	<resultMap type="Post" id="PostWithCnt" extends="PostMap">
+		<result column="cnt" property="replyCount"/>
+	</resultMap>
 	<!-- 
 		integer -> java.lang.Integer
 		_int -> int, _long, _double
@@ -84,12 +87,36 @@
 		p.seq = #{id}
 	</select>
 	
-	<select id="findAllPost" resultMap="PostMap" parameterType="boolean">
+	<select id="findAllPost" resultMap="PostWithCnt" parameterType="boolean">
 	select
 		<include refid="select_post"></include>
+		,rp.cnt
 	from
 		TB_POST p
-	where open = #{open,typeHandler=naver.ppojoji.blog.typehandler.StringYnTypeHandler}
+	LEFT JOIN (select
+            p.seq, 
+            count(p.SEQ) as cnt
+          from TB_POST p 
+          inner join TB_REPLY r
+          on p.seq = r.PARENT
+          where p.OPEN = 'Y'
+          group by p.seq )rp
+      ON rp.seq = p.seq	
+	where
+		1 = 1 
+	<!-- 	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="searchType=='title' and keyword != null and keyword != '' ">
+				AND TITLE like '%' || #{keyword} || '%'
+			</if>
+			<if test="searchType=='content' and keyword != null and keyword != '' ">
+				AND CONTENT like '%' || #{keyword} || '%'
+			</if>
+			<if test="searchType=='reg_id' and keyword != null and keyword != '' ">
+				AND reg_id like '%' || #{keyword} || '%'
+			</if>	
+		</trim> -->
+		and open = #{open,typeHandler=naver.ppojoji.blog.typehandler.StringYnTypeHandler}
+	order by p.creation_date desc
 	</select>
 	<insert id="insertPost" parameterType="map">
 		insert into TB_POST (
@@ -142,5 +169,11 @@
 		from
 			TB_POST p
 		where writer = #{writerSeq}	
+	</select>
+	<select id="SearchPost" parameterType="Search" resultMap="PostMap">
+		select 
+			<include refid="select_post"></include> 
+		from TB_POST p
+		where ${searchType} like '%${keyword}%' 
 	</select>
 </mapper>

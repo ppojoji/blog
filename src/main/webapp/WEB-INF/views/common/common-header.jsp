@@ -5,8 +5,8 @@
 	<h3>개인 블로그</h3>
 		
 	<div class="menu">
-        <a class="menu-item" href="#">HOME</a>
-        <c:if test="${ not empty LOGIN_USER}"><a href="<c:url value="/myinfo"/>">${LOGIN_USER.id}</a></c:if>
+        <a class="menu-item" href="<c:url value="/"/>">HOME</a>
+        <c:if test="${ not empty LOGIN_USER}"><a href="<c:url value="/myPage"/>">${LOGIN_USER.id}</a></c:if>
         <c:if test="${ not empty LOGIN_USER}"><a href="<c:url value="/logout"/>">LOGOUT</a></c:if>
         <c:if test="${ empty LOGIN_USER}"><a class="menu-item" href="<c:url value="/login"/>">LOGIN</a></c:if>
     </div>

@@ -8,3 +8,10 @@
     background-color: #CDDC39;
     box-shadow: 1px 1px 8px #ccc;
 }
+
+#searchOutput{
+	display : none;
+	padding: 1em;
+    font-size: 1.5rem;
+    background-color: #f4e470;
+}

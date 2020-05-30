@@ -42,4 +42,13 @@
 			where id = #{id}
 				and email = #{email}
 	</delete>
+	<select id="findUserId" parameterType="String" resultType="User">
+		select 
+			seq,
+			id,
+			pwd,
+			email
+		from tb_user
+		where id = #{id}
+	</select>
 </mapper>
