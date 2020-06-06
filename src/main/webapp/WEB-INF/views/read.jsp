@@ -17,6 +17,13 @@
 #pass-wrapper {
 	display: none;
 }
+#pwd-form {
+    border: 1px solid #ccc;
+    padding: .25em;
+    display: inline-block;
+    background-color: #eee;
+    display: none;
+}
 </style>
 </head>
 <body>
@@ -89,6 +96,11 @@
 		 	</ul>
 		</div>
 	</div>
+</div>
+<div id="pwd-form">
+	<input type="hidden" id="repl-seq" name="seq">
+	<input type="text" id="repl-pwd" name="pwd">
+	<input type="button" value="확인" id="btnCheckPwd">
 </div>
 </body>
 <script type="text/javascript">

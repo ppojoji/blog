@@ -6,6 +6,7 @@
 <jsp:include page="/WEB-INF/views/common/common-meta.jsp"></jsp:include>
 <title>댓글</title>
 <jsp:include page="/WEB-INF/views/common/common-import.jsp"></jsp:include>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/reply.js"></script>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/common-header.jsp"></jsp:include>
@@ -19,8 +20,8 @@
 			<textarea class="form-control" rows="10" name="contents"></textarea>
 		 </div>
 		 <div class="form-group">
-		 	<input class="form-control" style="width:auto; display:inline-block;" name="writer" type="text" placeholder="이름"> 
-		 	<input class="form-control" style="width:auto; display:inline-block;"  name="pwd" type="text" placeholder="비밀번호"> 
+		 	<input class="form-control" style="width:auto; display:inline-block;" name="writer" type="text" placeholder="이름">
+		 	<input class="form-control" style="width:auto; display:none;"  name="pwd" type="text" placeholder="비밀번호" id="pwd"> 
 		 </div>
 		 <div class="form-check" style="top: -43px;left: 420px">
 			<input class="form-check-input" type="checkbox" value="" id="defaultCheck">
@@ -33,6 +34,6 @@
 		 </div>
 	</form>
  	<input class="form-control btn btn-danger" type="button" value="취소">
-		
+	
 </body>
 </html>

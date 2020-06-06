@@ -15,7 +15,7 @@ function loadReply() {
 				var t = res[i].replyTime
 				var time = timeDiff(t, new Date().getTime())
 				$("#reply-area").append(
-					`<li><span>${res[i].title}</span> - <span>${res[i].writer}</span><span>(${time})</span></li>`
+					`<li><button class="btnPwdForm" data-seq="${res[i].seq}">댓글보기</button><span>${res[i].title}</span> - <span>${res[i].writer}</span><span>(${time})</span></li>`
 				)
 			}
 		}
@@ -120,7 +120,37 @@ function renderPost(post) {
 
 	
 $(document).ready(function() {
+	/**
+	 * 화면 가운데다 입력창을 띄우고 싶음
+	 */
+	function showPassForm() {
+		$('#pwd-form').css('display', 'inline-block')
+	}
+	function checkPass() {
+		$.ajax({
+			url: '/blog/api/checkPass',
+			method:'POST',
+			data:{
+				seq: $("#repl-seq").val(), 
+				pwd: $("#repl-pwd").val() 
+			},
+			success(res){
+				console.log(res);
+			}
+		})
+	}
 	$("#btnReply").click(function(){
 		document.location.href = '/blog/article/reply?pid='+seq; // [GET]
 	})
+	$('#reply-area').on('click', '.btnPwdForm', function(e) {
+		showPassForm()
+		var seq = $(e.target).data('seq')
+		console.log(seq)
+		$("#repl-seq").val(seq);
+	});
+	$('#btnCheckPwd').click(function(e){
+		checkPass() 
+	})
+	
+	
 })

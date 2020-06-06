@@ -316,4 +316,14 @@ public class BlogController {
 		List<Reply> reply = replyServise.selectReply(seq);
 		return reply;
 	}
+	@RequestMapping(value = "/api/checkPass", method = RequestMethod.POST, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@ResponseBody
+	public String CheckPass(@RequestParam Integer seq , @RequestParam String pwd) throws JsonProcessingException {
+		Reply reply = replyServise.findReply(seq, pwd); 
+		
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		res.put("reply", reply);
+		return om.writeValueAsString(res);
+	}
 }

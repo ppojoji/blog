@@ -18,7 +18,26 @@ public class ReplyService {
 	}
 
 	public List<Reply> selectReply(Integer seq) {
-		return replyDao.selectReply(seq);
+		List<Reply> replies = replyDao.selectReply(seq);
+		for(int i=0; i<replies.size(); i++) {
+			if(replies.get(i).isSecret()) {
+				replies.get(i).setTitle("비밀 댓글 입니다.");
+				replies.get(i).setContent("비밀 댓글 입니다.");
+				replies.get(i).setPwd("****");
+			}
+			replies.get(i).getContent();
+			
+		}
+		return replies;
+	}
+
+	public Reply findReply(Integer seq,String pwd) {
+		Reply reply = replyDao.findReply(seq);
+		if( pwd.equals(reply.getPwd())) {
+			return reply;
+		} else {
+			return null;
+		}
 	}
 
 }

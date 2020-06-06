@@ -73,6 +73,14 @@ public class Reply {
 		return "Reply [seq=" + seq + ", title=" + title + ", content=" + content + ", writer=" + writer + ", pwd=" + pwd
 				+ ", replyTime=" + replyTime + ", parent=" + parent + "]";
 	}
+
+	public boolean isSecret() {
+		if(this.pwd != null) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
 	
 }
