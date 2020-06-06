@@ -41,23 +41,46 @@
 			 -->
 		</tbody>
 	</table>
-	<!-- search -->
-	<div class="form-group row justify-content-center">
-		<div class="w100" style="padding-right:10px">
-			<select class="form-control form-control-sm" name="searchType" id="searchType">
-				<option value="title">제목</option>
-				<option value="Contents">본문</option>
-				<option value="writer">작성자</option>
-			</select>
+		<!-- search -->
+		<div class="form-group row justify-content-center">
+			<div class="w100" style="padding-right:10px">
+				<select class="form-control form-control-sm" name="searchType" id="searchType">
+					<option value="title">제목</option>
+					<option value="Contents">본문</option>
+					<option value="writer">작성자</option>
+				</select>
+			</div>
+			<div class="w300" style="padding-right:10px">
+				<input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
+			</div>
+			<div>
+				<button class="btn btn-sm btn-primary" name="btnSearch" id="btnSearch">검색</button>
+			</div>
 		</div>
-		<div class="w300" style="padding-right:10px">
-			<input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
-		</div>
-		<div>
-			<button class="btn btn-sm btn-primary" name="btnSearch" id="btnSearch">검색</button>
-		</div>
+		<!-- search -->
+		<!-- Multi Search -->
+			<div class="form-group row justify-content-center">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" name="multiSearchType" id="multiSearchType" value="title">
+					<label class="form-check-label" for="title">제목</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" name="multiSearchType" id="multiSearchType" value="contents">
+				  <label class="form-check-label" for="contents">본문</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" name="multiSearchType" id="multiSearchType" value="writer" >
+				  <label class="form-check-label" for="writer">작성자</label>
+				</div>
+				<div class="w300" style="padding-right:10px">
+					<input type="text" class="form-control form-control-sm" name="multiKeyword" id="multiKeyword">
+				</div>
+				<div>
+					<button class="btn btn-sm btn-primary" name="btnSearch2" id="btnSearch2">검색</button>
+				</div>
+			</div>
+			
+		<!-- Multi Search -->
 	</div>
-	<!-- search -->
-</div>
 </body>
 </html>

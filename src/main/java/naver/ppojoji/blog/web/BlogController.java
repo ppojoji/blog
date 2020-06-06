@@ -1,6 +1,7 @@
 package naver.ppojoji.blog.web;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Reply;
 import naver.ppojoji.blog.dto.Search;
@@ -90,6 +92,33 @@ public class BlogController {
 		List<Post> list = blogServise.searchPost(search);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search",list);
+		return om.writeValueAsString(map);
+	}
+	@RequestMapping(value="/api/multiSearch", method = RequestMethod.GET , produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@ResponseBody
+	public String MultiSearchPost(@RequestParam List<String> multiSearchType , @RequestParam String multiKeyword) throws JsonProcessingException {
+		// title, contents, writer
+		System.out.println("## multiSearchType" + multiSearchType);
+		System.out.println("## multiKeyword" + multiKeyword);
+		MultiSearch search = new MultiSearch();
+
+		if(multiSearchType.contains("title") == true) {
+			search.setTitle(true);
+		}
+		
+		if(multiSearchType.contains("contents") == true) {
+			search.setContents(true);
+		}
+		
+		if(multiSearchType.contains("writer") == true) {
+			search.setWriter(true);
+		}
+		
+		search.setMultiKeyword(multiKeyword);
+		
+		List<Post> list = blogServise.multiSearchPost(search);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("multiSearch",list);
 		return om.writeValueAsString(map);
 	}
 	@RequestMapping(value="/api/post/pass/{postSeq}", method= RequestMethod.POST, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)

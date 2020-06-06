@@ -13,7 +13,7 @@ public class Search {
 	public void setSearchType(String searchType) {
 		// title, content, reg_id 
 		
-		// TODO 입력 값 검서해야함
+		// TODO 입력 값 검사해야함
 		if(searchType.equals("title") || searchType.equals("Contents") || 
 				searchType.equals("writer")) {
 			this.searchType = searchType;

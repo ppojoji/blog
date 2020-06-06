@@ -104,18 +104,7 @@
       ON rp.seq = p.seq	
 	where
 		1 = 1 
-	<!-- 	<trim prefix="WHERE" prefixOverrides="AND|OR">
-			<if test="searchType=='title' and keyword != null and keyword != '' ">
-				AND TITLE like '%' || #{keyword} || '%'
-			</if>
-			<if test="searchType=='content' and keyword != null and keyword != '' ">
-				AND CONTENT like '%' || #{keyword} || '%'
-			</if>
-			<if test="searchType=='reg_id' and keyword != null and keyword != '' ">
-				AND reg_id like '%' || #{keyword} || '%'
-			</if>	
-		</trim> -->
-		and open = #{open,typeHandler=naver.ppojoji.blog.typehandler.StringYnTypeHandler}
+	and open = #{open,typeHandler=naver.ppojoji.blog.typehandler.StringYnTypeHandler}
 	order by p.creation_date desc
 	</select>
 	<insert id="insertPost" parameterType="map">
@@ -174,6 +163,23 @@
 		select 
 			<include refid="select_post"></include> 
 		from TB_POST p
-		where ${searchType} like '%${keyword}%' 
+		where replace(${searchType}, chr(13),'') like '%${keyword}%' 
+	</select>
+	<select id="MultiSearchPost" parameterType="multiSearch" resultMap="PostMap">
+		select 
+			<include refid="select_post"></include> 
+		from TB_POST p
+		where 1=1
+			<trim prefix="AND (" suffix=")" prefixOverrides="OR">
+				<if test="title == true">
+					OR TITLE like '%' || #{multiKeyword, jdbcType=VARCHAR} || '%'
+				</if>
+				<if test="contents == true">
+					OR CONTENTS like '%' || #{multiKeyword, jdbcType=VARCHAR} || '%'
+				</if>
+				<if test="writer == true">
+					 OR WRITER = #{writerKeyword,jdbcType=INTEGER} 
+				</if>
+			</trim>
 	</select>
 </mapper>

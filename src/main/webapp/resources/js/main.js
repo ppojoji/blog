@@ -66,9 +66,8 @@ $(document).ready(function(){
 	// 1. 서버로 게시글 내려받음
 	// 객체 리터럴
 	loadPosts();
-	$(document).on('click', '#btnSearch', function(e){
-		e.preventDefault();
-
+	
+	function keyword(){
 		var url = `${ctxpath}/api/search`;
 		
 		$.ajax({
@@ -80,19 +79,70 @@ $(document).ready(function(){
 				},
 			success: function(res) {
 				console.log(res);
-				renderPosts(res.search,21600000)
+				renderPosts(res.search,21600000) 
 				$('#searchOutput').show();
 				$('#cnt').text(res.search.length + '건');
 			}
 		});
-		
-		// location.href = url;
 		console.log(url);
+	}
+	
+	function multiKeyword(){
+		var url = `${ctxpath}/api/multiSearch`;
+		var param = $('input[name="multiSearchType"]').serialize()
+		param += '&multiKeyword=' +  $('#multiKeyword').val()
+		
+		$.ajax({
+			url: url,
+			method:'GET',
+			data: param,
+//			data:{
+//				multiSearchType : $('input[name="multiSearchType"]').serialize()
+//			,	multiKeyword : $('#multiKeyword').val()
+//				},
+			success: function(res) {
+				console.log(res);
+				renderPosts(res.multiSearch,21600000)
+				$('#searchOutput').show();
+				$('#cnt').text(res.multiSearch.length + '건');
+			}
+		});
+		console.log(url);
+	}
+	//단일 엔터버튼 눌렀을때
+	$(document).ready(function(){
+		$("#keyword").keydown(function (key){
+			if(key.keyCode == 13){
+				keyword();
+			}
 
+		});
+	});
+	
+	//멀티 엔터버튼 눌렀을때
+	$(document).ready(function(){
+		$("#multiKeyword").keydown(function (key){
+			if(key.keyCode == 13){
+				multiKeyword();
+			}
+		});
+	});
+	
+	//단일 검색버튼 눌렀을때
+	$(document).on('click', '#btnSearch', function(e){
+		e.preventDefault();
+		keyword();
 	});	
+	
 	$(document).on('click','#searchClose',function(e){
 		e.preventDefault()
 		loadPosts();
 		$('#searchOutput').hide();
 	});
+	
+	//멀티 검색버튼 눌렀을때
+	$(document).on('click', '#btnSearch2', function(e){
+		e.preventDefault();
+		multiKeyword();
+	});	
 })

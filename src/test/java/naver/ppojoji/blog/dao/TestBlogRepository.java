@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +14,22 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import naver.ppojoji.blog.dto.LocalUpFile;
+import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.service.BlogService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations ={"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class TestBlogRepository {
 
 	@Autowired
-	BlogDao blogRepo; 
+	BlogDao blogRepo;
+	
+	@Autowired
+	BlogService blogService;
 	
 	@Test
+	@Ignore
 	public void test() {
 		Post post = blogRepo.findPostBySeq(5025);
 		assertNotNull(post);
@@ -34,5 +41,18 @@ public class TestBlogRepository {
 		System.out.println(post);
 		System.out.println(post.getOpen());
 		System.out.println("view pass " + post.getViewPass());
+	}
+	
+	@Test
+	public void search() {
+		MultiSearch search = new MultiSearch(); 
+//		search.setTitle(true);
+		search.setContents(true);
+		search.setWriter(true);
+		search.setMultiKeyword("파일");
+		List list = blogService.multiSearchPost(search);
+		System.out.println(list);
+		
+		org.apache.ibatis.type.JdbcType D;
 	}
 }

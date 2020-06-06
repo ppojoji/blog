@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
@@ -136,6 +137,12 @@ public class BlogDao {
 	public List<Post> searchPost(Search search) {
 		return session.selectList("BlogPostMapper.SearchPost",search);
 		
+	}
+
+	public List<Post> multiSearchPost(MultiSearch search) {
+//		search.setTitle(true);
+//		search.setContents(ture);
+		return session.selectList("BlogPostMapper.MultiSearchPost",search);
 	}
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.FileDao;
 import naver.ppojoji.blog.dao.UserDao;
+import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
@@ -161,5 +162,18 @@ public class BlogService {
 		}
 		return blogDao.searchPost(search);
 		
+	}
+	
+	public List<Post> multiSearchPost(MultiSearch search) {
+		// [title, writer] "test2"
+		// title like '%204%'
+		// writer = 204
+		if(search.isWriter()) {
+			User user = userDao.findUserById(search.getMultiKeyword());
+			if(user != null) {
+				search.setWriterKeyword(user.getSeq());
+			}
+		}
+		return blogDao.multiSearchPost(search);
 	}
 }
