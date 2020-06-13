@@ -22,15 +22,33 @@ $(document).ready(function(){
 				// 타입 변수이름 = '아마아'
 				// var 
 				console.log('응답', res)
-				renderPosts(res.posts,res.limit)
+				renderPosts(res.posts,res.limit, function(title) {
+					return title
+				})
 			},
 			error(e, res){
 				;
 			}
 		})
 	}
-	
-	function renderPosts(posts, limit) {
+	 function searchConverter (title, searchKeyword) {
+		// var searchKeyword = $('#keyword').val();
+		while (title.includes(searchKeyword)) {
+			title = title.replace(searchKeyword,`<span class="hl">{}</span>`)						
+		}
+		// '{}' => '파일'
+		while(title.includes(`<span class="hl">{}</span>`)){
+			title = title.replace("{}",searchKeyword);
+		}
+		return title;
+	}
+	/*
+	 * 
+	 renderPosts(posts, 11111, function(title) {
+	    return '';
+	 ))
+	*/
+	function renderPosts(posts, limit, fnConverter) {
 		
 		$('#blog-list-body').empty();
 		for(var i = 0 ; i < posts.length ; i++) {
@@ -53,9 +71,10 @@ $(document).ready(function(){
 			if(posts[i].replyCount) {
 				cntText = '(' + posts[i].replyCount + ')'
 			}
+			var title = fnConverter(posts[i].title)
 			$('#blog-list-body').append(
 				`<tr>
-					<td>${imgTag}<a href="/blog/article/pageReadPost/${posts[i].seq}">${posts[i].title}${cntText}</a></td>
+					<td>${imgTag}<a href="/blog/article/pageReadPost/${posts[i].seq}">${title}${cntText}</a></td>
 					<td>${posts[i].viewCount}</td>
 					<td>${posts[i].writer.id}</td>
 					<td>${time}</td>
@@ -79,7 +98,10 @@ $(document).ready(function(){
 				},
 			success: function(res) {
 				console.log(res);
-				renderPosts(res.search,21600000) 
+				renderPosts(res.search,21600000, function (title) {
+					var searchKeyword = $('#keyword').val();
+					return searchConverter(title,searchKeyword)
+				}) 
 				$('#searchOutput').show();
 				$('#cnt').text(res.search.length + '건');
 			}
@@ -102,7 +124,10 @@ $(document).ready(function(){
 //				},
 			success: function(res) {
 				console.log(res);
-				renderPosts(res.multiSearch,21600000)
+				renderPosts(res.multiSearch,21600000, function (title) {
+					var searchKeyword = $('#multiKeyword').val();
+					return searchConverter(title,searchKeyword)
+				})
 				$('#searchOutput').show();
 				$('#cnt').text(res.multiSearch.length + '건');
 			}

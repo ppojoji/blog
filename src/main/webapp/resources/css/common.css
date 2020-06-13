@@ -16,3 +16,7 @@
     background-color: #f4e470;
 }
 
+span.hl {
+    font-weight: bold;
+    background-color: yellow;
+}
