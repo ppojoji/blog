@@ -322,7 +322,7 @@ public class BlogController {
 		Reply reply = replyServise.findReply(seq, pwd); 
 		
 		Map<String, Object> res = new HashMap<>();
-		res.put("success", true);
+		res.put("success", reply != null);
 		res.put("reply", reply);
 		return om.writeValueAsString(res);
 	}

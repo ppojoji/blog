@@ -15,7 +15,7 @@ function loadReply() {
 				var t = res[i].replyTime
 				var time = timeDiff(t, new Date().getTime())
 				$("#reply-area").append(
-					`<li><button class="btnPwdForm" data-seq="${res[i].seq}">댓글보기</button><span>${res[i].title}</span> - <span>${res[i].writer}</span><span>(${time})</span></li>`
+					`<li><button class="btnPwdForm" data-seq="${res[i].seq}">댓글보기</button><span class="body">${res[i].title}</span> - <span>${res[i].writer}</span><span>(${time})</span></li>`
 				)
 			}
 		}
@@ -126,7 +126,7 @@ $(document).ready(function() {
 	function showPassForm() {
 		$('#pwd-form').css('display', 'inline-block')
 	}
-	function checkPass() {
+	function checkPass(callback) {
 		$.ajax({
 			url: '/blog/api/checkPass',
 			method:'POST',
@@ -135,7 +135,9 @@ $(document).ready(function() {
 				pwd: $("#repl-pwd").val() 
 			},
 			success(res){
-				console.log(res);
+				// 콜백 함수에게 응답 결과를 넘겨줌
+				callback(res)
+				// console.log(res);
 			}
 		})
 	}
@@ -149,7 +151,17 @@ $(document).ready(function() {
 		$("#repl-seq").val(seq);
 	});
 	$('#btnCheckPwd').click(function(e){
-		checkPass() 
+		checkPass(function(res){
+			// 렌더링 작업을 합니다.
+			if(res.success) {
+				var replySeq = $("#repl-seq").val(); // "5"
+				var span = $(`button[data-seq="${replySeq}"]`).parent().find('span.body')
+				span.text(res.reply.title + ' - ' + res.reply.content);
+			} else {
+				alert("비번이 틀립니다.");
+			}
+			
+		}) 
 	})
 	
 	
