@@ -31,4 +31,9 @@
 	from tb_message
 	where seq = #{seq}
 </select>
+<update id="updateMessage" parameterType="Integer">
+	update tb_message
+	set readtime = sysdate
+	where seq = #{seq}
+</update>
  </mapper> 

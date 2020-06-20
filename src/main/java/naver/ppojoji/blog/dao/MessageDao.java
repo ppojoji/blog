@@ -31,4 +31,8 @@ public class MessageDao {
 		return session.selectOne("MessageMapper.readMessage", msgSeq);
 	}
 
+	public void updateMessage(Integer msgSeq) {
+		session.update("MessageMapper.updateMessage", msgSeq);
+	}
+
 }

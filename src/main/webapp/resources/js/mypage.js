@@ -126,7 +126,6 @@ $(document).ready(function(){
 						readtime="읽지 않음"
 					}
 					
-					
 					$("#msg-body").append(
 							`
 					<tr class="${readClass}">
@@ -169,6 +168,13 @@ $(document).ready(function(){
 		//console.log("eeeee");
 	}).on('click', 'input.btn-message-read', function(e){
 		var msgSeq = $(e.target).data('seq')
+		
+//		var readtime = '';
+//		
+//		if(readtime == null){
+//			readtime = new Date().getTime()
+//		}
+		
 		$.ajax({
 			url:`/blog/article/api/messageRead/${msgSeq}`,
 			method: 'GET',
@@ -180,4 +186,7 @@ $(document).ready(function(){
 			}
 		})
 	})
+//	$(".btn-message-read").click(function(){
+//		
+//	})
 })

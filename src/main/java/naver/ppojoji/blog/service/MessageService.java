@@ -69,7 +69,7 @@ public class MessageService {
 		messageDao.deleteMessage(seq);
 	}
 	public Message redaMessages(Integer msgSeq) {
-		// todo 여기서 메세지 읽은 시간을 업데이트 해줌
+		 messageDao.updateMessage(msgSeq);
 		Message msg = messageDao.readMessage(msgSeq);
 		return msg;
 	}
