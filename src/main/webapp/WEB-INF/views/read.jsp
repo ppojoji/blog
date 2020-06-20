@@ -10,6 +10,7 @@
 <!-- <link href="/blog/resources/css/read.css" rel="stylesheet" type="text/css"> -->
 <script type="text/javascript" src="/blog/resources/js/common/time-util.js"></script>
 <script type="text/javascript" src="/blog/resources/js/read.js"></script>
+<link href="/blog/resources/css/read.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 .err {
 	display: none;

@@ -163,7 +163,8 @@
 		select 
 			<include refid="select_post"></include> 
 		from TB_POST p
-		where replace(${searchType}, chr(13),'') like '%${keyword}%' 
+		where replace(${searchType}, chr(13),'') like '%${keyword}%'
+		<!-- where  contains(${searchType},'%${keyword}%') >0 -->
 	</select>
 	<select id="MultiSearchPost" parameterType="multiSearch" resultMap="PostMap">
 		select 

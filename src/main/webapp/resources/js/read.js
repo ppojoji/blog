@@ -11,13 +11,25 @@ function loadReply() {
 		method:'GET',
 		success:function(res){
 			console.log(res);
-			for(var i=0; i<res.length; i++){
-				var t = res[i].replyTime
-				var time = timeDiff(t, new Date().getTime())
-				$("#reply-area").append(
-					`<li><button class="btnPwdForm" data-seq="${res[i].seq}">댓글보기</button><span class="body">${res[i].title}</span> - <span>${res[i].writer}</span><span>(${time})</span></li>`
-				)
-			}
+			
+				for(var i=0; i<res.length; i++){
+					var readClass = ''
+					if(res[i].pwd != null){
+						readClass = "btnPwdForm";
+					}	
+					var t = res[i].replyTime
+					var time = timeDiff(t, new Date().getTime())
+					if(res[i].pwd != null){
+						$("#reply-area").append(
+								`<li><button data-seq="${res[i].seq}" class="btnPwdForm">댓글보기</button><span class="body">${res[i].title}</span> - <span>${res[i].writer}</span><span>(${time})</span></li>`
+							)
+					} else {
+						// 공개 댓글
+						$("#reply-area").append(
+								`<span class="body">${res[i].title}</span> - <span>${res[i].writer}</span><span>(${time})</span></li>`
+							)
+					}
+				}
 		}
 	})
 }

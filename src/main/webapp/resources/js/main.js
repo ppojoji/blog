@@ -72,11 +72,12 @@ $(document).ready(function(){
 				cntText = '(' + posts[i].replyCount + ')'
 			}
 			var title = fnConverter(posts[i].title)
+			var receiver = posts[i].writer.seq
 			$('#blog-list-body').append(
 				`<tr>
 					<td>${imgTag}<a href="/blog/article/pageReadPost/${posts[i].seq}">${title}${cntText}</a></td>
 					<td>${posts[i].viewCount}</td>
-					<td>${posts[i].writer.id}</td>
+					<td><a href="/blog/note/writeMessage/${receiver}">${posts[i].writer.id}</a></td>
 					<td>${time}</td>
 				</tr>`)
 		}
