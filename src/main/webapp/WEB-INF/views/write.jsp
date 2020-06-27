@@ -7,12 +7,14 @@
 <title>Insert title here</title>
 <jsp:include page="/WEB-INF/views/common/common-import.jsp"></jsp:include>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
 <!-- include summernote css/js -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 
 <!-- <link href="/blog/resources/css/read.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/blog/resources/js/read.js"></script> -->
+<script type="text/javascript" src="/blog/resources/js/oauth/imgur.js"></script> -->
 <style type="text/css">
 .err {
 	display: none;
@@ -55,6 +57,18 @@
 	</div>
 	
 </div>
+<div id="imgur-upload" class="modal fade" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">이미지 업로드</div>
+			<div class="modal-body">body</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-upload">올리기</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 <script type="text/javascript">
 $("#btnSubmit").click( function(){
@@ -94,7 +108,32 @@ $("#btnSubmit").click( function(){
 } )
 
 $(document).ready(function() {
-  $('#content').summernote();
+	var btnImgur = function(context) {
+        var ui = $.summernote.ui;
+        var button = ui.button({
+            contents: '<i class="far fa-image"></i>',
+            tooltip: 'Uload to Imgur',
+            click: function() {
+                window.imgur.openDialog()
+            }
+        });
+        return button.render(); 
+    } 
+  $('#content').summernote({
+	  toolbar: [
+		    ['style', ['bold', 'italic', 'underline', 'clear']],
+		    ['font', ['strikethrough', 'superscript', 'subscript']],
+		    ['fontsize', ['fontsize']],
+		    ['color', ['color']],
+		    ['para', ['ul', 'ol', 'paragraph']],
+		    ['height', ['height']],
+		    ['insert', ['imgur', 'picture']]
+		],
+		buttons: {
+			imgur: btnImgur
+		},
+		dialogsFade: true,
+  });
 });
 </script>
 

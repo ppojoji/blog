@@ -65,21 +65,22 @@ System.out.println("##seq"+seq);
 			@RequestParam String sender ,
 			@RequestParam Integer receiver,
 			HttpSession session) {
-		// User loginUser = Util.getUser(session);
-		// String sender = loginUser.getId();
+		 User loginUser = Util.getUser(session);
+		 int userSeq = loginUser.getSeq();
+		 
+		 System.out.println("### loginUser " + loginUser);
+		 System.out.println("### userSeq " + userSeq);
+		 System.out.println("### receiver " + receiver);
 		
 		Message msg = new Message();
 			msg.setContent(content);
 			msg.setSender(sender);
 			msg.setReceiver(receiver);
 		System.out.println(msg);
-		/*
-		Map<String, Object> map = new HashMap<String, Object>(); 
-		map.put(title, title);
-		map.put(content, content);
-		map.put(SendWriter, SendWriter);
-		*/
-		messageService.sendMessage(msg);
+	
+		if(userSeq != receiver) {
+			messageService.sendMessage(msg);
+		}
 		return new HashMap<String, Object>();
 	}
 	

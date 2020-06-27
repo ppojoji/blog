@@ -98,10 +98,33 @@ $(document).ready(function(){
 		})
 	})
 	$('#message').on('shown.bs.tab', function(e){
+		getBlogApiMessage();
+	})
+	$('#msg-body').on('click','input.btn-message-del',function(e){
+		removeMesage(e);
+		
+		//console.log("eeeee");
+	}).on('click', 'input.btn-message-read', function(e){
+		readMesage(e);
+	})
+//	$(".btn-message-read").click(function(){
+//		
+//	})
+	
+	$("#write_reply").on("click", function(e) {
+		getBlogApiMessage();
+	})
+	
+	$("#modal_cancel").on("click", function(e) {
+		getBlogApiMessage();
+	})
+	
+	function getBlogApiMessage() {
 		$.ajax({
 			url : '/blog/api/Message', 
 			method : 'GET' ,
 			success(res) {
+				var html = ""
 				for(var i=0; i<res.messages.length; i++){
 					
 					var readClass = ''
@@ -126,20 +149,20 @@ $(document).ready(function(){
 						readtime="읽지 않음"
 					}
 					
-					$("#msg-body").append(
+					html +=
 							`
 					<tr class="${readClass}">
 						<td><input type="text" value="${res.messages[i].sender}" disabled></td>
 						<td><input type="text" value="${content}" disabled></td>
 						<td><input type="text" value="${sendtime}" disabled></td>
-						<td><input type="text" value="${readtime}" disabled></td>
+						<td><input type="text" value="${readtime}" class="readtime" disabled></td>
 						<td><input type="button" data-seq="${res.messages[i].seq}" class="btn-message-del" value="삭제"></td>
 						<td><input type="button" data-seq="${res.messages[i].seq}" class="btn-message-read" value="읽기"></td>
 					</tr>	
-					`
-							)
+					`;
+							
 				}
-				
+				$("#msg-body").html(html);
 				console.log(res);
 			},
 			/*
@@ -148,8 +171,25 @@ $(document).ready(function(){
 			}
 			*/
 		})
-	})
-	$('#msg-body').on('click','input.btn-message-del',function(e){
+	}
+	
+	function readMesage(e){
+		var msgSeq = $(e.target).data('seq')
+		$.ajax({
+			url:`/blog/article/api/messageRead/${msgSeq}`,
+			method: 'GET',
+			//async: false,
+			success(res) {
+				console.log(res); // res.msg.content, res.msg.sender
+				//$('.readtime').val();
+				$('.modal-title').text(res.msg.sender)
+				$('.modal-body').text(res.msg.content)
+				$('#noteModal').modal('show')	
+			}
+		});
+	}
+	
+	function removeMesage(e){
 		var clicked = $(e.target)
 		var seq = clicked.data('seq');
 		
@@ -165,28 +205,5 @@ $(document).ready(function(){
 				console.log(res);
 			}
 		})
-		//console.log("eeeee");
-	}).on('click', 'input.btn-message-read', function(e){
-		var msgSeq = $(e.target).data('seq')
-		
-//		var readtime = '';
-//		
-//		if(readtime == null){
-//			readtime = new Date().getTime()
-//		}
-		
-		$.ajax({
-			url:`/blog/article/api/messageRead/${msgSeq}`,
-			method: 'GET',
-			success(res) {
-				console.log(res); // res.msg.content, res.msg.sender
-				$('.modal-title').text(res.msg.sender)
-				$('.modal-body').text(res.msg.content)
-				$('#noteModal').modal('show')				
-			}
-		})
-	})
-//	$(".btn-message-read").click(function(){
-//		
-//	})
+	}
 })

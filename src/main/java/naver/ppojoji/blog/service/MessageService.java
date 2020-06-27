@@ -8,6 +8,8 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dao.MessageDao;
@@ -42,7 +44,9 @@ public class MessageService {
 		
 		String title = "새로운 쪽지 도착";
 		String content = Util.readMailTemplate("new-note");
+		System.out.println("@@ content" +content);
 		content = content.replace("{{name}}", receiver.getId())
+				.replace("{{content}}", msg.getContent())
 				.replace("{{sender}}", msg.getSender());
 		
 		mailService.SendMail(receiverEmail, title, content);
@@ -68,9 +72,13 @@ public class MessageService {
 	public void deleteMessage(Integer seq) {
 		messageDao.deleteMessage(seq);
 	}
+	
+	@Transactional
 	public Message redaMessages(Integer msgSeq) {
-		 messageDao.updateMessage(msgSeq);
 		Message msg = messageDao.readMessage(msgSeq);
+		if (ObjectUtils.isEmpty(msg.getReadtime())) {
+			messageDao.updateMessage(msgSeq);
+		}
 		return msg;
 	}
 

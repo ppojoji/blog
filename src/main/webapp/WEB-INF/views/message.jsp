@@ -17,12 +17,11 @@
 	<form id="frm">
 		<input type="hidden" id="receiver" value="${receiver}">
 		<div><span>test</span></div>
-		<div style="
-    margin-bottom: 1rem;">
+		<div style="margin-bottom: 1rem;">
 			<input class="form-control" type="text" id="sender" placeholder="보내는 사람 email">
 		</div>
 		<div>
-			<textarea class="form-control" id="content" placeholder="내용">쪽지 내용 여기 들어감</textarea>
+			<textarea class="form-control" id="content" placeholder="내용"></textarea>
 		</div>
 		<div>
 			<button id="btnSend" class="btn btn-primary form-control">쪽지 보내기</button>

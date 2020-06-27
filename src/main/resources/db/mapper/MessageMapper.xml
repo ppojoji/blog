@@ -35,5 +35,6 @@
 	update tb_message
 	set readtime = sysdate
 	where seq = #{seq}
+	
 </update>
  </mapper> 
