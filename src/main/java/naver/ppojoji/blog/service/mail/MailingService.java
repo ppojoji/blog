@@ -1,10 +1,12 @@
 package naver.ppojoji.blog.service.mail;
 
+import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,16 @@ public class MailingService {
 
 	@Autowired
 	private JavaMailSender mailSender;
-	private String senderEmail = "ppojoji@gmail.com";
+//	private String senderEmail = "ppojoji@gmail.com";
+	@Value("${mailing.sender}")
+	private String senderEmail;
 	
+	
+	@PostConstruct
+	public void checkSenderEmail() {
+		
+		System.out.println(">>>>>>>> " + senderEmail);
+	}
 	public String SendMail(String receiverEmail , String title , String content) {
 		MimeMessage msg = mailSender.createMimeMessage();
 		

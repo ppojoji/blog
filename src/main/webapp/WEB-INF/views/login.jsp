@@ -29,7 +29,7 @@
 				  </div>
 				  <div class="form-group">
 				    	<label>
-						    <input type="checkbox" name="useCookie"> 로그인 유지
+						    <input type="checkbox" id="useCookie" > 로그인 유지
 					    </label>
 				  </div>
 				  <button type="submit" class="btn btn-primary">로그인</button>

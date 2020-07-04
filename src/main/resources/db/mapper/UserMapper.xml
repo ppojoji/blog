@@ -51,4 +51,19 @@
 		from tb_user
 		where id = #{id}
 	</select>
+	<update id="updateAutoLoginKey" parameterType="map">
+		update tb_user 
+		set AUTOLOGINKEY = #{autoLoginKey}
+		where seq = #{seq}
+	</update>
+	<select id="autoLoginKey" parameterType="String" resultType="User">
+		select 
+			seq,
+			id,
+			pwd,
+			email,
+			autoLoginKey
+		from tb_user
+		where autoLoginKey = #{autoLoginKey}
+	</select>
 </mapper>

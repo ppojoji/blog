@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
@@ -53,5 +55,18 @@ public class Util {
 		res.put("success", false);
 		res.put(key, value);
 		return res;
+	}
+	public static Cookie findCookie(HttpServletRequest req, String key) {
+		Cookie [] cookies = req.getCookies(); // new Cookie[0]
+		if (cookies == null ) {
+			return null;
+		}
+		
+		for (int i = 0; i < cookies.length; i++) {
+			if(key.equals(cookies[i].getName())) {
+				return cookies[i];
+			}
+		}
+		return null;
 	}
 }

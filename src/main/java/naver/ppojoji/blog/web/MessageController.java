@@ -80,8 +80,10 @@ System.out.println("##seq"+seq);
 	
 		if(userSeq != receiver) {
 			messageService.sendMessage(msg);
+			return Util.success("data", msg);
+		} else {
+			return Util.fail("casue", "SAME_ID");
 		}
-		return new HashMap<String, Object>();
 	}
 	
 	@RequestMapping(value = "/article/api/messageRead/{msgSeq}", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)

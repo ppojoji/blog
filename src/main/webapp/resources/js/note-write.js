@@ -12,7 +12,15 @@ $(document).ready(function(){
 				receiver : receiver
 			},
 			success(res){
+				if(res.success) {					
+					alert('쪽지 썼다')
+				} else {
+					alert('실패다')
+				}
 				console.log(res);
+			},
+			error(e) {
+				alert('족지 못보냄')
 			}
 		})
 		

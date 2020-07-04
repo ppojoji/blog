@@ -5,6 +5,10 @@ public class User {
 	private String id;
 	private String pwd; 
 	private String email;
+	
+	private String autoLoginKey;
+	
+	
 	public int getSeq() {
 		return seq;
 	}
@@ -29,8 +33,19 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getAutoLoginKey() {
+		return autoLoginKey;
+	}
+	public void setAutoLoginKey(String autoLoginKey) {
+		this.autoLoginKey = autoLoginKey;
+	}
 	@Override
 	public String toString() {
-		return "User [seq=" + seq + ", id=" + id + ", pwd=" + pwd + ", email=" + email + "]";
+		return "User [seq=" + seq + ", id=" + id + ", pwd=" + pwd + ", email=" + email + ", autoLoginKey="
+				+ autoLoginKey + ", getSeq()=" + getSeq() + ", getId()=" + getId() + ", getPwd()=" + getPwd()
+				+ ", getEmail()=" + getEmail() + ", getAutoLoginKey()=" + getAutoLoginKey() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
+	
 }

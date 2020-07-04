@@ -3,7 +3,9 @@ package naver.ppojoji.blog.web;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +40,9 @@ public class UserController {
 			produces = Value.APPLICATION_JSON_CHARSET_UTF_8 )
 	@ResponseBody
 	public String login(@RequestParam String id ,@RequestParam String pwd, 
-			HttpServletRequest req,
-			HttpSession session) throws JsonProcessingException {
-		User loginUser = userService.login(id, pwd);
+			HttpServletRequest req, HttpServletResponse response,
+			HttpSession session , @RequestParam String useCookie) throws JsonProcessingException {
+		User loginUser = userService.login(id, pwd,useCookie);
 		
 		Map<String, Object> res = new HashMap<>();
 		if (loginUser == null) {
@@ -56,6 +58,15 @@ public class UserController {
 			// TODO 세션에는 진짜 꼭 필요한 정보만 담아야 함 - why (세선 클러스터링이라는게 있습니다)
 			session.removeAttribute(Value.KEY_NEXT_URL);
  			session.setAttribute(Value.KEY_LOGIN_USER, loginUser);
+ 			
+ 			/* 
+ 			 * login key 설정
+ 			 */
+ 			Cookie autoLoginCookie =new Cookie("loginCookie", loginUser.getAutoLoginKey());
+ 			autoLoginCookie.setPath("/");
+// 			autoLoginCookie.setMaxAge(60*60*24*7);// 단위는 (초)임으로 7일정도로 유효시간을 설정해 준다.
+            // 쿠키를 적용해 준다.
+            response.addCookie(autoLoginCookie);
 			res.put("success", true);
 			res.put("nextUrl",nextUrl);
 		}

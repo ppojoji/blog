@@ -22,6 +22,9 @@
 	</beans:bean>
 	<interceptors>
        <interceptor>
+       	   <mapping path="/myPage"/>
+       	   <mapping path="/article/api/myinfo"/>
+       	   
            <mapping path="/article/write"/>
            <mapping path="/article/api/write"/>
            <mapping path="/article/update/**"/>

@@ -7,7 +7,8 @@ $(document).ready(function() {
 			method: 'POST',	
 			data: {
 				id : $("#id").val(),
-				pwd : $("#pwd").val()
+				pwd : $("#pwd").val(),
+				useCookie : $('#useCookie').prop('checked')
 			},
 			success: function(res){
 				console.log(res)
