@@ -21,8 +21,10 @@ public class OauthTokenService {
 	public void saveToken(int userSeq, Map<String, String> tokens) {
 		String expired = tokens.get("expires_in");
 		Integer duration = Integer.parseInt(expired);
+		System.out.println("## duration" + duration);
 		// FIXME 날짜로 변환이 안되는 중
 		duration /= 1000 ; // second
+		System.out.println("## duration sec " + duration);
 		tokens.put("sec", duration.toString());
 		oauthTokenDao.saveToken(userSeq,tokens);
 	}

@@ -27,9 +27,13 @@
 				    <label for="pwd">비밀번호</label>
 				    <input type="password" class="form-control" id="pwd">
 				  </div>
+				  <div class="form-group">
+				    	<label>
+						    <input type="checkbox" name="useCookie"> 로그인 유지
+					    </label>
+				  </div>
 				  <button type="submit" class="btn btn-primary">로그인</button>
 				</form>
-				
 			</div>
 			<!-- <div class="col-8">75%</div>
 			<div class="col-3">25%</div>

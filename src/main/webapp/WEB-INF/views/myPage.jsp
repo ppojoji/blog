@@ -128,12 +128,18 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <p>Modal body text goes here.</p>
+      <div class="modal-body" data-hhh="ddd">
+      	<p class="msg-body"></p>
+       <div class="mail-form">
+       		<input type="hidden" id="seq">
+	       	<input type="text" id="title" placeholder="제목"/>
+	        <input type="text" id="content" placeholder="내용"/>
+       </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id="write_reply">답장쓰기</button>
         <button type="button" class="btn btn-secondary" id="modal_cancel" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="modal_send">보내기</button>
       </div>
     </div>
   </div>

@@ -112,7 +112,11 @@ $(document).ready(function(){
 //	})
 	
 	$("#write_reply").on("click", function(e) {
-		getBlogApiMessage();
+		senderMessage(e, function(res) {
+			if(res.success == true){
+				$('#noteModal').modal('hide')
+			}
+		});
 	})
 	
 	$("#modal_cancel").on("click", function(e) {
@@ -182,8 +186,9 @@ $(document).ready(function(){
 			success(res) {
 				console.log(res); // res.msg.content, res.msg.sender
 				//$('.readtime').val();
+				$('#seq').val(msgSeq);
 				$('.modal-title').text(res.msg.sender)
-				$('.modal-body').text(res.msg.content)
+				$('.modal-body .msg-body').text(res.msg.content)
 				$('#noteModal').modal('show')	
 			}
 		});
@@ -204,6 +209,27 @@ $(document).ready(function(){
 				tr.remove()
 				console.log(res);
 			}
+		})
+	}
+	
+	function senderMessage(e, callback) {
+		var clicked = $(e.target)
+		var messageSeq = $('#seq').val();
+		var title = $("#title").val(); 
+		var content = $("#content").val();
+		
+		$.ajax({
+			url : "/blog/api/replyMessage" ,
+			method : "POST" , 
+			data : {
+				messageSeq : messageSeq ,
+				title : title, 
+				content : content
+			},
+			success(res){
+				console.log(res)
+				callback(res)
+			} 
 		})
 	}
 })

@@ -81,5 +81,11 @@ public class MessageService {
 		}
 		return msg;
 	}
+	public void replyMessage(String title, String content, Integer messageSeq) {
+		Message message = messageDao.readMessage(messageSeq);
+		String senderEmail = message.getSender();
+		
+		mailService.SendMail(senderEmail, title, content);
+	}
 
 }

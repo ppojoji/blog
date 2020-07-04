@@ -3,6 +3,8 @@ package naver.ppojoji.blog;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -31,5 +33,25 @@ public class Util {
 		} catch (IOException e) {
 			throw new BlogException(500, "FAIL_TO_READ_MAILTEMPLATE");
 		}
+	}
+	
+	public static Map<String, Object> success(String key, Object value) {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("success", true);
+		res.put(key, value);
+		return res;
+	}
+	public static Map<String, Object> success(String key1, Object value1, String k2, Object v2) {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("success", true);
+		res.put(key1, value1);
+		res.put(k2, v2);
+		return res;
+	}
+	public static Map<String, Object> fail(String key, Object value) {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("success", false);
+		res.put(key, value);
+		return res;
 	}
 }

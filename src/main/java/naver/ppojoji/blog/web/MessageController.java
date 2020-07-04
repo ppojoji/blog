@@ -88,9 +88,17 @@ System.out.println("##seq"+seq);
 	@ResponseBody
 	public Object ReadMessage(@PathVariable Integer msgSeq) {
 		Message msg = messageService.redaMessages(msgSeq);
-		Map<String, Object> res = new HashMap<>();
-		res.put("success", true);
-		res.put("msg", msg);
-		return res;
+//		Map<String, Object> res = new HashMap<>();
+//		res.put("success", true);
+//		res.put("msg", msg);
+		return Util.success("msg", msg);
+	}
+	
+	@RequestMapping(value = "/api/replyMessage" ,method = RequestMethod.POST)
+	@ResponseBody
+	public Object ReplyMessage(@RequestParam String title , @RequestParam String content, @RequestParam Integer messageSeq) {
+		
+		messageService.replyMessage(title,content,messageSeq);
+		return Util.success("data", null);
 	}
 }
