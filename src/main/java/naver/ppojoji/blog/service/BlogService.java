@@ -1,27 +1,22 @@
 package naver.ppojoji.blog.service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.dao.BlogDao;
-import naver.ppojoji.blog.dao.FileDao;
 import naver.ppojoji.blog.dao.UserDao;
+import naver.ppojoji.blog.dto.LocalUpFile;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
-import naver.ppojoji.blog.web.Value;
 
 @Service
+@Transactional
 public class BlogService {
 	@Autowired
 	BlogDao blogDao;
@@ -121,6 +116,18 @@ public class BlogService {
 
 	public void deletePost(Integer pid) {
 		// FIXME 자기가 쓴 글인지 확인해야함
+		/*
+		 * 파일을 지우고, 글을 지워야 함
+		 */
+		Post post = blogDao.findPostBySeq(pid);
+		List<LocalUpFile> files = post.getUpFiles();
+		for(int i=0;i<files.size();i++) {
+			LocalUpFile upfile = files.get(i);
+			String upFile = upfile.getGenName();
+			fileService.deleteFile(upFile);
+			Integer seq = upfile.getSeq();
+			blogDao.deleteFile(seq);
+		}
 		blogDao.deletePost(pid);
 	}
 
@@ -175,5 +182,14 @@ public class BlogService {
 			}
 		}
 		return blogDao.multiSearchPost(search);
+	}
+	
+	public List<Post> delYn() {
+		List<Post> list =blogDao.delYn();
+		return list;
+	}
+	public void setAsdeleted(Integer pid) {
+		blogDao.setAsdeleted(pid);
+		
 	}
 }

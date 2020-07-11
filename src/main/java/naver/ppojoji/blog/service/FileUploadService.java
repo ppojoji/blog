@@ -46,4 +46,9 @@ public class FileUploadService {
 		}
 		return null;
 	}
+	
+	public void deleteFile(String genName) {
+		File file = new File(rootDir, genName);
+		file.delete();
+	}
 }

@@ -9,3 +9,8 @@
 </script>
 <link href="/blog/resources/css/common.css" rel="stylesheet" type="text/css">
 
+<!-- toastr 라이브러리 -->
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+

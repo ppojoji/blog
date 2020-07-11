@@ -7,12 +7,10 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
-import naver.ppojoji.blog.dto.User;
 
 /**
  * XXXDao
@@ -142,6 +140,23 @@ public class BlogDao {
 //		search.setTitle(true);
 //		search.setContents(ture);
 		return session.selectList("BlogPostMapper.MultiSearchPost",search);
+	}
+
+	public List<Post> delYn() {
+		return session.selectList("BlogPostMapper.delYn");
+	}
+
+	public void setAsdeleted(Integer pid) {
+		session.update("BlogPostMapper.setAsDeleted",pid);
+		
+	}
+	/**
+	 * 첨부파일을 하나 지움
+	 * @param fileSeq
+	 */
+	public void deleteFile(Integer fileSeq) {
+		session.delete("BlogPostMapper.deleteFile", fileSeq);
+		
 	}
 
 }

@@ -12,7 +12,7 @@ public class AboutJackson {
 	public static void main(String[] args) throws JsonProcessingException {
 		ObjectMapper om = new ObjectMapper();
 		Post p = new Post();
-		p.setSeq(3222L);
+		p.setSeq(3222);
 		p.setTitle("dakdk");
 		p.setContents("doadkf aodsfkaldfk");
 		p.setCreationDate(new Date());

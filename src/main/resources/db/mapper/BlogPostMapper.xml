@@ -183,4 +183,19 @@
 				</if>
 			</trim>
 	</select>
+	<select id="delYn" resultMap="PostMap">
+		select 
+			<include refid="select_post"></include> 
+		from tb_post p
+		where delyn='Y'
+	</select>
+	<update id="setAsDeleted" parameterType="integer">
+		update tb_post 
+		set delyn = 'Y'
+		where seq = #{seq}
+	</update>
+	<delete id="deleteFile" parameterType="integer">
+		delete from tb_files
+		where seq = #{seq}
+	</delete>
 </mapper>

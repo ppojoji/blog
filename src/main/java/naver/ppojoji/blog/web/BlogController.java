@@ -29,6 +29,7 @@ import naver.ppojoji.blog.dto.Reply;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BlogService;
+import naver.ppojoji.blog.service.PostDeletion;
 import naver.ppojoji.blog.service.ReplyService;
 
 @Controller
@@ -38,8 +39,11 @@ public class BlogController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
+	@Autowired PostDeletion del;
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
+//		System.out.println(">>>>>> :: " + del.deletePost());
 		return "main";
 	}
 	
@@ -253,7 +257,9 @@ public class BlogController {
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다. 
 		// FIXME 지금 로그인한 사람이 지우려는 글의 작성자이어야 함
 		
-		this.blogServise.deletePost(pid);
+		// FIXME 아래와 같이 진짜로 지우면 안되고, 지운다는 표시만 하는 메소드들을 만들어야 함
+		this.blogServise.setAsdeleted(pid);
+		// this.blogServise.deletePost(pid);
 		Map<String, Object> res = new HashMap<>();
 		System.out.println("##res"+res);
 		res.put("success",true);

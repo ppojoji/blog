@@ -16,7 +16,6 @@
 <h3>여기서 쪽지 보냄</h3>
 	<form id="frm">
 		<input type="hidden" id="receiver" value="${receiver}">
-		<div><span>test</span></div>
 		<div style="margin-bottom: 1rem;">
 			<input class="form-control" type="text" id="sender" placeholder="보내는 사람 email">
 		</div>

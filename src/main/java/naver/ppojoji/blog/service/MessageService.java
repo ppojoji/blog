@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -41,6 +42,7 @@ public class MessageService {
 		Integer receiverSeq = msg.getReceiver();
 		User receiver = userDao.findUser(receiverSeq);
 		String receiverEmail = receiver.getEmail();
+		String senderEmail = msg.getSender();
 		
 		String title = "새로운 쪽지 도착";
 		String content = Util.readMailTemplate("new-note");
@@ -49,7 +51,8 @@ public class MessageService {
 				.replace("{{content}}", msg.getContent())
 				.replace("{{sender}}", msg.getSender());
 		
-		mailService.SendMail(receiverEmail, title, content);
+		mailService.registerMail(senderEmail,receiverEmail, title, content);
+		// mailService.SendMail(receiverEmail, title, content);
 //// 		InputStream in = MessageService.class.getResourceAsStream("/mail/template/new-note.html");
 //		try {
 ////			List<String> lines = IOUtils.readLines(in, "utf-8");
@@ -82,6 +85,8 @@ public class MessageService {
 		return msg;
 	}
 	public void replyMessage(String title, String content, Integer messageSeq) {
+		// FIXME 여기서도 곧바로 메일을 보내지 않습니다.
+		// 마찬가지로 메일잡으로 등록합니다. 
 		Message message = messageDao.readMessage(messageSeq);
 		String senderEmail = message.getSender();
 		

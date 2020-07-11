@@ -13,14 +13,16 @@ $(document).ready(function(){
 			},
 			success(res){
 				if(res.success) {					
-					alert('쪽지 썼다')
+					//alert('쪽지 썼다')
+					toastr.success("쪽지 보냈습니다.",{timeOut: 3000},{closeButton: true});
 				} else {
-					alert('실패다')
+					//alert('실패다')
+					toastr.error("쪽지 보내기가 실패했습니다.",{timeOut: 3000},{closeButton: true});
 				}
 				console.log(res);
 			},
 			error(e) {
-				alert('족지 못보냄')
+				toastr.error("쪽지 못보냄",{timeOut: 3000},{closeButton: true});
 			}
 		})
 		

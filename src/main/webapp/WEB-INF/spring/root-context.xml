@@ -3,8 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
 	<context:property-placeholder location="classpath:*.properties" />
@@ -12,10 +18,17 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!--  1. jdbc 연결 정보 -->
 	<bean id="ds" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-		<property name="driverClass" value="oracle.jdbc.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521/orcl"/>
+		  
+		<property name="driverClass" value="${db.driverClass}"/>
+        <property name="url" value="${db.url}"/> 
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+         
+		  
+		<!-- <property name="driverClass" value="oracle.jdbc.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521/orcl"/>
         <property name="username" value="blog"/>
-        <property name="password" value="blog"/>
+        <property name="password" value="blog"/> -->  
 	</bean>
 	<!-- MyBatis -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -35,7 +48,7 @@
 		<property name="dataSource" ref="ds"></property>
 	</bean>
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="username" value="${mailing.password}"></property>
+		<property name="username" value="${mailing.sender}"></property>
 		<property name="password" value="${mailing.password}"></property>
 		<property name="host" value="smtp.gmail.com"></property>
 		<property name="port" value="587"></property>
@@ -48,4 +61,9 @@
 			</props>
 		</property>
 	</bean>
+	<!-- 스케줄러설정 -->
+	<task:executor id="myExec" pool-size="5"/>
+	<task:scheduler id="myScheduler" pool-size="5"/>
+	<task:annotation-driven executor="myExec" scheduler="myScheduler"/>
+	
 </beans>

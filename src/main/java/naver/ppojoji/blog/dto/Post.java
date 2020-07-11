@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Post {
-	private Long seq; // 테이블의 PK를 담습니다.
+	private Integer seq; // 테이블의 PK를 담습니다.
 	private String title;
 	private String contents;
 	private Date creationDate  ;
@@ -25,7 +25,7 @@ public class Post {
 	public Post() {
 	}
 	
-	public Post(Long seq, String title, String contents, Date creationDate, int viewCount) {
+	public Post(Integer seq, String title, String contents, Date creationDate, int viewCount) {
 		super();
 		this.seq = seq;
 		this.title = title;
@@ -34,10 +34,10 @@ public class Post {
 		this.viewCount = viewCount;
 	}
 
-	public Long getSeq() {
+	public Integer getSeq() {
 		return seq;
 	}
-	public void setSeq(Long seq) {
+	public void setSeq(Integer seq) {
 		this.seq = seq;
 	}
 	public String getTitle() {

@@ -69,4 +69,18 @@ public class Util {
 		}
 		return null;
 	}
+	/**
+	 * Util.params("a", 13, "b", 32, "c", "dkdkd")
+	 * @param args
+	 * @return
+	 */
+	public static Map<String, Object> params(Object ... args) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		for (int i = 0; i < args.length; i += 2) {
+			String key = (String) args[i];   // 4
+			Object val = args[i+1]; // 5
+			param.put(key, val);
+		}
+		return param;
+	}
 }
