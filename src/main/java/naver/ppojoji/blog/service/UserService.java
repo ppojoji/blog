@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import naver.ppojoji.blog.dao.UserDao;
+import naver.ppojoji.blog.dto.Mail;
 import naver.ppojoji.blog.dto.User;
+import naver.ppojoji.blog.service.mail.MailingService;
 import naver.ppojoji.blog.service.oauth.OAuthService;
 
 @Service
@@ -18,6 +20,8 @@ public class UserService {
 	UserDao userDao;
 	@Autowired
 	OAuthService oauthService;
+	@Autowired
+	MailingService mailingService;
 	public User login(String id , String pwd, String useCookie) {
 		
 		User user = userDao.login(id, pwd);
@@ -48,5 +52,29 @@ public class UserService {
 	}
 	public void userDelete(String id , String email) {
 		userDao.userDelete(id,email);
+	}
+	
+	public void resetPassword(String email) {
+		/*
+		 * 1) 베일로 비번을 쏴줌(임시비번)
+		 * 
+		 * 2) 비번 재설정 url을 전송함
+		 * 
+		 */
+		User user = userDao.findUserByEmail(email);
+		String pwd = UUID.randomUUID().toString();
+		pwd = pwd.substring(0, 20);
+		
+		user.setPwd(pwd);
+		
+		userDao.UpdatePwd(user.getEmail(), user.getPwd());
+		
+		String title = "비번 변경됨";
+		String content = "임시 비번을 설정했습니다. [" + pwd + "]";
+		String receiver = user.getEmail();
+		Mail mail = new Mail(title, content, receiver);
+		mailingService.SendMail(mail);
+		
+		
 	}
 }

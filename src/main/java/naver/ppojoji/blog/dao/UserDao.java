@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.User;
 
 @Repository
@@ -42,5 +43,9 @@ public class UserDao {
 	}
 	public User findUserByEmail(String email) {
 		return session.selectOne("UserMapper.findUserEmail", email);
+	}
+	public int UpdatePwd(String email,String pwd) {
+		Map<String, Object> user =Util.params("email",email ,"pwd",pwd);
+		return session.update("UserMapper.updatePwd", user);
 	}
 }

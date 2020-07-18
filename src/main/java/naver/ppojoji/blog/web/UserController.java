@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.UserService;
 
@@ -108,5 +109,10 @@ public class UserController {
 		// 사용시간을 지원하려면 테이블을 어떻게 만들어야 할지....
 //		this.userService.userDelete(id);
 		return "logout"; 
+	}
+	@RequestMapping(value = "/user/resetpw")
+	public Object resetPw(@RequestParam String email) {
+		userService.resetPassword(email);
+		return Util.params("success", true, "msg", "메일로 보냈음");
 	}
 }

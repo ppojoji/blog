@@ -8,6 +8,14 @@ public class Mail {
 	private Integer sendresult;
 	private String receiver;
 	private String seq;
+	
+	public Mail() {
+	}
+	public Mail(String title, String content, String receiver) {
+		this.subject = title;
+		this.content = content;
+		this.receiver = receiver;
+	}
 	public String getSubject() {
 		return subject;
 	}

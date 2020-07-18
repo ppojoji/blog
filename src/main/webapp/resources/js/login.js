@@ -26,4 +26,21 @@ $(document).ready(function() {
 		});
 		
 	})
+	
+	$('.btn-pw-reset').click(function() {
+		var email = $('#email').val()
+		$.ajax({
+			url: '/blog/user/resetpw',
+			method: 'POST',
+			data : {
+				email 
+			},
+			success(res) {
+				console.log(res)
+			}
+		})
+	})
+	$('.btn-find-pass').click(function(){
+		$('#passModal').modal('show');
+	})
 })

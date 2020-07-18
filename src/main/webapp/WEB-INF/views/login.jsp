@@ -38,6 +38,7 @@
 					    </label>
 				  </div>
 				  <button type="submit" class="btn btn-primary">로그인</button>
+				  <a href="#" class="btn btn-primary btn-find-pass">비번 찾기</a>
 				</form>
 			</div>
 			<!-- <div class="col-8">75%</div>
@@ -45,6 +46,31 @@
 			<div class="col-3">25%</div> -->
 		</div>
 	</div>
+</div>
+<!-- The Modal -->
+<div class="modal" id="passModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Heading</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <input type="text" id="email" name="email" >
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-primary btn-pw-reset" data-dismiss="modal">비번 재설정</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 </body>
 <script type="text/javascript">window.Naver.prepareLogin()</script>
