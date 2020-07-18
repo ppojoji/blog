@@ -40,4 +40,7 @@ public class UserDao {
 		map.put("autoLoginKey", autoLoginKey);
 		session.update("UserMapper.updateAutoLoginKey", map);
 	}
+	public User findUserByEmail(String email) {
+		return session.selectOne("UserMapper.findUserEmail", email);
+	}
 }

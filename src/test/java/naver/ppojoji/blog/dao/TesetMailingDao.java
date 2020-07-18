@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import naver.ppojoji.blog.dto.Mail;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations ={"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class TesetMailingDao {
@@ -18,8 +20,8 @@ public class TesetMailingDao {
 	
 	@Test
 	public void test_메일잡_읽기() {
-		List<Map<String, Object>> jobs = dao.getBeforeMail();
-		for (Map<String, Object> job : jobs) {
+		List<Mail> jobs = dao.getBeforeMail();
+		for (Mail job : jobs) {
 			System.out.println(job);
 		}
 	}

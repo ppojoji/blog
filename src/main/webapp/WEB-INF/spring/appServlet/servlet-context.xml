@@ -29,6 +29,7 @@
            <mapping path="/article/api/write"/>
            <mapping path="/article/update/**"/>
            <mapping path="/article/api/delete/**"/>
+           <mapping path="/note/writeMessage/**"/>
            <beans:bean id="commonInterceptor" class="naver.ppojoji.blog.web.interceptor.LoginChecker"/>
        </interceptor>
     </interceptors>

@@ -8,7 +8,9 @@
 <jsp:include page="/WEB-INF/views/common/common-import.jsp"></jsp:include>
 
 <link href="/blog/resources/css/login.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/login.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/oauth/naver.js"></script>
 </head>
 <body>
 <div>
@@ -16,7 +18,10 @@
 	
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col">
+			<div class="col-12 naver-login-bar">
+				<a href="#" id="login-link"><img src="https://static.nid.naver.com/oauth/big_g.PNG?version=js-2.0.0" height="60"></a>
+			</div>
+			<div class="col-12">
 				<div id="error" class="alert alert-danger mt-3">여기에 오류 메세지 나옴</div>
 				<form id="loginForm">
 				  <div class="form-group">
@@ -42,4 +47,5 @@
 	</div>
 </div>
 </body>
+<script type="text/javascript">window.Naver.prepareLogin()</script>
 </html>

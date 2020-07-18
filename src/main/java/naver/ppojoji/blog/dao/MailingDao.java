@@ -28,7 +28,7 @@ public class MailingDao {
 		session.insert("MailingMapper.registerMail", param);	
 	}
 	
-	public List<Map<String, Object>> getBeforeMail() {
+	public List<Mail> getBeforeMail() {
 		/*
 		 * 이렇게 map오로 만들면 일단 편함
 		 * but, 나중에 코드 읽기 되게 더러움

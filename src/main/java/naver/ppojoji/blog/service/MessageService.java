@@ -15,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dao.MessageDao;
 import naver.ppojoji.blog.dao.UserDao;
+import naver.ppojoji.blog.dto.Mail;
 import naver.ppojoji.blog.dto.Message;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.mail.MailingService;
@@ -89,8 +90,12 @@ public class MessageService {
 		// 마찬가지로 메일잡으로 등록합니다. 
 		Message message = messageDao.readMessage(messageSeq);
 		String senderEmail = message.getSender();
-		
-		mailService.SendMail(senderEmail, title, content);
+		Mail mail = new Mail();
+		mail.setSender(senderEmail);
+		mail.setSubject(title);
+		mail.setContent(content);
+		mail.setReceiver(senderEmail);
+		mailService.SendMail(mail);
 	}
 
 }

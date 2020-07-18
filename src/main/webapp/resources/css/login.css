@@ -2,3 +2,7 @@
 #error {
 	display: none;
 }
+.naver-login-bar {
+	text-align: center;
+	margin-top: 1em;
+}

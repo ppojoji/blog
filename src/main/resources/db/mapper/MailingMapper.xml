@@ -22,7 +22,7 @@
 				, #{receiver}
 			   )
 	</insert>
-	<select id="getBeforeMail" resultType="hashmap">
+	<select id="getBeforeMail" resultType="Mail">
 		select seq, subject ,content ,sender , sendresult ,receiver 
 		from tb_mailjob 
 		where sendresult = '-1'
