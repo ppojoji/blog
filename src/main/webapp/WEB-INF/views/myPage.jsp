@@ -51,6 +51,9 @@
 	  <li class="nav-item">
 	    <a class="nav-link" id="message" data-toggle="tab" href="#myMessage">쪽지</a>
 	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" id="category" data-toggle="tab" href="#cateList">카테고리</a>
+	  </li>
 	</ul>
 
 	<!-- Tab panes -->
@@ -66,6 +69,19 @@
 	  <div class="tab-pane container fade" id="leave">
 	  	<label>탈퇴합니다</label>
 		<input type="button" id="userDelete" class="form-control" value="탈퇴">
+	  </div>
+	  <div class="tab-pane container fade" id="cateList">
+	  	<div class="cate-control">
+		  	<label>카테고리</label>
+			<input type="button" value="카테고리">
+	  	</div>
+	  		<!--  카테고리 목록 여기에 -->
+  		<ul class="list-group cate-view">
+  		<!-- 
+		  <li class="list-group-item active"><span>aaa</span> <button>X</button></li>
+		  <li class="list-group-item"><span>bbbb</span> <button>X</button></li>
+  		 -->
+		</ul>
 	  </div>
 	  <div class="tab-pane container fade" id="mypost">
 	  	<label>내글</label>

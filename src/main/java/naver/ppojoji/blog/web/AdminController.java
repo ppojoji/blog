@@ -4,19 +4,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import naver.ppojoji.blog.Util;
+import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.service.AdminService;
 import naver.ppojoji.blog.service.BlogService;
+import naver.ppojoji.blog.service.CategoryService;
 
 @Controller
 public class AdminController {
@@ -26,6 +35,8 @@ public class AdminController {
 	@Autowired 
 	BlogService blogService;
 	
+	@Autowired
+	CategoryService cateService;
 	/*
 	 * FIXME 이것도 나중에 없애고 싶음
 	 */
@@ -86,5 +97,19 @@ public class AdminController {
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		return om.writeValueAsString(res);
+	}
+	
+	@GetMapping(value = "/categories")
+	@ResponseBody
+	public List<Category> cateList(HttpSession session) {
+		// FIXME 로그인 정보가 있는1지 확인해야함
+		return cateService.findAllCate();
+	}
+	
+	@PostMapping(value = "/cate/deleteCate")
+	@ResponseBody
+	public Object deleteCate(@RequestParam Integer seq) {
+		cateService.deleteCate(seq);
+		return Util.success("cate", seq);
 	}
 }

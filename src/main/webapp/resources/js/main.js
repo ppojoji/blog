@@ -73,9 +73,14 @@ $(document).ready(function(){
 			}
 			var title = fnConverter(posts[i].title)
 			var receiver = posts[i].writer.seq
+			var cateName = ''
+			if(posts[i].category != null){
+				cateName = posts[i].category.name
+			}
 			$('#blog-list-body').append(
 				`<tr>
 					<td>${imgTag}<a href="/blog/article/pageReadPost/${posts[i].seq}">${title}${cntText}</a></td>
+					<td><a href="/blog/cate/${cateName}">${cateName}</a></td>
 					<td>${posts[i].viewCount}</td>
 					<td><a href="/blog/note/writeMessage/${receiver}">${posts[i].writer.id}</a></td>
 					<td>${time}</td>

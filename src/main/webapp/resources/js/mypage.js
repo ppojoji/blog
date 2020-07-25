@@ -100,12 +100,19 @@ $(document).ready(function(){
 	$('#message').on('shown.bs.tab', function(e){
 		getBlogApiMessage();
 	})
+	$('#category').on('shown.bs.tab', function(e){
+		loadCategory();
+	})
 	$('#msg-body').on('click','input.btn-message-del',function(e){
 		removeMesage(e);
 		
 		//console.log("eeeee");
 	}).on('click', 'input.btn-message-read', function(e){
 		readMesage(e);
+	})
+	$('.cate-view').on('click', 'button', function(e){
+		deleteCate(e);
+		console.log(e.target)
 	})
 //	$(".btn-message-read").click(function(){
 //		
@@ -194,6 +201,37 @@ $(document).ready(function(){
 		});
 	}
 	
+	function loadCategory(e){
+		$.ajax({
+			url:`/blog/categories`,
+			method: 'GET',
+			//async: false,
+			success(res) {
+				console.log(res); // res.msg.content, res.msg.sender
+//				$('.cate-view').append(liHtml);
+				
+				for(var i=0; i<res.length; i++){
+					$(".cate-view").append(`<li class="list-group-item cate-item"><span>${res[i].name}</span> <button data-seq="${res[i].seq}">X</button></li>`)
+				}
+//				$(".list-group-item active").val();
+//				$(".list-group-item active").val();
+			}
+		});
+	}
+	
+	function deleteCate(e){
+		var cate = $(e.target).data('seq') // data-seq="dkdkd"
+		$.ajax({
+			url: "/blog/cate/deleteCate",
+			method:"POST",
+			data:{
+				seq : cate
+			},
+			success(res){
+				console.log(res)
+			}
+		})
+	}
 	function removeMesage(e){
 		var clicked = $(e.target)
 		var seq = clicked.data('seq');

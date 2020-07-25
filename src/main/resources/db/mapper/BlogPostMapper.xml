@@ -32,6 +32,10 @@
 			column="writer" 
 			property="writer" 
 			select="UserMapper.findUserV1"/>
+		<association 
+			column="category" 
+			property="category" 
+			select="CategoryMapper.category"/>	
 		<collection property="upFiles" ofType="LocalUpFile" resultMap="upFileMap"/>
 		<!-- join query!!! FIXME
 		<association 
@@ -71,7 +75,8 @@
 		p.view_count,
 		p.writer,
 		p.open,
-		p.view_pass
+		p.view_pass,
+		p.category
 	</sql>
 	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
 	select

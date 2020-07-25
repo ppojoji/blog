@@ -9,13 +9,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.LocalUpFile;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BlogService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,5 +55,16 @@ public class TestBlogRepository {
 		System.out.println(list);
 		
 		org.apache.ibatis.type.JdbcType D;
+	}
+	
+	@Test
+	public void test_카테고리_포함해서_읽기() {
+		Post post = blogRepo.findPostBySeq(5009);
+		User user = post.getWriter();
+		assertNotNull(user);
+		Category cate = post.getCategory();
+		assertNotNull(cate);
+		assertEquals(3, cate.getSeq().intValue());
+		assertEquals("ccc", cate.getName());
 	}
 }
