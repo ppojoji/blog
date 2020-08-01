@@ -113,13 +113,15 @@ $(document).ready(function(){
 			var title = fnConverter(posts[i].title)
 			var receiver = posts[i].writer.seq
 			var cateName = ''
+			var cateSeq = ''
 			if(posts[i].category != null){
+				cateSeq = posts[i].category.seq
 				cateName = posts[i].category.name
 			}
 			$('#blog-list-body').append(
 				`<tr>
 					<td>${imgTag}<a href="/blog/article/pageReadPost/${posts[i].seq}">${title}${cntText}</a></td>
-					<td><a href="/blog/cate/${cateName}">${cateName}</a></td>
+					<td><a href="/blog/cate/${cateName}" class="cate-link" data-cate="${cateSeq}">${cateName}</a></td>
 					<td>${posts[i].viewCount}</td>
 					<td><a href="/blog/note/writeMessage/${receiver}">${posts[i].writer.id}</a></td>
 					<td>${time}</td>
@@ -215,6 +217,15 @@ $(document).ready(function(){
 		e.preventDefault();
 		multiKeyword();
 	});
+	
+	$('#blog-list-body').on('click', 'a.cate-link', function(e) {
+		e.preventDefault();
+		console.log('[cate] ', e.target)
+		var cateSeq = $(e.target).data("cate");
+		console.log(cateSeq)
+		$("#cata").val(cateSeq);
+		$('#cata').trigger('change')
+	})
 	
 	$("#cata").change(function(e){
 		console.log(e.target.value);
