@@ -22,6 +22,20 @@
 	       <!-- 글 내용 추가 -->
 	       <!-- 답글 영역 -->
 	<jsp:include page="/WEB-INF/views/common/common-header.jsp"></jsp:include>
+	<div>
+    	<select class="custom-select" id="cata">
+    		<option value="null">[전체보기]</option>
+		  <%-- <option selected>카테고리</option>77
+		  <%
+		  	for(int i=0; i<10; i++){
+		  %>
+		  <option value="<%=i%>">${cata}</option>
+		  <%
+		  	}
+		  %> --%>
+		 
+		</select>
+    </div>
 	<div id="searchOutput">
 		검색 결과 : <span id="cnt"></span> <a href="#" id="searchClose">닫기</a>
 	</div>

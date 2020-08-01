@@ -18,5 +18,8 @@ public class CategoryService {
 	public void deleteCate(Integer seq) {
 		cateDao.deleteCate(seq);
 	}
+	public List<Category> sameNameCate(String name) {
+		return cateDao.sameNameCate(name);
+	}
 
 }

@@ -25,4 +25,8 @@ public class CategoryDao {
 	public void deleteCate(Integer seq) {
 		session.delete("CategoryMapper.deleteCate",seq);
 	}
+	
+	public List<Category> sameNameCate(String name) {
+		return session.selectList("CategoryMapper.sameNameCate",name);
+	}
 }

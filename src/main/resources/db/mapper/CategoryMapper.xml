@@ -16,4 +16,8 @@
 		delete from tb_category 
 		where seq = #{seq}
 	</delete>
+	<select id="sameNameCate" parameterType="String" resultType="Category">
+		select * 
+		from tb_category 
+	</select>
 </mapper>

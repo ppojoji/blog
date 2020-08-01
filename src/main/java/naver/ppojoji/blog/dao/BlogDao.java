@@ -159,4 +159,8 @@ public class BlogDao {
 		
 	}
 
+	public List<Post> findByCate(Integer cateSeq) {
+		return session.selectList("BlogPostMapper.findByCate", cateSeq);
+	}
+
 }

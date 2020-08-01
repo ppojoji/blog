@@ -98,6 +98,7 @@ function renderPost(post) {
 			// 타입 변수이름 = '아마아'
 			// var 
 			console.log('응답', res)
+			renderCategory(res.cate);
 			if(res.success) {
 				renderPost(res.post)
 			} else if(res.cause === 'VIEW_PASS'){
@@ -129,7 +130,31 @@ function renderPost(post) {
 			;
 		}
 	})
+/*
 
+$.ajax({
+	success(res) {
+	    renderCategory();
+	}
+});
+function renderCategory() { ... }
+
+$(document).ready(function() {
+
+
+})
+
+ */
+function renderCategory(cateList){
+	//var cata = ${}
+	for(var i=0; i<cateList.length; i++){
+		var seq = cateList[i].seq;
+		var name = cateList[i].name;
+		$("#cata").append(
+			`<option value="${seq}">${name}</option>`
+		);
+	}
+} 
 	
 $(document).ready(function() {
 	/**
@@ -175,6 +200,4 @@ $(document).ready(function() {
 			
 		}) 
 	})
-	
-	
 })

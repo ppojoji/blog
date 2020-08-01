@@ -23,12 +23,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import naver.ppojoji.blog.Util;
+import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Reply;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BlogService;
+import naver.ppojoji.blog.service.CategoryService;
 import naver.ppojoji.blog.service.PostDeletion;
 import naver.ppojoji.blog.service.ReplyService;
 
@@ -56,8 +59,13 @@ public class BlogController {
 	
 	@Autowired
 	BlogService blogServise;
+	
 	@Autowired
 	ReplyService replyServise;
+	
+	@Autowired
+	CategoryService cateGoryService;
+	
 	
 	@RequestMapping(value="/api/posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
@@ -71,7 +79,7 @@ public class BlogController {
 		
 		List<Post> list = blogServise.findAllPosts(true);
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+		List<Category> cata = cateGoryService.findAllCate();
 		/*
 		 * TODO 2020-05-01 LIMIT 시간을 디비에서 읽어들임
 		 * => 관리자 페이지에서 내가 설정을 바꿀 수 있게 해봄
@@ -79,9 +87,17 @@ public class BlogController {
 		 */
 		map.put("limit", 6*60*60*1000); // 6시간 밀리세컨드로 ...
 		map.put("posts", list);
+		map.put("cata", cata);
 		//map.put("search", search);
 		return om.writeValueAsString(map);
 		// { "seq": 3000, "title": "ㅇㅇㅇㅇ", "content": "ㅇ미암리ㅏㅇ", viewCount: 1}
+	}
+	@RequestMapping(value="/api/posts/cate/{cateSeq}" )
+	@ResponseBody
+	public Object ListPostsByCata(@PathVariable Integer cateSeq) {
+		List<Post> list = blogServise.findByCate(cateSeq);
+		
+		return Util.success("posts", list,"limit", 6*60*60*1000);
 	}
 	@RequestMapping(value="/api/search", method = RequestMethod.GET , produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
@@ -159,7 +175,7 @@ public class BlogController {
 			throws JsonProcessingException {
 		
 		Post post = blogServise.readPosts(postSeq, true);
-		
+		List<Category> cata = cateGoryService.findAllCate();
 		Map<String, Object> res = new HashMap<>();
 		if(post != null) {
 			if(post.getViewPass() != null) {
@@ -167,7 +183,8 @@ public class BlogController {
 				res.put("cause", "VIEW_PASS");
 			} else {
 				res.put("success", true);
-				res.put("post", post);				
+				res.put("post", post);
+				res.put("cate", cata);
 			}
 		} else {
 			res.put("success", false);
@@ -331,5 +348,17 @@ public class BlogController {
 		res.put("success", reply != null);
 		res.put("reply", reply);
 		return om.writeValueAsString(res);
+	}
+	
+//	@RequestMapping(value="/cate/{cateName}", method= RequestMethod.GET, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
+//	public String cate() {
+//		//List<Post> list = blogServise.findAllPosts(true);
+//		return "cate"; 
+//	}
+	@RequestMapping(value="/cate/{name}", method= RequestMethod.GET, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
+	@ResponseBody
+	public List<Category> cate(@PathVariable String name) {
+		List<Category> list = cateGoryService.sameNameCate(name);
+		return list;
 	}
 }

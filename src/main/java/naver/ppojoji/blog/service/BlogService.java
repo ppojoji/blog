@@ -192,4 +192,7 @@ public class BlogService {
 		blogDao.setAsdeleted(pid);
 		
 	}
+	public List<Post> findByCate(Integer cateSeq) {
+		return blogDao.findByCate(cateSeq);
+	}
 }

@@ -10,9 +10,19 @@ function loadPosts() {
 		}
 	});
 }
+	function renderCategory(cateList){
+		//var cata = ${}
+		for(var i=0; i<cateList.length; i++){
+			var seq = cateList[i].seq;
+			var name = cateList[i].name;
+			$("#cata").append(
+				`<option value="${seq}">${name}</option>`
+			);
+		}
+	} 
 $(document).ready(function(){
 	
-	function loadPosts(){
+	function loadPosts(buildCate){
 		$.ajax ({
 			//    /blog/api/posts
 			url: '/blog/api/posts',
@@ -22,6 +32,10 @@ $(document).ready(function(){
 				// 타입 변수이름 = '아마아'
 				// var 
 				console.log('응답', res)
+				if(buildCate == true){
+					renderCategory(res.cata)
+				}
+				
 				renderPosts(res.posts,res.limit, function(title) {
 					return title
 				})
@@ -31,6 +45,31 @@ $(document).ready(function(){
 			}
 		})
 	}
+	
+	function loadPostsByCata(cataSeq){
+		
+		$.ajax ({
+			//    /blog/api/posts
+			url: '/blog/api/posts/cate/' + cataSeq,
+			method: 'GET',
+//			data:{
+//				cataSeq : cataSeq
+//			},
+			success(res) {
+				// 타입 변수이름 = '아마아'
+				// var 
+				console.log('응답', res)
+				//renderCategory(res.cata)
+				renderPosts(res.posts,res.limit, function(title) {
+					return title
+				})
+			},
+			error(e, res){
+				;
+			}
+		})
+	}
+	
 	 function searchConverter (title, searchKeyword) {
 		// var searchKeyword = $('#keyword').val();
 		while (title.includes(searchKeyword)) {
@@ -90,7 +129,7 @@ $(document).ready(function(){
 	// $( css-selector-문법)
 	// 1. 서버로 게시글 내려받음
 	// 객체 리터럴
-	loadPosts();
+	loadPosts(true);
 	
 	function keyword(){
 		var url = `${ctxpath}/api/search`;
@@ -167,7 +206,7 @@ $(document).ready(function(){
 	
 	$(document).on('click','#searchClose',function(e){
 		e.preventDefault()
-		loadPosts();
+		loadPosts(false);
 		$('#searchOutput').hide();
 	});
 	
@@ -175,5 +214,15 @@ $(document).ready(function(){
 	$(document).on('click', '#btnSearch2', function(e){
 		e.preventDefault();
 		multiKeyword();
-	});	
+	});
+	
+	$("#cata").change(function(e){
+		console.log(e.target.value);
+		var seq = e.target.value;
+		if(seq == "null"){
+			loadPosts(false);
+		}else {
+			loadPostsByCata(seq);
+		}
+	});
 })
