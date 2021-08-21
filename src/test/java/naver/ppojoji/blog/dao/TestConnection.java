@@ -25,6 +25,7 @@ public class TestConnection {
 	public void test_연결잘되는지테스트() throws SQLException {
 		assertNotNull(ds);
 		// blogDao.
+//		org.mariadb.jdbc.Driver
 		
 	}
 	/*

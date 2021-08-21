@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +36,8 @@ public class UserController {
 	public String login() {
 		return "login";
 	}
+	
+	// @CrossOrigin(origins = "*", allowCredentials = "true")
 	@RequestMapping(
 			value="/api/login", 
 			method = RequestMethod.POST , 
@@ -70,6 +73,7 @@ public class UserController {
             response.addCookie(autoLoginCookie);
 			res.put("success", true);
 			res.put("nextUrl",nextUrl);
+			res.put("user", loginUser);
 		}
 		return om.writeValueAsString(res);
 	}
@@ -85,10 +89,16 @@ public class UserController {
 	@ResponseBody
 	public String myInfo(HttpSession session) throws JsonProcessingException {
 		User user = (User) session.getAttribute("LOGIN_USER");
+		
 		Map<String, Object> res = new HashMap<>();
-		res.put("success", user != null);
-		res.put("user", user);
-		user.setPwd(null);
+		if(user != null) {
+			res.put("success", user != null);
+			res.put("user", user);
+			user.setPwd(null);
+		}else {
+			res.put("success", false);
+			res.put("user", user);
+		}
 		return om.writeValueAsString(res);
 	}
 	

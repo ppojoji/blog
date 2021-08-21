@@ -92,7 +92,7 @@ public class MailingService {
 //	}
 	
 	@Transactional
-	@Scheduled(cron = "50 * * * * *")
+//	@Scheduled(cron = "50 * * * * *")
 	public void scheduleMailing() {
 		//Mail mail = (Mail) mailingDao.getBeforeMail();
 		List<Mail> jobs = mailingDao.getBeforeMail();

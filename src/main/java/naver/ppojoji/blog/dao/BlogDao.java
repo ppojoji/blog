@@ -79,7 +79,8 @@ public class BlogDao {
 		for (String k : param.keySet()) {
 			System.out.println(" >> " + k + " : " + param.get(k));
 		}
-		return (Integer) param.get("seq");
+		Long seq = (Long) param.get("seq");
+		return seq.intValue() ;
 		// 
 //		Post p = new Post();
 //		p.setTitle(title);

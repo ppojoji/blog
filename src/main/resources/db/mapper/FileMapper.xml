@@ -3,19 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="FileMapper">
-	<insert id="fileSave" parameterType="map" keyProperty="seq">
+	<insert id="fileSave" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
 		INSERT INTO TB_FILES(
-			SEQ,ORIGINNAME,GENNAME,FILESIZE,CONTENTTYPE,POST)
-		VALUES (TB_FILES_SEQ.NEXTVAL,
+			ORIGINNAME,GENNAME,FILESIZE,CONTENTTYPE,POST)
+		VALUES (
 			#{originName},
 			#{genName},
 			#{fileSize},
 			#{contentType},
 			#{post}
 			)
-		<selectKey keyProperty="seq" resultType="integer" order="AFTER">
-			SELECT TB_FILES_SEQ.currval FROM dual
-		</selectKey>
 	</insert>
 	<select id="FindFile" parameterType="String" resultMap="BlogPostMapper.upFileMap">
 		select * 

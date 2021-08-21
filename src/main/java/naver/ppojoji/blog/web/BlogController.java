@@ -175,6 +175,12 @@ public class BlogController {
 			throws JsonProcessingException {
 		
 		Post post = blogServise.readPosts(postSeq, true);
+		try {
+			Thread.sleep(1*100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List<Category> cata = cateGoryService.findAllCate();
 		Map<String, Object> res = new HashMap<>();
 		if(post != null) {
@@ -234,7 +240,10 @@ public class BlogController {
 	 */
 	@RequestMapping(value="/article/api/update/{postSeq}", method= RequestMethod.POST, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
-	public String updatePost(@RequestParam String title , @RequestParam String contents , @RequestParam Integer postSeq) throws JsonProcessingException {
+	public String updatePost(
+			@RequestParam String title ,
+			@RequestParam String contents , 
+			@PathVariable Integer postSeq) throws JsonProcessingException {
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다.
 		this.blogServise.updatePost(title, contents, postSeq);
 		System.out.println("##postSeq"+postSeq);
@@ -270,12 +279,14 @@ public class BlogController {
 	
 	@RequestMapping(value="/article/api/delete", method= RequestMethod.POST, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
-	public String deletePost(@RequestParam Integer pid) throws JsonProcessingException {
+	public String deletePost(@RequestParam Integer pid, HttpSession session) throws JsonProcessingException {
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다. 
 		// FIXME 지금 로그인한 사람이 지우려는 글의 작성자이어야 함
 		
 		// FIXME 아래와 같이 진짜로 지우면 안되고, 지운다는 표시만 하는 메소드들을 만들어야 함
-		this.blogServise.setAsdeleted(pid);
+		
+		User loginUser = (User) session.getAttribute(Value.KEY_LOGIN_USER);
+		this.blogServise.setAsdeleted(loginUser.getSeq(), pid);
 		// this.blogServise.deletePost(pid);
 		Map<String, Object> res = new HashMap<>();
 		System.out.println("##res"+res);

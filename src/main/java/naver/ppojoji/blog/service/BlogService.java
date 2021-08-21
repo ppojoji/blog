@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.UserDao;
 import naver.ppojoji.blog.dto.LocalUpFile;
@@ -188,8 +189,15 @@ public class BlogService {
 		List<Post> list =blogDao.delYn();
 		return list;
 	}
-	public void setAsdeleted(Integer pid) {
-		blogDao.setAsdeleted(pid);
+	public void setAsdeleted(Integer userSeq, Integer pid) {
+		// pid의 작성자를 가져옴
+		Post post = this.readPosts(pid, false);
+		
+		if(userSeq == post.getWriter().getSeq()) {
+			blogDao.setAsdeleted(pid);
+		}else {
+			throw new BlogException(403, "NOT_A_USER");
+		}
 		
 	}
 	public List<Post> findByCate(Integer cateSeq) {

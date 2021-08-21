@@ -110,23 +110,19 @@
 	where
 		1 = 1 
 	and open = #{open,typeHandler=naver.ppojoji.blog.typehandler.StringYnTypeHandler}
+	and delYn = 'N'
 	order by p.creation_date desc
 	</select>
-	<insert id="insertPost" parameterType="map">
+	<insert id="insertPost" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
 		insert into TB_POST (
-			seq,
 			TITLE,
 			contents,
 			writer
 		) values (
-			tb_post_seq.nextval,
 			#{title},
 			#{contents},
 			#{writeSeq}
 		)
-		<selectKey keyProperty="seq" resultType="integer" order="AFTER">
-			SELECT TB_POST_SEQ.currval FROM dual
-		</selectKey>
 	</insert>
 	<update id="updatePost" parameterType="map">
 		update tb_Post
