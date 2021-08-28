@@ -46,6 +46,7 @@
 	</resultMap>
 	<resultMap type="Post" id="PostWithCnt" extends="PostMap">
 		<result column="cnt" property="replyCount"/>
+		<result column="ufile_cnt" property="upfileCount"/> 
 	</resultMap>
 	<!-- 
 		integer -> java.lang.Integer
@@ -84,7 +85,7 @@
 		, f.*
 	from
 		TB_POST p
-	left join 
+	LEFT join 
 		tb_files f
 	on
 		p.seq = f.post
@@ -93,25 +94,30 @@
 	</select>
 	
 	<select id="findAllPost" resultMap="PostWithCnt" parameterType="boolean">
-	select
+	SELECT
 		<include refid="select_post"></include>
 		,rp.cnt
-	from
-		TB_POST p
-	LEFT JOIN (select
-            p.seq, 
-            count(p.SEQ) as cnt
-          from TB_POST p 
-          inner join TB_REPLY r
-          on p.seq = r.PARENT
-          where p.OPEN = 'Y'
-          group by p.seq )rp
-      ON rp.seq = p.seq	
-	where
-		1 = 1 
-	and open = #{open,typeHandler=naver.ppojoji.blog.typehandler.StringYnTypeHandler}
-	and delYn = 'N'
-	order by p.creation_date desc
+		,fcnt.ufile_cnt
+	FROM   tb_post p
+       LEFT JOIN (SELECT p.seq,
+                         Count(p.seq) AS cnt
+                  FROM   tb_post p
+                         INNER JOIN tb_reply r
+                                 ON p.seq = r.parent
+                  WHERE  p.open = 'Y'
+                  GROUP  BY p.seq) rp
+              ON rp.seq = p.seq
+       LEFT JOIN (SELECT p.seq,
+                         Count(tf.seq) AS ufile_cnt
+                  FROM   tb_post p
+                         LEFT JOIN tb_files tf
+                                ON p.seq = tf.post
+                  GROUP  BY p.seq) fcnt
+              ON fcnt.seq = p.seq
+		WHERE  1 = 1
+			and open = #{open,typeHandler=naver.ppojoji.blog.typehandler.StringYnTypeHandler}
+			and delYn = 'N'
+			order by p.creation_date desc
 	</select>
 	<insert id="insertPost" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
 		insert into TB_POST (

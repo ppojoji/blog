@@ -21,6 +21,7 @@ public class Post {
 	private boolean open;
 	
 	private Integer replyCount;
+	private Integer upfileCount;
 	
 	private Category category;
 	
@@ -101,6 +102,14 @@ public class Post {
 
 	public void setReplyCount(Integer replyCount) {
 		this.replyCount = replyCount;
+	}
+
+	public Integer getUpfileCount() {
+		return upfileCount;
+	}
+
+	public void setUpfileCount(Integer upfileCount) {
+		this.upfileCount = upfileCount;
 	}
 
 	@Override
