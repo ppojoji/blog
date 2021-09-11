@@ -9,18 +9,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.dao.BlogDao;
+import naver.ppojoji.blog.dao.CategoryDao;
 import naver.ppojoji.blog.dao.UserDao;
+import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.LocalUpFile;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
+import naver.ppojoji.blog.web.CateController;
 
 @Service
 @Transactional
 public class BlogService {
 	@Autowired
 	BlogDao blogDao;
+	
+	@Autowired
+	CategoryDao cateDao;
 	
 	@Autowired
 	FileUploadService fileService;
@@ -85,14 +91,24 @@ public class BlogService {
 	 * 새로운 글 추가
 	 * @param title
 	 * @param contents
+	 * @param i 
 	 */
 	@Transactional
 	public void insertPost(String title, 
 			String contents, 
 			List<MultipartFile> files,
+			Integer cateSeq, // null
 			Integer writerSeq) {
 			// HttpSession session) {
-		Integer postSeq = blogDao.insertPost(title,contents, writerSeq);
+		Category cate = cateDao.findCategory(cateSeq);
+		if (cate == null) {
+			if(cateSeq == 0) {
+				cateSeq = null;
+			} else {
+				throw new BlogException(404, "NO_SUCH_CATEGORY");
+			}
+		}
+		Integer postSeq = blogDao.insertPost(title,contents, cateSeq, writerSeq);
 		fileService.uploadSave(postSeq, files);
 		
 		//long seq = nextSeq();
@@ -110,9 +126,10 @@ public class BlogService {
 	 * 수정
 	 * @param title
 	 * @param contents
+	 * @param postSeq2 
 	 */
-	public void updatePost(String title, String contents ,Integer postSeq) {
-		blogDao.updatePost(title,contents,postSeq);
+	public void updatePost(String title, String contents ,Integer cateSeq ,Integer postSeq ) {
+		blogDao.updatePost(title,contents,cateSeq ,postSeq);
 	}
 
 	public void deletePost(Integer pid) {

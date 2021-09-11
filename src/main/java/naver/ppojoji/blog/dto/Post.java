@@ -24,7 +24,16 @@ public class Post {
 	private Integer upfileCount;
 	
 	private Category category;
+	private Date lastDate;
 	
+	public Date getLastDate() {
+		return lastDate;
+	}
+
+	public void setLastDate(Date lastDate) {
+		this.lastDate = lastDate;
+	}
+
 	public Category getCategory() {
 		return category;
 	}

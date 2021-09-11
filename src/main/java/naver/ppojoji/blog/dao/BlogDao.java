@@ -67,11 +67,12 @@ public class BlogDao {
 		return session.selectList("BlogPostMapper.findAllPost",isOpen);
 	}
 
-	public Integer insertPost(String title, String contents, int writeSeq) {
+	public Integer insertPost(String title, String contents, Integer cateSeq , int writeSeq) {
 		// 1. map 으로 감싸서 보내기
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("title", title);
 		param.put("contents", contents);
+		param.put("cateSeq", cateSeq);
 		param.put("writeSeq", writeSeq);
 		session.insert("BlogPostMapper.insertPost", param);
 		
@@ -90,10 +91,11 @@ public class BlogDao {
 		
 	}
 
-	public void updatePost(String title, String contents, Integer postSeq) {
+	public void updatePost(String title, String contents, Integer cateSeq ,Integer postSeq ) {
 		Map<String,Object> param = new HashMap<String, Object>(); 
 		param.put("title", title);
 		param.put("contents", contents);
+		param.put("cateSeq", cateSeq);
 		param.put("postSeq", postSeq);
 		session.update("BlogPostMapper.updatePost",param);
 	}

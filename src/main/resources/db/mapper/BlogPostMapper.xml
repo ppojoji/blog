@@ -22,6 +22,7 @@
 		<result column="contents" property="contents"/>
 		<result column="creation_date" property="creationDate"/>
 		<result column="view_count" property="viewCount"/>
+		<result column="last_date" property="lastDate"/>
 		<!-- <result column="open" property="open"/> -->
 		<result column="view_pass" property="viewPass"/>
 		<!-- <result column="writer" property="writerSeq"/> -->
@@ -77,7 +78,8 @@
 		p.writer,
 		p.open,
 		p.view_pass,
-		p.category
+		p.category,
+		p.last_date
 	</sql>
 	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
 	select
@@ -123,10 +125,12 @@
 		insert into TB_POST (
 			TITLE,
 			contents,
+			category,
 			writer
 		) values (
 			#{title},
 			#{contents},
+			#{cateSeq},
 			#{writeSeq}
 		)
 	</insert>
@@ -135,6 +139,7 @@
 		set
 			title = #{title}
 			, contents = #{contents}
+			, category = #{cateSeq}
 		where
 			seq = #{postSeq} 
 	</update>

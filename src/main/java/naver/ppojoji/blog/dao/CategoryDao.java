@@ -13,8 +13,8 @@ public class CategoryDao {
 	@Autowired
 	SqlSession session; 
 	
-	public Category findCategory(int seq) {
-		
+	public Category findCategory(Integer seq) {
+		// null -> int (NullpointerException)
 		return session.selectOne("CategoryMapper.category",seq);
 	}
 
