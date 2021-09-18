@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import naver.ppojoji.blog.dto.Category;
@@ -27,6 +29,16 @@ public class CateController {
 		Map<String, Object> res = new HashMap<String, Object>();
 		res.put("cates", cates);
 		res.put("success", true);
+		return res;
+	}
+	
+	@PostMapping("/api/cate")
+	@ResponseBody
+	public Object insertCate(@RequestParam String cate) {
+		Category cateObj = cateSerivce.insertCate(cate);
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		res.put("cate", cateObj);
 		return res;
 	}
 }

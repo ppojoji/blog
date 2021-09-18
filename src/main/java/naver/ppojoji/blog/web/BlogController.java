@@ -92,7 +92,7 @@ public class BlogController {
 		return om.writeValueAsString(map);
 		// { "seq": 3000, "title": "ㅇㅇㅇㅇ", "content": "ㅇ미암리ㅏㅇ", viewCount: 1}
 	}
-	@RequestMapping(value="/api/posts/cate/{cateSeq}" )
+	@RequestMapping(value="/api/posts/cate/{cateSeq}")
 	@ResponseBody
 	public Object ListPostsByCata(@PathVariable Integer cateSeq) {
 		List<Post> list = blogServise.findByCate(cateSeq);

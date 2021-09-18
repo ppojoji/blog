@@ -20,4 +20,11 @@
 		select * 
 		from tb_category 
 	</select>
+	<insert id="insertCate" parameterType="Category" useGeneratedKeys="true" keyProperty="seq">
+		insert into tb_category (
+			name
+		) values (
+		  #{name}
+		) 
+	</insert>
 </mapper>

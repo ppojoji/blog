@@ -29,4 +29,11 @@ public class CategoryDao {
 	public List<Category> sameNameCate(String name) {
 		return session.selectList("CategoryMapper.sameNameCate",name);
 	}
+
+	public Category insertCate(String cateName) {
+		Category cate = new Category();
+		cate.setName(cateName);
+		session.insert("CategoryMapper.insertCate",cate);
+		return cate; // 일단 null로...
+	}
 }
