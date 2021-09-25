@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.dao.CategoryDao;
 import naver.ppojoji.blog.dto.Category;
 
@@ -23,8 +24,12 @@ public class CategoryService {
 	public List<Category> sameNameCate(String name) {
 		return cateDao.sameNameCate(name);
 	}
-	public Category insertCate(String cate) {
-		return cateDao.insertCate(cate);
+	public Category insertCate(String cateName) {
+		Category cate = cateDao.findByCateName(cateName);
+		if(cate != null) {
+			throw new BlogException(409, "DUP_CATE_NAME");
+		}
+		return cateDao.insertCate(cateName);
 	}
 
 }

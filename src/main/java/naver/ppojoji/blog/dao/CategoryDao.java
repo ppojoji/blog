@@ -36,4 +36,8 @@ public class CategoryDao {
 		session.insert("CategoryMapper.insertCate",cate);
 		return cate; // 일단 null로...
 	}
+	
+	public Category findByCateName(String cateName) {
+		return session.selectOne("CategoryMapper.findByCateName",cateName);
+	}
 }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -373,5 +374,15 @@ public class BlogController {
 	public List<Category> cate(@PathVariable String name) {
 		List<Category> list = cateGoryService.sameNameCate(name);
 		return list;
+	}
+	
+	@GetMapping("/api/post/overviews")
+	@ResponseBody
+	public Object MaxNByCate() {
+		List<Map<String,Object>> maxNData = blogServise.findRecentNForCates(3);
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		res.put("overviews", maxNData);
+		return res;
 	}
 }

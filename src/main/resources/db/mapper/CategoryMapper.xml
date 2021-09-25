@@ -27,4 +27,9 @@
 		  #{name}
 		) 
 	</insert>
+	<select id="findByCateName" parameterType="String" resultType="Category">
+		select * 
+		from tb_category 
+		where name=#{name}
+	</select>
 </mapper>

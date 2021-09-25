@@ -1,6 +1,9 @@
 package naver.ppojoji.blog.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,6 @@ import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
-import naver.ppojoji.blog.web.CateController;
 
 @Service
 @Transactional
@@ -219,5 +221,25 @@ public class BlogService {
 	}
 	public List<Post> findByCate(Integer cateSeq) {
 		return blogDao.findByCate(cateSeq);
+	}
+	
+	public List<Map<String,Object>> findRecentNForCates(int n) {
+		// 1. 모든 카테고리를 다 가져옴
+		List<Category> cates = cateDao.findAllCateList();
+		// 2. 각각의 카테고리마다 n개씩 가져옴
+		List<Map<String,Object>> overviews = new ArrayList<>();
+		for(int i=0; i<cates.size(); i++) {
+			Category cate = cates.get(i);
+			List<Post> posts = blogDao.findByCate(cate.getSeq()); // 2, 34
+			int length = Math.min(n, posts.size());
+			List<Post> maxN = posts.subList(0, length);
+			Map<String,Object> overview = new HashMap<>();
+			overview.put("cate", cate);
+			overview.put("posts", maxN);
+			overviews.add(overview);
+		}
+		return overviews;
+		
+		
 	}
 }
