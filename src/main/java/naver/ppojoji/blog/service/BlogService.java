@@ -219,6 +219,10 @@ public class BlogService {
 		}
 		
 	}
+	public List<Post> findByCateName(String cateName) {
+		Category cate = cateDao.findByCateName(cateName);
+		return blogDao.findByCate(cate.getSeq());
+	}
 	public List<Post> findByCate(Integer cateSeq) {
 		return blogDao.findByCate(cateSeq);
 	}
@@ -242,4 +246,5 @@ public class BlogService {
 		
 		
 	}
+
 }

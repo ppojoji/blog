@@ -232,4 +232,27 @@
 		and category = #{seq}
 		order by p.creation_date desc
 	</select>
+	<!-- 
+	<select id="findByCateName" parameterType="String" >
+	select
+		<include refid="select_post"></include>
+		,rp.cnt
+		from
+			TB_POST p
+		LEFT JOIN (select
+	            p.seq, 
+	            count(p.SEQ) as cnt
+	          from TB_POST p 
+	          inner join TB_REPLY r
+	          on p.seq = r.PARENT
+	          where p.OPEN = 'Y'
+	          group by p.seq )rp
+	      ON rp.seq = p.seq	
+		where
+			1 = 1 
+		and open = 'Y'
+		and category = #{seq}
+		order by p.creation_date desc
+	</select>
+	 -->
 </mapper>

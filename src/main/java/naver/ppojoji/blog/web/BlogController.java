@@ -93,10 +93,10 @@ public class BlogController {
 		return om.writeValueAsString(map);
 		// { "seq": 3000, "title": "ㅇㅇㅇㅇ", "content": "ㅇ미암리ㅏㅇ", viewCount: 1}
 	}
-	@RequestMapping(value="/api/posts/cate/{cateSeq}")
+	@RequestMapping(value="/api/posts/cate/{cateName}")
 	@ResponseBody
-	public Object ListPostsByCata(@PathVariable Integer cateSeq) {
-		List<Post> list = blogServise.findByCate(cateSeq);
+	public Object ListPostsByCata(@PathVariable String cateName) {
+		List<Post> list = blogServise.findByCateName(cateName);
 		
 		return Util.success("posts", list,"limit", 6*60*60*1000);
 	}

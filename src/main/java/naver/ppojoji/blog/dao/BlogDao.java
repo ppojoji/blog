@@ -166,4 +166,8 @@ public class BlogDao {
 		return session.selectList("BlogPostMapper.findByCate", cateSeq);
 	}
 
+	public List<Post> findByCateName(String cateName) {
+		return session.selectList("BlogPostMapper.findByCateName",cateName);
+	}
+
 }
