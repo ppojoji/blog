@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.dao;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +81,8 @@ public class BlogDao {
 		for (String k : param.keySet()) {
 			System.out.println(" >> " + k + " : " + param.get(k));
 		}
-		Long seq = (Long) param.get("seq");
+		BigInteger val = (BigInteger) param.get("seq");
+		Long seq = val.longValue();
 		return seq.intValue() ;
 		// 
 //		Post p = new Post();

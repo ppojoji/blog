@@ -13,9 +13,14 @@ public class CategoryDao {
 	@Autowired
 	SqlSession session; 
 	
-	public Category findCategory(Integer seq) {
+	/**
+	 * cate seq 로 카테고리 조회
+	 * @param seq
+	 * @return
+	 */
+	public Category findCategory(Integer cateSeq) {
 		// null -> int (NullpointerException)
-		return session.selectOne("CategoryMapper.category",seq);
+		return session.selectOne("CategoryMapper.category",cateSeq);
 	}
 
 	public List<Category> findAllCateList() {
@@ -30,14 +35,26 @@ public class CategoryDao {
 		return session.selectList("CategoryMapper.sameNameCate",name);
 	}
 
-	public Category insertCate(String cateName) {
+	public Category insertCate(String cateName, Integer orderNum) {
 		Category cate = new Category();
 		cate.setName(cateName);
+		cate.setOrdernum(orderNum);
 		session.insert("CategoryMapper.insertCate",cate);
 		return cate; // 일단 null로...
 	}
 	
 	public Category findByCateName(String cateName) {
 		return session.selectOne("CategoryMapper.findByCateName",cateName);
+	}
+
+	public Category updateCate(Category cate) {
+		// map -> 
+		// dto -> setXXX(), setXXX)
+		session.update("CategoryMapper.updateCate", cate);
+		return cate;
+	}
+
+	public Integer maxOrder() {
+		return session.selectOne("CategoryMapper.maxOrder");
 	}
 }

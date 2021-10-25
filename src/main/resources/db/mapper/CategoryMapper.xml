@@ -9,8 +9,16 @@
 		where seq = #{seq}
 	</select>
 	<select id="cateList" resultType="Category">
-		select * 
-		from tb_category 
+		<!-- select * 
+		from tb_category   -->
+		SELECT
+			ct.*
+ 		  , COUNT(p.SEQ) AS post_cnt
+		FROM tb_category ct
+		LEFT JOIN tb_post p 
+		     ON p.CATEGORY = ct.seq
+		GROUP BY ct.seq 
+		ORDER BY ct.ordernum 
 	</select>
 	<delete id="deleteCate" parameterType="Integer">
 		delete from tb_category 
@@ -23,13 +31,29 @@
 	<insert id="insertCate" parameterType="Category" useGeneratedKeys="true" keyProperty="seq">
 		insert into tb_category (
 			name
+			,ordernum
+			,useYn
 		) values (
 		  #{name}
+		  ,#{ordernum}
+		  ,#{useYn}
 		) 
 	</insert>
 	<select id="findByCateName" parameterType="String" resultType="Category">
 		select * 
 		from tb_category 
 		where name=#{name}
+	</select>
+	<update id="updateCate" parameterType="Category">
+		update  tb_category 
+		set
+			name = #{name} ,
+			ordernum = #{ordernum} ,
+			useYn = #{useYn}
+		where seq = #{seq}
+	</update>
+	<select id="maxOrder" resultType="int">
+		SELECT MAX(ordernum)
+		FROM tb_category
 	</select>
 </mapper>

@@ -7,6 +7,10 @@ public class BlogException extends RuntimeException {
 		super(errorCode);
 		this.responseCode = responseCode;
 	}
+	public BlogException(int responseCode, Error error) {
+		super(error.name());
+		this.responseCode = responseCode;
+	}
 
 	public int getResponseCode() {
 		return responseCode;
