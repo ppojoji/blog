@@ -47,16 +47,17 @@ public class CateController {
 	}
 	// api/cate/4553/name
 	// {value: 'vue.js'}
-	@PutMapping("/api/cate/{cateSeq}/name")
+	@PutMapping("/api/cate/{cateSeq}")
 	@ResponseBody
 	public Object updateCate(@PathVariable Integer cateSeq, @RequestBody Map<String, Object> param) {
 //		Category cateObj = cateSerivce.insertCate(cate);
 		
 		System.out.println("[cate]" + cateSeq);
 		System.out.println("[body]" + param);
-		String cateName = (String)param.get("value"); // "abc"
+		String prop = (String) param.get("prop");
+		String value = (String)param.get("value"); // "abc"
 		
-		Category cate = cateSerivce.updateCate(cateSeq,cateName);
+		Category cate = cateSerivce.updateCate(cateSeq, prop, value);
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		res.put("cate", cate);

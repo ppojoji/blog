@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import naver.ppojoji.blog.BlogException;
+import naver.ppojoji.blog.BoardType;
 import naver.ppojoji.blog.Error;
+import naver.ppojoji.blog.YesNo;
 import naver.ppojoji.blog.dao.CategoryDao;
 import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.Post;
@@ -44,18 +46,36 @@ public class CategoryService {
 		Integer maxOrderNum = cateDao.maxOrder() + 1;
 		return cateDao.insertCate(cateName,maxOrderNum);
 	}
-	public Category updateCate(Integer cateSeq, String cateName) {
-		if(cateName == null || cateName.trim().length() == 0) {
+	public Category updateCate(Integer cateSeq, String prop ,  Object value) {
+		if(value == null) {
 			throw new BlogException(400, Error.EMPTY_CATE_NAME);
 		}
-		cateName = cateName.trim(); // 
-		Category existing = cateDao.findByCateName(cateName);
 		
-		if(existing != null) {
-			throw new BlogException(409, "DUP_CATE_NAME");
-		}
 		Category cate = cateDao.findCategory(cateSeq);
-		cate.setName(cateName);
+		if ("name".equals(prop)) {
+			String cateName = (String) value; // 
+			Category existing = cateDao.findByCateName(cateName);
+			if(existing != null) {
+				throw new BlogException(409, Error.DUP_CATE_NAME);
+				
+			}
+			cate.setName(value.toString());
+		} else if ("useYn".equals(prop)) {
+			String v = (String) value; // 강제로 캐스팅 "Y", "N"
+			YesNo yn = YesNo.valueOf(v); // "Y" -> YesNo.Y, "N" -> YesNo.N, "V"
+			cate.setUseYn(yn);
+		} else if("replyYN".equals(prop)){
+			String v = (String)value; 
+			YesNo yn = YesNo.valueOf(v);
+			cate.setReplyYN(yn);
+		}else if("type".equals(prop)) {
+			String v = (String)value; 
+			BoardType type = BoardType.valueOf(v);
+			cate.setType(type);
+		}
+		else {
+			throw new BlogException(400, Error.BAD_REQUEST);
+		}
 		return cateDao.updateCate(cate);
 	}
 	public void orderChange(Integer srcCateSeq, Integer dstCateSeq) {

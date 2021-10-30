@@ -94,7 +94,12 @@
 	where
 		p.seq = #{id}
 	</select>
-	
+	<select id="findAllByAdmin" resultMap="PostMap">
+		select 
+		 <include refid ="select_post"></include>
+		 from tb_post p
+		 where delyn = 'N'
+	</select>
 	<select id="findAllPost" resultMap="PostWithCnt" parameterType="boolean">
 	SELECT
 		<include refid="select_post"></include>

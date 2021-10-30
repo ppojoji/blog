@@ -93,6 +93,16 @@ public class BlogController {
 		return om.writeValueAsString(map);
 		// { "seq": 3000, "title": "ㅇㅇㅇㅇ", "content": "ㅇ미암리ㅏㅇ", viewCount: 1}
 	}
+	@GetMapping("/api/admin/posts")
+	@ResponseBody
+	public Object findAllByAdmin(){
+		List<Post> posts = blogServise.findAllByAdmin();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("posts", posts);
+		map.put("success", true);
+		return map;
+	}
+	
 	@RequestMapping(value="/api/posts/cate/{cateName}")
 	@ResponseBody
 	public Object ListPostsByCata(@PathVariable String cateName) {

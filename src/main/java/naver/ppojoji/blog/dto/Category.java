@@ -1,16 +1,39 @@
 package naver.ppojoji.blog.dto;
 
+import naver.ppojoji.blog.BoardType;
+import naver.ppojoji.blog.YesNo;
+
 public class Category {
 	private Integer seq;
 	private String name;
 	private Integer post_cnt;
 	private Integer ordernum;
-	private String useYn;
+	private YesNo useYn;
+	private YesNo replyYN;
+	private BoardType type;
 	
-	public String getUseYn() {
+	public Category() {
+		this.useYn = YesNo.Y;
+		this.replyYN= YesNo.Y;
+		this.type = BoardType.NM;
+	}
+	
+	public BoardType getType() {
+		return type;
+	}
+	public void setType(BoardType type) {
+		this.type = type;
+	}
+	public YesNo getReplyYN() {
+		return replyYN;
+	}
+	public void setReplyYN(YesNo replyYN) {
+		this.replyYN = replyYN;
+	}
+	public YesNo getUseYn() {
 		return useYn;
 	}
-	public void setUseYn(String useYn) {
+	public void setUseYn(YesNo useYn) {
 		this.useYn = useYn;
 	}
 	public Integer getOrdernum() {

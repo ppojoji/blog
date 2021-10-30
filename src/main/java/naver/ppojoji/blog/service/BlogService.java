@@ -63,6 +63,10 @@ public class BlogService {
 		}
 		return posts;
 	}
+	
+	public List<Post> findAllByAdmin(){
+		return blogDao.findAllByAdmin();
+	}
 	/**
 	 * 주어진 사용자가 작성한 글을 조회함
 	 * @return

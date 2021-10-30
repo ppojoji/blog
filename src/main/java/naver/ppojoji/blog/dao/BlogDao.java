@@ -67,7 +67,15 @@ public class BlogDao {
 	public List<Post> findAllPost(boolean isOpen) {
 		return session.selectList("BlogPostMapper.findAllPost",isOpen);
 	}
-
+	
+	/**
+	 * 내글 가져오기(관리용이므로 delYn 제외한 모든글 반환0
+	 * @return
+	 */
+	public List<Post> findAllByAdmin() {
+		return session.selectList("BlogPostMapper.findAllByAdmin");
+	}
+	
 	public Integer insertPost(String title, String contents, Integer cateSeq , int writeSeq) {
 		// 1. map 으로 감싸서 보내기
 		Map<String, Object> param = new HashMap<String, Object>();

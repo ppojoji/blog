@@ -33,10 +33,14 @@
 			name
 			,ordernum
 			,useYn
+			,replyYN
+			,type
 		) values (
 		  #{name}
 		  ,#{ordernum}
 		  ,#{useYn}
+		  ,#{replyYN}
+		  ,#{type}
 		) 
 	</insert>
 	<select id="findByCateName" parameterType="String" resultType="Category">
@@ -49,7 +53,9 @@
 		set
 			name = #{name} ,
 			ordernum = #{ordernum} ,
-			useYn = #{useYn}
+			useYn = #{useYn},
+			replyYN = #{replyYN},
+			type = #{type}
 		where seq = #{seq}
 	</update>
 	<select id="maxOrder" resultType="int">

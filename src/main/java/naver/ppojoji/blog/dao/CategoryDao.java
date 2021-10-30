@@ -40,7 +40,7 @@ public class CategoryDao {
 		cate.setName(cateName);
 		cate.setOrdernum(orderNum);
 		session.insert("CategoryMapper.insertCate",cate);
-		return cate; // 일단 null로...
+		return cate; 
 	}
 	
 	public Category findByCateName(String cateName) {
