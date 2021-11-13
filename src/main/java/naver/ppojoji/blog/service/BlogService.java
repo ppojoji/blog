@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.BlogException;
+import naver.ppojoji.blog.Error;
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.CategoryDao;
 import naver.ppojoji.blog.dao.UserDao;
@@ -249,6 +250,26 @@ public class BlogService {
 		return overviews;
 		
 		
+	}
+
+	public void updatePost(Integer userSeq, Integer pid, String prop, String value) {
+		Post post = blogDao.findPostBySeq(pid);
+		if(post == null) {
+			throw new BlogException(404, Error.NOT_FOUND);
+		}
+		// TODO userSEq가 post의 글쓴이인지 확인해야 함
+		
+		if("open".equals(prop)) {
+			// post.setOpen(value.equals("Y")); // "Y" true, else "N", "n", "", null
+			blogDao.updateOpen(pid, value.equals("Y"));
+		}else if("category".equals(prop)) {
+			Category cate = cateDao.findCategory(Integer.parseInt(value));
+			post.setCategory(cate);
+			blogDao.updatePost(post);
+		}
+		else {
+			throw new BlogException(400, Error.BAD_REQUEST);
+		}
 	}
 
 }

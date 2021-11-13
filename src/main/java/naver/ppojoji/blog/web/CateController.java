@@ -56,6 +56,7 @@ public class CateController {
 		System.out.println("[body]" + param);
 		String prop = (String) param.get("prop");
 		String value = (String)param.get("value"); // "abc"
+		System.out.println("prop:"+prop + ", value:" + value);
 		
 		Category cate = cateSerivce.updateCate(cateSeq, prop, value);
 		Map<String, Object> res = new HashMap<>();

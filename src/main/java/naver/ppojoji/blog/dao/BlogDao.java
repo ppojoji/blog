@@ -100,7 +100,14 @@ public class BlogDao {
 		
 		
 	}
-
+	/**
+	 * 글 수정(이거 쓰지 마세요 updatePost(Post post) 쓰세요)
+	 * @param title
+	 * @param contents
+	 * @param cateSeq
+	 * @param postSeq
+	 */
+	@Deprecated
 	public void updatePost(String title, String contents, Integer cateSeq ,Integer postSeq ) {
 		Map<String,Object> param = new HashMap<String, Object>(); 
 		param.put("title", title);
@@ -109,7 +116,9 @@ public class BlogDao {
 		param.put("postSeq", postSeq);
 		session.update("BlogPostMapper.updatePost",param);
 	}
-
+	public void updatePost(Post post) {
+		session.update("BlogPostMapper.updatePost2", post);		
+	}
 	public void deletePost(Integer pid) {
 		session.delete("BlogPostMapper.deletePost",pid);
 	}

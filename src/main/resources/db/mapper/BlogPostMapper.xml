@@ -149,6 +149,16 @@
 		where
 			seq = #{postSeq} 
 	</update>
+	<update id="updatePost2" parameterType="Post">
+		update tb_Post
+		set
+			title = #{title}
+			, contents = #{contents}
+			, category = #{category.seq}
+			, last_date = current_timestamp
+		where
+			seq = #{seq} 
+	</update>
 	<delete id="deletePost" parameterType="Integer">
 		delete from tb_Post
 		where seq=#{id}
