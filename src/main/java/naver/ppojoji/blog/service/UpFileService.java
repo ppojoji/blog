@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 import naver.ppojoji.blog.dao.FileDao;
 import naver.ppojoji.blog.dto.LocalUpFile;
 
+/**
+ *@deprecated 중복!!!!
+ * @author ppojo
+ *
+ */
 @Service
 public class UpFileService {
 	@Autowired
@@ -32,6 +37,23 @@ public class UpFileService {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public LocalUpFile deleteFile(String genName) {
+		System.out.println("[GEN NAME]" + genName);
+		LocalUpFile file = fileDao.FindFile(genName);
+		
+		String subPath = file.getGenName();
+		String filePath = rootDir + "\\" + subPath; // 
+		
+		File f = new File(filePath);
+		if (f.exists()) {
+			boolean done = f.delete(); // 진짜 디스크에서 지움
+			System.out.println("del? " + done);
+		}
+		int delCnt = fileDao.deleteFile(file);
+		System.out.println("[del cnt]" + delCnt);
+		return file;
 	}
 	
 }

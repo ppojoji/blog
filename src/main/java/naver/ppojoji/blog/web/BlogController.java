@@ -13,8 +13,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +29,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import naver.ppojoji.blog.Util;
+import naver.ppojoji.blog.dto.BanHistory;
 import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Reply;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.User;
+import naver.ppojoji.blog.service.BanHistoryService;
 import naver.ppojoji.blog.service.BlogService;
 import naver.ppojoji.blog.service.CategoryService;
 import naver.ppojoji.blog.service.PostDeletion;
@@ -68,6 +72,9 @@ public class BlogController {
 	
 	@Autowired
 	CategoryService cateGoryService;
+	
+	@Autowired
+	BanHistoryService banHistoryService;
 	
 	
 	@RequestMapping(value="/api/posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
@@ -108,7 +115,8 @@ public class BlogController {
 	@RequestMapping(value="/api/posts/cate/{cateName}")
 	@ResponseBody
 	public Object ListPostsByCata(@PathVariable String cateName) {
-		List<Post> list = blogServise.findByCateName(cateName);
+//		List<Post> list = blogServise.findByCateName(cateName);
+		List<Post> list = blogServise.findByCate2(cateName);
 		
 		return Util.success("posts", list,"limit", 6*60*60*1000);
 	}
@@ -402,10 +410,87 @@ public class BlogController {
 	@ResponseBody
 	public Object UpdatePost(@PathVariable Integer pid , @RequestBody Map<String, Object> param) {
 		String prop = (String) param.get("prop");
-		String value = (String)param.get("value"); // "abc"
+		// class java.lang.Integer cannot be cast to class java.lang.String
+		Object value = param.get("value"); // "abc"
 		System.out.println("prop:"+prop + ", value:" + value);
 		
 		blogServise.updatePost(null, pid,prop,value);
-		return null;
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		return res;
+	}
+	
+	@GetMapping("/admin/api/posts/all")
+	@ResponseBody
+	public Object listAllPosts() {
+		// FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
+		// FIXME "/admin"으로 시작하는 uri는 슈퍼 관리자만 실행해야함
+		List<Post> posts = blogServise.findAllByAdmin();
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		res.put("posts", posts);
+		return res;
+	}
+	
+	@GetMapping("/admin/api/posts/del")
+	@ResponseBody
+	public Object postsDeleted() {
+		// FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
+		// FIXME "/admin"으로 시작하는 uri는 슈퍼 관리자만 실행해야함
+		List<Post> posts = blogServise.findpostsDelY();
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		res.put("posts", posts);
+		return res;
+	}
+	/**
+	 * 관리자가 실제로 글을 지움
+	 * @param pid
+	 * @return
+	 */
+	@DeleteMapping("/admin/api/delete/{pid}")
+	@ResponseBody
+	public Object PostDelete(@PathVariable Integer pid) {
+		// FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
+		blogServise.postDelete(pid);
+		
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		res.put("pid", pid);
+		return res;
+	}
+	/*
+	 * @PutMapping("/admin/api/post/{postSeq}/policy/{code}")
+	 * 
+	 * @ResponseBody public Object PostPolicy(@PathVariable Integer postSeq
+	 * , @PathVariable String code) { // FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
+	 * blogServise.setPostPolicy(postSeq,code);
+	 * 
+	 * Map<String, Object> res = new HashMap<>(); res.put("ban", code);
+	 * res.put("success", true); return res; }
+	 */
+	
+	@PostMapping("/admin/api/post/{postSeq}/policy/{code}")
+	@ResponseBody
+	public Object Banhistory(HttpSession session,@PathVariable Integer postSeq , @PathVariable String code) {
+		User adminUser = Util.getUser(session);
+		
+		blogServise.Banhistory(adminUser, postSeq,code);
+		
+		Map<String, Object> res = new HashMap<>();
+		res.put("ban", code);
+		res.put("success", true);
+		return res;
+	}
+	
+	@GetMapping("/admin/api/post/{postSeq}/ban")
+	@ResponseBody
+	public Object GetBanHistoryByPost(@PathVariable Integer postSeq) {
+		List<BanHistory> ban = banHistoryService.GetBanHistoryByPost(postSeq);
+		
+		Map<String, Object> res = new HashMap<>();
+		res.put("ban", ban);
+		res.put("success", true);
+		return res;
 	}
 }

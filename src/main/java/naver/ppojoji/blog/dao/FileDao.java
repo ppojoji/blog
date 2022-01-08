@@ -27,4 +27,7 @@ public class FileDao {
 	public LocalUpFile FindFile(String genName) {
 		return session.selectOne("FileMapper.FindFile", genName);
 	}
+	public int deleteFile(LocalUpFile file) {
+		return session.delete("FileMapper.deleteFile" , file);
+	}
 }

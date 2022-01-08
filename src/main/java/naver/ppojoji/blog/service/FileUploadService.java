@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.dao.FileDao;
+import naver.ppojoji.blog.dto.LocalUpFile;
 
 @Service
 public class FileUploadService {
@@ -47,8 +48,24 @@ public class FileUploadService {
 		return null;
 	}
 	
-	public void deleteFile(String genName) {
-		File file = new File(rootDir, genName);
-		file.delete();
+//	public void deleteFile(String genName) {
+//		File file = new File(rootDir, genName);
+//		file.delete();
+//	}
+	public LocalUpFile deleteFile(String genName) {
+		System.out.println("[GEN NAME]" + genName);
+		LocalUpFile file = fileDao.FindFile(genName);
+		
+		String subPath = file.getGenName();
+		String filePath = rootDir + "\\" + subPath; // 
+		
+		File f = new File(filePath);
+		if (f.exists()) {
+			boolean done = f.delete(); // 진짜 디스크에서 지움
+			System.out.println("del? " + done);
+		}
+		int delCnt = fileDao.deleteFile(file);
+		System.out.println("[del cnt]" + delCnt);
+		return file;
 	}
 }

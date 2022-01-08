@@ -8,13 +8,16 @@
 		<result column="id" property="id"/>
 		<result column="pwd" property="pwd"/>
 		<result column="email" property="email"/>
+		<result column="admin" property="admin"/>
 	</resultMap>
+	
 	<select id="findUser" parameterType="Integer" resultType="User">
 		select 
 			seq,
 			id,
 			pwd,
-			email
+			email,
+			admin
 		from tb_user
 		where seq = #{id}	
 	</select>
@@ -23,7 +26,8 @@
 			seq,
 			id,
 			pwd,
-			email
+			email,
+			admin
 		from tb_user
 		where seq = #{id}	
 	</select>
@@ -32,7 +36,8 @@
 		 	seq,
 		 	id,
 		 	pwd,
-		 	email
+		 	email,
+		 	admin
 		 from tb_user
 		 where id = #{id}
 		 and pwd = #{pwd}	
@@ -47,7 +52,8 @@
 			seq,
 			id,
 			pwd,
-			email
+			email,
+			admin
 		from tb_user
 		where id = #{id}
 	</select>
@@ -62,6 +68,7 @@
 			id,
 			pwd,
 			email,
+			admin,
 			autoLoginKey
 		from tb_user
 		where autoLoginKey = #{autoLoginKey}
@@ -71,7 +78,8 @@
 			seq,
 			id,
 			pwd,
-			email
+			email,
+			admin
 		from tb_user
 		where email = #{email}
 	</select>

@@ -2,6 +2,7 @@ package naver.ppojoji.blog.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Error;
+import naver.ppojoji.blog.dao.BanHistoryDao;
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.CategoryDao;
 import naver.ppojoji.blog.dao.UserDao;
@@ -36,6 +38,10 @@ public class BlogService {
 	
 	@Autowired 
 	UserDao userDao;
+	
+	@Autowired 
+	BanHistoryService banHistoryService;
+	
 	/*
 	List<Post> list = new ArrayList<>();
 	{
@@ -151,7 +157,7 @@ public class BlogService {
 			String upFile = upfile.getGenName();
 			fileService.deleteFile(upFile);
 			Integer seq = upfile.getSeq();
-			blogDao.deleteFile(seq);
+			blogDao.deleteFile(seq); // 여기서 하면 안됨
 		}
 		blogDao.deletePost(pid);
 	}
@@ -224,12 +230,19 @@ public class BlogService {
 		}
 		
 	}
-	public List<Post> findByCateName(String cateName) {
-		Category cate = cateDao.findByCateName(cateName);
-		return blogDao.findByCate(cate.getSeq());
+//	public List<Post> findByCateName(String cateName) {
+//		// TODO 글마다 사진 하나씩 가져오기 ...
+//		Category cate = cateDao.findByCateName(cateName);
+//		List<Post> posts = blogDao.findByCate(cate.getSeq(), null);
+//		return posts;
+//	}
+	public List<Post> findByCate(Integer cateSeq, String delYn) {
+		return blogDao.findByCate(cateSeq, delYn);
 	}
-	public List<Post> findByCate(Integer cateSeq) {
-		return blogDao.findByCate(cateSeq);
+	
+	public List<Post> findByCate2(String cateName) {
+		Category cate = cateDao.findByCateName(cateName);
+		return blogDao.findByCate2(cate.getSeq());
 	}
 	
 	public List<Map<String,Object>> findRecentNForCates(int n) {
@@ -239,7 +252,7 @@ public class BlogService {
 		List<Map<String,Object>> overviews = new ArrayList<>();
 		for(int i=0; i<cates.size(); i++) {
 			Category cate = cates.get(i);
-			List<Post> posts = blogDao.findByCate(cate.getSeq()); // 2, 34
+			List<Post> posts = blogDao.findByCate(cate.getSeq(),"N"); // 2, 34
 			int length = Math.min(n, posts.size());
 			List<Post> maxN = posts.subList(0, length);
 			Map<String,Object> overview = new HashMap<>();
@@ -252,7 +265,11 @@ public class BlogService {
 		
 	}
 
-	public void updatePost(Integer userSeq, Integer pid, String prop, String value) {
+	public void updatePost(Integer userSeq, Integer pid, String prop, Object value) {
+		/*
+		 * userSeq 로 자기 글인지 확인해야함
+		 *  
+		 */
 		Post post = blogDao.findPostBySeq(pid);
 		if(post == null) {
 			throw new BlogException(404, Error.NOT_FOUND);
@@ -263,13 +280,70 @@ public class BlogService {
 			// post.setOpen(value.equals("Y")); // "Y" true, else "N", "n", "", null
 			blogDao.updateOpen(pid, value.equals("Y"));
 		}else if("category".equals(prop)) {
-			Category cate = cateDao.findCategory(Integer.parseInt(value));
+			Integer cateSeq = (Integer)value; 
+			Category cate = cateDao.findCategory(cateSeq);
 			post.setCategory(cate);
 			blogDao.updatePost(post);
 		}
 		else {
 			throw new BlogException(400, Error.BAD_REQUEST);
 		}
+	}
+
+	public int postDelete(Integer pid) {
+		// delYn == 'Y'
+//		blogDao.findByCate(pid,)
+		Post post = blogDao.findPostBySeq(pid);
+		String del = post.getDelYn();
+		if("Y".equals(del)) {
+			// 1. 답글 있으면 답글 지워야 함(OK 그냥 됨)
+			
+			// 2. 첨부파일 잇으면 첨부파일 지워야 함 ( 디스크에 있는 파일 지워야 함)
+			List<LocalUpFile> files = post.getUpFiles();
+//			if(files.size() > 0) {
+//				throw new BlogException(400,Error.BAD_REQUEST);
+//			}
+			for (LocalUpFile file : files) {
+				fileService.deleteFile(file.getGenName());
+			}
+			return blogDao.postDelete(pid);
+		}else {
+			throw new BlogException(400,Error.BAD_REQUEST);
+		}
+	}
+
+	public List<Post> findpostsDelY() {
+		return blogDao.findpostsDelY();
+		
+	}
+
+	public void setPostPolicy(Integer postSeq, String code) {
+		// code = "null"
+		Post post = blogDao.findPostBySeq(postSeq);
+		if (post == null) {
+			// 여기서 없다고 예외 던짐
+		}
+		// if ( code ...) 올바른 코드값인지 확인해야함
+		code = "null".equals(code) ? null : code;
+		blogDao.setPostPolicy(postSeq,code);
+		
+	}
+
+	public void Banhistory(User adminUser , Integer postSeq, String code) {
+		// FIXME 관리지인지 다 확인해아함
+		if(!adminUser.getAdmin().equals("Y")) {
+			throw new BlogException(401,Error.NOT_ADMIN);
+		}
+		
+		Post post = blogDao.findPostBySeq(postSeq);
+		if (post == null) {
+			// 여기서 없다고 예외 던짐
+		}
+		// if ( code ...) 올바른 코드값인지 확인해야함
+		code = "null".equals(code) ? null : code;
+		banHistoryService.Banhistory(adminUser,postSeq,code);
+		
+		setPostPolicy(postSeq, code);
 	}
 
 }

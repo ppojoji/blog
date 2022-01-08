@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BanHistoryMapper">
+
+	<insert id="ban" parameterType="BanHistory">
+		INSERT INTO tb_ban_history (ADMIN, REASON,POST)
+		VALUES(#{admin}, #{reason},#{post});
+	</insert>
+	
+	<select id="GetBanHistoryByPost" resultType="BanHistory" parameterType="int">
+		select * 
+		from tb_ban_history
+		where post = #{postSeq}
+	</select> 
+</mapper>

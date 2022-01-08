@@ -26,6 +26,22 @@ public class Post {
 	private Category category;
 	private Date lastDate;
 	
+	private String delYn;
+	
+	/**
+	 * 글 금지 사유
+	 * TODO enum 으로 교체
+	 */
+	private String ban;
+	
+	public String getDelYn() {
+		return delYn;
+	}
+
+	public void setDelYn(String delYn) {
+		this.delYn = delYn;
+	}
+
 	public Date getLastDate() {
 		return lastDate;
 	}
@@ -119,6 +135,14 @@ public class Post {
 
 	public void setUpfileCount(Integer upfileCount) {
 		this.upfileCount = upfileCount;
+	}
+
+	public String getBan() {
+		return ban;
+	}
+
+	public void setBan(String ban) {
+		this.ban = ban;
 	}
 
 	@Override

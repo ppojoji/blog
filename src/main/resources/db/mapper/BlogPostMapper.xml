@@ -25,10 +25,12 @@
 		<result column="last_date" property="lastDate"/>
 		<!-- <result column="open" property="open"/> -->
 		<result column="view_pass" property="viewPass"/>
+		<result column="delYn" property="delYn"/>
 		<!-- <result column="writer" property="writerSeq"/> -->
 		<!-- 변환에 사용될 핸들러 클래스 지정 -->
 		<result property="open" column="open"
-			typeHandler="naver.ppojoji.blog.typehandler.StringYnTypeHandler" /> 
+			typeHandler="naver.ppojoji.blog.typehandler.StringYnTypeHandler" />
+		<result property="ban" column="ban"/>
 		<association 
 			column="writer" 
 			property="writer" 
@@ -79,7 +81,9 @@
 		p.open,
 		p.view_pass,
 		p.category,
-		p.last_date
+		p.last_date,
+		p.delYn,
+		p.ban
 	</sql>
 	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
 	select
@@ -226,7 +230,7 @@
 		delete from tb_files
 		where seq = #{seq}
 	</delete>
-	<select id="findByCate" parameterType="Integer" resultMap="PostMap">
+	<select id="findByCate" parameterType="map" resultMap="PostMap">
 		select
 		<include refid="select_post"></include>
 		,rp.cnt
@@ -245,7 +249,33 @@
 			1 = 1 
 		and open = 'Y'
 		and category = #{seq}
+		<if test="delYn != null || delYn = ''">
+			and delYN = #{delYn}
+		</if>
 		order by p.creation_date desc
+	</select>
+	<select id="findByCate2" parameterType="Integer" resultMap="PostMap" >
+	SELECT
+		<include refid="select_post"></include>
+		,count(rp.seq) AS cnt
+		, f.*
+		FROM 
+			(SELECT
+				  p.seq,
+				  MIN(f.seq) AS fileSeq
+				FROM tb_post p
+				LEFT JOIN tb_files f
+				  ON (f.POST = p.SEQ AND f.CONTENTTYPE like 'image%')
+				WHERE p.CATEGORY = #{cate}
+				GROUP BY p.SEQ
+			) ref
+		LEFT JOIN tb_reply rp
+		         ON rp.PARENT = ref.seq	
+		JOIN tb_post p
+		       ON p.seq = ref.seq
+		LEFT JOIN tb_files f 
+		       ON f.seq =  ref.fileSeq
+		GROUP BY p.seq
 	</select>
 	<!-- 
 	<select id="findByCateName" parameterType="String" >
@@ -270,4 +300,23 @@
 		order by p.creation_date desc
 	</select>
 	 -->
+	 <delete id="postDelete" parameterType="int">
+	 	delete from tb_post
+	 	where seq=#{pid} 
+	 </delete>
+	 <select id="findpostsDelY" resultMap="PostMap">
+	 SELECT
+		<include refid="select_post"></include>
+		, f.*
+		FROM 
+			tb_post p
+		LEFT JOIN tb_files f 
+		       ON f.post =  p.seq     
+		WHERE p.DELYN = 'Y'	
+	 </select>
+	 <update id="setPostPolicy" parameterType="map">
+	 	update tb_post
+	 	set ban = #{code}
+	 	where seq = #{postSeq}
+	 </update>
 </mapper>

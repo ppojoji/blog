@@ -6,6 +6,10 @@ public enum Error {
 	DUP_CATE_NAME,
 	EMPTY_CATE_NAME,
 	NOT_FOUND, 
-	BAD_REQUEST
+	BAD_REQUEST, 
+	/**
+	 * 관리자가 아님
+	 */
+	NOT_ADMIN
 	
 }

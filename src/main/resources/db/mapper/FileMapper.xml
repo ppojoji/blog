@@ -19,4 +19,8 @@
 		from tb_files 
 		where GENNAME = #{id}
 	</select>
+	<delete id="deleteFile" parameterType="LocalUpFile">
+		delete from tb_files
+		where seq = #{seq}
+	</delete>
 </mapper>

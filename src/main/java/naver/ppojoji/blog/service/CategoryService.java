@@ -28,7 +28,8 @@ public class CategoryService {
 		return cateDao.findAllCateList();
 	}
 	public void deleteCate(Integer cateSeq) {
-		List<Post> posts = blogService.findByCate(cateSeq);
+		List<Post> posts = blogService.findByCate(cateSeq, null);
+		// FIXME 만약에 cateSeq 밑에 delYn == 'Y' 인 글이 있는 경우, 'Y'인 글을 모두 지움! 그리고 카테고리도 지움!!
 		if(posts.size() == 0) {
 			cateDao.deleteCate(cateSeq);
 		}else {

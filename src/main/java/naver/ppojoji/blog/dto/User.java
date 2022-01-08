@@ -5,6 +5,16 @@ public class User {
 	private String id;
 	private String pwd; 
 	private String email;
+	private String admin;
+	
+	
+	
+	public String getAdmin() {
+		return admin;
+	}
+	public void setAdmin(String admin) {
+		this.admin = admin;
+	}
 	
 	private String autoLoginKey;
 	

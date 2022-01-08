@@ -39,6 +39,11 @@ public class BlogDao {
 		System.out.println("done");
 	}
 	*/
+	/**
+	 * 주어진 seq의 글 조회
+	 * @param postSeq
+	 * @return
+	 */
 	public Post findPostBySeq(int postSeq) {
 		Post post = session.selectOne("BlogPostMapper.findPostBySeq", postSeq);
 		return post;
@@ -180,13 +185,41 @@ public class BlogDao {
 		session.delete("BlogPostMapper.deleteFile", fileSeq);
 		
 	}
-
-	public List<Post> findByCate(Integer cateSeq) {
-		return session.selectList("BlogPostMapper.findByCate", cateSeq);
+	/**
+	 * 주어진 카테고리의 글 조회(delYn 이 없으면 카테고리의 글 모두 조회) 
+	 * @param cateSeq
+	 * @param delYn
+	 * @return
+	 */
+	public List<Post> findByCate(Integer cateSeq, String delYn) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("seq", cateSeq);
+		map.put("delYn", delYn);
+		return session.selectList("BlogPostMapper.findByCate", map);
 	}
 
 	public List<Post> findByCateName(String cateName) {
 		return session.selectList("BlogPostMapper.findByCateName",cateName);
 	}
+	
+	public List<Post> findByCate2(Integer cateSeq) {
+		return session.selectList("BlogPostMapper.findByCate2", cateSeq);
+	}
 
+	public int postDelete(Integer pid) {
+		return session.delete("BlogPostMapper.postDelete", pid);
+	}
+
+	public List<Post> findpostsDelY() {
+		return session.selectList("BlogPostMapper.findpostsDelY");
+	}
+
+	public void setPostPolicy(Integer postSeq, String code) {
+		Map map = new HashMap<>();
+		map.put("postSeq", postSeq);
+		map.put("code", code);
+		
+		session.update("BlogPostMapper.setPostPolicy",map);
+		
+	}
 }
