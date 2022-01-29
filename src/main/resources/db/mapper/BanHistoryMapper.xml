@@ -9,9 +9,19 @@
 		VALUES(#{admin}, #{reason},#{post});
 	</insert>
 	
-	<select id="GetBanHistoryByPost" resultType="BanHistory" parameterType="int">
+	<select id="GetBanHistoryByPost"
+		resultType="BanHistory"
+		 parameterType="Post">
 		select * 
 		from tb_ban_history
-		where post = #{postSeq}
+		where post = #{seq}
 	</select> 
+	
+	<select id="findRecentBan" parameterType="Post" resultType="BanHistory">
+		select * 
+		from tb_ban_history
+		where post = #{seq}
+		ORDER BY bantime DESC
+		LIMIT 1;
+	</select>
 </mapper>

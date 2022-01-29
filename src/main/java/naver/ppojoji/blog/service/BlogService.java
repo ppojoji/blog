@@ -17,6 +17,7 @@ import naver.ppojoji.blog.dao.BanHistoryDao;
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.CategoryDao;
 import naver.ppojoji.blog.dao.UserDao;
+import naver.ppojoji.blog.dto.BanHistory;
 import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.LocalUpFile;
 import naver.ppojoji.blog.dto.MultiSearch;
@@ -71,9 +72,28 @@ public class BlogService {
 		return posts;
 	}
 	
-	public List<Post> findAllByAdmin(){
-		return blogDao.findAllByAdmin();
+	public List<Post> findAllByAdmin(User adminUser){
+		checkAdmin(adminUser);
+		
+		List<Post> posts = blogDao.findAllByAdmin(adminUser);
+		for (Post post : posts) {
+			BanHistory ban = banHistoryService.findRecentBan(post);
+			post.setRecentBan(ban);
+		}
+		return posts;
 	}
+	
+	public List<Post> findBanByAdmin(String searchType, User adminUser) {
+		checkAdmin(adminUser);
+		
+		List<Post> posts = blogDao.findBanByAdmin(searchType,adminUser);
+		for (Post post : posts) {
+			BanHistory ban = banHistoryService.findRecentBan(post);
+			post.setRecentBan(ban);
+		}
+		return posts;
+	}
+	
 	/**
 	 * 주어진 사용자가 작성한 글을 조회함
 	 * @return
@@ -290,12 +310,14 @@ public class BlogService {
 		}
 	}
 
-	public int postDelete(Integer pid) {
+	public int postDelete(User adminUser, Integer pid) {
 		// delYn == 'Y'
 //		blogDao.findByCate(pid,)
+		checkAdmin(adminUser);
+		
 		Post post = blogDao.findPostBySeq(pid);
 		String del = post.getDelYn();
-		if("Y".equals(del)) {
+		if("N".equals(del)) {
 			// 1. 답글 있으면 답글 지워야 함(OK 그냥 됨)
 			
 			// 2. 첨부파일 잇으면 첨부파일 지워야 함 ( 디스크에 있는 파일 지워야 함)
@@ -306,12 +328,15 @@ public class BlogService {
 			for (LocalUpFile file : files) {
 				fileService.deleteFile(file.getGenName());
 			}
-			return blogDao.postDelete(pid);
+			return blogDao.postDelete(post);
 		}else {
 			throw new BlogException(400,Error.BAD_REQUEST);
 		}
 	}
-
+	/**
+	 * 사용자가 지운다고 표시한 글들을 조회
+	 * @return
+	 */
 	public List<Post> findpostsDelY() {
 		return blogDao.findpostsDelY();
 		
@@ -330,10 +355,7 @@ public class BlogService {
 	}
 
 	public void Banhistory(User adminUser , Integer postSeq, String code) {
-		// FIXME 관리지인지 다 확인해아함
-		if(!adminUser.getAdmin().equals("Y")) {
-			throw new BlogException(401,Error.NOT_ADMIN);
-		}
+		checkAdmin(adminUser);
 		
 		Post post = blogDao.findPostBySeq(postSeq);
 		if (post == null) {
@@ -345,5 +367,13 @@ public class BlogService {
 		
 		setPostPolicy(postSeq, code);
 	}
+	
+	public void checkAdmin(User adminUser) {
+		if(!adminUser.getAdmin().equals("Y")) {
+			throw new BlogException(401,Error.NOT_ADMIN);
+		}
+	}
+
+	
 
 }

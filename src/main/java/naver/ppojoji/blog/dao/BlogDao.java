@@ -9,9 +9,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import naver.ppojoji.blog.dto.BanHistory;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
+import naver.ppojoji.blog.dto.User;
 
 /**
  * XXXDao
@@ -75,10 +77,24 @@ public class BlogDao {
 	
 	/**
 	 * 내글 가져오기(관리용이므로 delYn 제외한 모든글 반환0
+	 * @param adminUser 
 	 * @return
 	 */
-	public List<Post> findAllByAdmin() {
-		return session.selectList("BlogPostMapper.findAllByAdmin");
+	public List<Post> findAllByAdmin(User adminUser) {
+		return session.selectList("BlogPostMapper.findAllByAdmin",adminUser);
+	}
+	/**
+	 * 금지된 글 목록 가져오기
+	 * TODO BlogPostMapper.findAllByAdmin을 같이 사용하도록 수정하면 좋음.
+	 * @param adminUser
+	 * @return
+	 */
+	public List<Post> findBanByAdmin(String searchType , User adminUser) {
+		Map map = new HashMap<>();
+		map.put("searchType", searchType);
+		map.put("adminUser", adminUser);
+		
+		return session.selectList("BlogPostMapper.findBanByAdmin",map);
 	}
 	
 	public Integer insertPost(String title, String contents, Integer cateSeq , int writeSeq) {
@@ -206,8 +222,12 @@ public class BlogDao {
 		return session.selectList("BlogPostMapper.findByCate2", cateSeq);
 	}
 
-	public int postDelete(Integer pid) {
-		return session.delete("BlogPostMapper.postDelete", pid);
+	public int postDelete(Post post) {
+//		Map map = new HashMap<>();
+//		map.put("adminUser", adminUser.getEmail());
+//		map.put("pid", pid);
+//		
+		return session.delete("BlogPostMapper.postDelete", post);
 	}
 
 	public List<Post> findpostsDelY() {

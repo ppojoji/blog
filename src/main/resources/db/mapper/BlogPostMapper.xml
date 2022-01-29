@@ -98,11 +98,18 @@
 	where
 		p.seq = #{id}
 	</select>
-	<select id="findAllByAdmin" resultMap="PostMap">
+	<select id="findAllByAdmin" resultMap="PostMap" parameterType="User">
 		select 
 		 <include refid ="select_post"></include>
 		 from tb_post p
 		 where delyn = 'N'
+	</select>
+	<select id="findBanByAdmin" resultMap="PostMap" parameterType="map">
+		select 
+		 <include refid ="select_post"></include>
+		 from tb_post p
+		 where ban = #{searchType}
+		 and delyn = 'N'
 	</select>
 	<select id="findAllPost" resultMap="PostWithCnt" parameterType="boolean">
 	SELECT
@@ -300,9 +307,9 @@
 		order by p.creation_date desc
 	</select>
 	 -->
-	 <delete id="postDelete" parameterType="int">
+	 <delete id="postDelete" parameterType="Post">
 	 	delete from tb_post
-	 	where seq=#{pid} 
+	 	where seq=#{seq} 
 	 </delete>
 	 <select id="findpostsDelY" resultMap="PostMap">
 	 SELECT

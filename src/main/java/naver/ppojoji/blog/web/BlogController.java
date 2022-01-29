@@ -2,6 +2,7 @@ package naver.ppojoji.blog.web;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.BanHistory;
 import naver.ppojoji.blog.dto.Category;
@@ -104,8 +106,9 @@ public class BlogController {
 	}
 	@GetMapping("/api/admin/posts")
 	@ResponseBody
-	public Object findAllByAdmin(){
-		List<Post> posts = blogServise.findAllByAdmin();
+	public Object findAllByAdmin(HttpSession session){
+		User adminUser = Util.getUser(session);
+		List<Post> posts = blogServise.findAllByAdmin(adminUser);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("posts", posts);
 		map.put("success", true);
@@ -419,30 +422,55 @@ public class BlogController {
 		res.put("success", true);
 		return res;
 	}
-	
-	@GetMapping("/admin/api/posts/all")
+	/**
+	 * [관리자용] 모든 글 조회
+	 * @param session
+	 * @return
+	 */
+	@GetMapping("/admin/api/posts/{searchType}")
 	@ResponseBody
-	public Object listAllPosts() {
+	public Object listAllPosts(HttpSession session , @PathVariable String searchType) {
 		// FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
 		// FIXME "/admin"으로 시작하는 uri는 슈퍼 관리자만 실행해야함
-		List<Post> posts = blogServise.findAllByAdmin();
+		User adminUser = Util.getUser(session);
+		List<Post> posts = null;
+		
+		if("all".equals(searchType)) {
+			posts = blogServise.findAllByAdmin(adminUser);
+		} else if ("AD".equals(searchType)){
+			posts = blogServise.findBanByAdmin(searchType,adminUser);
+		} else if ("PN".equals(searchType)){
+			posts = blogServise.findBanByAdmin(searchType,adminUser);
+		} else if ("AB".equals(searchType)){
+			posts = blogServise.findBanByAdmin(searchType,adminUser);
+		} else if ("GM".equals(searchType)){
+			posts = blogServise.findBanByAdmin(searchType,adminUser);
+		} else if ("ET".equals(searchType)){
+			posts = blogServise.findBanByAdmin(searchType,adminUser);
+		} else {
+			throw new BlogException(400, "NO_SUCH_SEARCHTYPE");
+		}
+		
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		res.put("posts", posts);
+		
 		return res;
 	}
 	
-	@GetMapping("/admin/api/posts/del")
-	@ResponseBody
-	public Object postsDeleted() {
-		// FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
-		// FIXME "/admin"으로 시작하는 uri는 슈퍼 관리자만 실행해야함
-		List<Post> posts = blogServise.findpostsDelY();
-		Map<String, Object> res = new HashMap<>();
-		res.put("success", true);
-		res.put("posts", posts);
-		return res;
-	}
+//	@GetMapping("/admin/api/posts/del")
+//	@ResponseBody
+//	public Object postsDeleted(HttpSession session) {
+//		// FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
+//		// FIXME "/admin"으로 시작하는 uri는 슈퍼 관리자만 실행해야함
+//		User adminUser = Util.getUser(session);
+//		
+//		List<Post> posts = blogServise.findPostsByWriter(adminUser);
+//		Map<String, Object> res = new HashMap<>();
+//		res.put("success", true);
+//		res.put("posts", posts);
+//		return res;
+//	}
 	/**
 	 * 관리자가 실제로 글을 지움
 	 * @param pid
@@ -450,9 +478,10 @@ public class BlogController {
 	 */
 	@DeleteMapping("/admin/api/delete/{pid}")
 	@ResponseBody
-	public Object PostDelete(@PathVariable Integer pid) {
-		// FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
-		blogServise.postDelete(pid);
+	public Object PostDelete(HttpSession session, @PathVariable Integer pid) {
+		User adminUser = Util.getUser(session);
+		
+		blogServise.postDelete(adminUser,pid);
 		
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
@@ -472,21 +501,25 @@ public class BlogController {
 	
 	@PostMapping("/admin/api/post/{postSeq}/policy/{code}")
 	@ResponseBody
-	public Object Banhistory(HttpSession session,@PathVariable Integer postSeq , @PathVariable String code) {
+	public Object Banhistory(HttpSession session,
+			@PathVariable Integer postSeq ,
+			@PathVariable String code) {
 		User adminUser = Util.getUser(session);
 		
-		blogServise.Banhistory(adminUser, postSeq,code);
-		
+		blogServise.Banhistory(adminUser, postSeq, code); // "null"
+		long banTime = new Date().getTime();
 		Map<String, Object> res = new HashMap<>();
-		res.put("ban", code);
+		res.put("ban", "null".equals(code) ? null : code);
+		res.put("banTime", banTime);
 		res.put("success", true);
 		return res;
 	}
 	
 	@GetMapping("/admin/api/post/{postSeq}/ban")
 	@ResponseBody
-	public Object GetBanHistoryByPost(@PathVariable Integer postSeq) {
-		List<BanHistory> ban = banHistoryService.GetBanHistoryByPost(postSeq);
+	public Object GetBanHistoryByPost(HttpSession session, @PathVariable Integer postSeq) {
+		User adminUser = Util.getUser(session);
+		List<BanHistory> ban = banHistoryService.GetBanHistoryByPost(adminUser,postSeq);
 		
 		Map<String, Object> res = new HashMap<>();
 		res.put("ban", ban);

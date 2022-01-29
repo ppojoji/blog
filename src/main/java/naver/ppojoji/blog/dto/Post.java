@@ -34,6 +34,8 @@ public class Post {
 	 */
 	private String ban;
 	
+	private BanHistory recentBan;
+	
 	public String getDelYn() {
 		return delYn;
 	}
@@ -157,5 +159,15 @@ public class Post {
 	public void setUpFiles(List<LocalUpFile> upfiles) {
 		this.upfiles = upfiles;
 	}
+
+	public BanHistory getRecentBan() {
+		return recentBan;
+	}
+
+	public void setRecentBan(BanHistory recentBan) {
+		this.recentBan = recentBan;
+	}
+	
+	
 	
 }

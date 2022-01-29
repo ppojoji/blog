@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import naver.ppojoji.blog.dto.BanHistory;
+import naver.ppojoji.blog.dto.Post;
 
 @Repository
 public class BanHistoryDao {
@@ -20,8 +21,13 @@ public class BanHistoryDao {
 		
 	}
 
-	public List<BanHistory> GetBanHistoryByPost(Integer postSeq) {
-		List<BanHistory> ban = session.selectList("BanHistoryMapper.GetBanHistoryByPost",postSeq);
+	public List<BanHistory> GetBanHistoryByPost(Post post) {
+		List<BanHistory> ban = session.selectList("BanHistoryMapper.GetBanHistoryByPost",post);
+		return ban;
+	}
+
+	public BanHistory findRecentBan(Post post) {
+		BanHistory ban = session.selectOne("BanHistoryMapper.findRecentBan",post);
 		return ban;
 	}
 }
