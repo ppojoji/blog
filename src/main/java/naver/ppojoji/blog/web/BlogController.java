@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import naver.ppojoji.blog.BanType;
 import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.BanHistory;
@@ -106,9 +107,9 @@ public class BlogController {
 	}
 	@GetMapping("/api/admin/posts")
 	@ResponseBody
-	public Object findAllByAdmin(HttpSession session){
+	public Object findAllByAdmin(HttpSession session,String searchType){
 		User adminUser = Util.getUser(session);
-		List<Post> posts = blogServise.findAllByAdmin(adminUser);
+		List<Post> posts = blogServise.findAllByAdmin(searchType,adminUser);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("posts", posts);
 		map.put("success", true);
@@ -430,27 +431,62 @@ public class BlogController {
 	@GetMapping("/admin/api/posts/{searchType}")
 	@ResponseBody
 	public Object listAllPosts(HttpSession session , @PathVariable String searchType) {
-		// FIXME /admin으로 시작하는 요청은 전부 권한을 확인해야함
-		// FIXME "/admin"으로 시작하는 uri는 슈퍼 관리자만 실행해야함
 		User adminUser = Util.getUser(session);
 		List<Post> posts = null;
 		
-		if("all".equals(searchType)) {
-			posts = blogServise.findAllByAdmin(adminUser);
+		System.out.println("@@@@ "+ searchType); // @@@@ AD,PN,AB
+		/*
+		 * "AD,PN,AB" => ["AD", "PN", "AB"]
+		 * 
+		 * String [] arr = { 'A', ..}
+		 */
+		List<String> banTypes = Arrays.asList( searchType.split(","));
+		// banTypes = ["all"]
+		
+//		if("all".equals(searchType)) {
+//			posts = blogServise.findAllByAdmin(adminUser);
+//		} else if ("AD".equals(searchType)){
+//			posts = blogServise.findBanByAdmin(searchType,adminUser);
+//		} else if ("PN".equals(searchType)){
+//			posts = blogServise.findBanByAdmin(searchType,adminUser);
+//		} else if ("AB".equals(searchType)){
+//			posts = blogServise.findBanByAdmin(searchType,adminUser);
+//		} else if ("GM".equals(searchType)){
+//			posts = blogServise.findBanByAdmin(searchType,adminUser);
+//		} else if ("ET".equals(searchType)){
+//			posts = blogServise.findBanByAdmin(searchType,adminUser);
+//		} else {
+//			throw new BlogException(400, "NO_SUCH_SEARCHTYPE");
+//		}
+		/* FIXME 이제 배열임
+		if("all".equals(banTypes[0])) { // AD,PN
+			searchType = null;
 		} else if ("AD".equals(searchType)){
-			posts = blogServise.findBanByAdmin(searchType,adminUser);
 		} else if ("PN".equals(searchType)){
-			posts = blogServise.findBanByAdmin(searchType,adminUser);
 		} else if ("AB".equals(searchType)){
-			posts = blogServise.findBanByAdmin(searchType,adminUser);
 		} else if ("GM".equals(searchType)){
-			posts = blogServise.findBanByAdmin(searchType,adminUser);
 		} else if ("ET".equals(searchType)){
-			posts = blogServise.findBanByAdmin(searchType,adminUser);
 		} else {
 			throw new BlogException(400, "NO_SUCH_SEARCHTYPE");
 		}
+		*/
+		if ("all".equals(banTypes.get(0))) {
+			banTypes = null;
+		} else {
+			for (String ban : banTypes) {
+				if ("AD".equals(ban)){
+				} else if ("PN".equals(ban)){
+				} else if ("AB".equals(ban)){
+				} else if ("GM".equals(ban)){
+				} else if ("ET".equals(ban)){
+				} else {
+					throw new BlogException(400, "NO_SUCH_SEARCHTYPE");
+				}
+			}
+		}
+		// BanType banType = BanType.toBanType(searchType);
 		
+		posts = blogServise.findAllByAdmin(banTypes,adminUser);
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		res.put("posts", posts);

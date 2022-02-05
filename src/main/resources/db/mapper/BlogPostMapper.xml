@@ -98,11 +98,20 @@
 	where
 		p.seq = #{id}
 	</select>
-	<select id="findAllByAdmin" resultMap="PostMap" parameterType="User">
+	<select id="findAllByAdmin" resultMap="PostMap" parameterType="map">
 		select 
 		 <include refid ="select_post"></include>
 		 from tb_post p
 		 where delyn = 'N'
+		 <if test="banTypes != null">
+		 	and ban in
+		 	<foreach collection="banTypes" item="ban" index="index" separator="," open="(" close=")">
+      			#{ban}
+		    </foreach>
+		 </if>
+		 <if test="searchType != null">
+		 	and ban = #{searchType}
+		 </if>
 	</select>
 	<select id="findBanByAdmin" resultMap="PostMap" parameterType="map">
 		select 

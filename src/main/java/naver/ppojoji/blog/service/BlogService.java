@@ -72,10 +72,10 @@ public class BlogService {
 		return posts;
 	}
 	
-	public List<Post> findAllByAdmin(User adminUser){
+	public List<Post> findAllByAdmin(String searchType, User adminUser){
 		checkAdmin(adminUser);
 		
-		List<Post> posts = blogDao.findAllByAdmin(adminUser);
+		List<Post> posts = blogDao.findAllByAdmin(searchType,adminUser);
 		for (Post post : posts) {
 			BanHistory ban = banHistoryService.findRecentBan(post);
 			post.setRecentBan(ban);
@@ -83,16 +83,25 @@ public class BlogService {
 		return posts;
 	}
 	
-	public List<Post> findBanByAdmin(String searchType, User adminUser) {
+	public List<Post> findAllByAdmin(List<String> banTypes, User adminUser){
 		checkAdmin(adminUser);
 		
-		List<Post> posts = blogDao.findBanByAdmin(searchType,adminUser);
+		List<Post> posts = blogDao.findAllByAdmin(banTypes,adminUser);
 		for (Post post : posts) {
 			BanHistory ban = banHistoryService.findRecentBan(post);
 			post.setRecentBan(ban);
 		}
 		return posts;
 	}
+	
+	/*
+	 * public List<Post> findBanByAdmin(String searchType, User adminUser) {
+	 * checkAdmin(adminUser);
+	 * 
+	 * List<Post> posts = blogDao.findBanByAdmin(searchType,adminUser); for (Post
+	 * post : posts) { BanHistory ban = banHistoryService.findRecentBan(post);
+	 * post.setRecentBan(ban); } return posts; }
+	 */
 	
 	/**
 	 * 주어진 사용자가 작성한 글을 조회함

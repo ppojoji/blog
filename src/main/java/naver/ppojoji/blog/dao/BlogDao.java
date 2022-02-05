@@ -77,11 +77,33 @@ public class BlogDao {
 	
 	/**
 	 * 내글 가져오기(관리용이므로 delYn 제외한 모든글 반환0
+	 * @param searchType 
 	 * @param adminUser 
 	 * @return
 	 */
-	public List<Post> findAllByAdmin(User adminUser) {
-		return session.selectList("BlogPostMapper.findAllByAdmin",adminUser);
+	public List<Post> findAllByAdmin(String searchType, User adminUser) {
+//		if(searchType.equals("all")) {
+//			searchType = null;
+//		}
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("searchType", searchType);
+		map.put("adminUser", adminUser);
+		
+		System.out.println("### searchType " + searchType);
+		return session.selectList("BlogPostMapper.findAllByAdmin",map);
+	}
+	
+	public List<Post> findAllByAdmin(List<String> banTypes, User adminUser) {
+//		if(searchType.equals("all")) {
+//			searchType = null;
+//		}
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("banTypes", banTypes);
+		map.put("adminUser", adminUser);
+		
+		return session.selectList("BlogPostMapper.findAllByAdmin",map);
 	}
 	/**
 	 * 금지된 글 목록 가져오기
@@ -89,13 +111,13 @@ public class BlogDao {
 	 * @param adminUser
 	 * @return
 	 */
-	public List<Post> findBanByAdmin(String searchType , User adminUser) {
-		Map map = new HashMap<>();
-		map.put("searchType", searchType);
-		map.put("adminUser", adminUser);
-		
-		return session.selectList("BlogPostMapper.findBanByAdmin",map);
-	}
+	/*
+	 * public List<Post> findBanByAdmin(String searchType , User adminUser) { Map
+	 * map = new HashMap<>(); map.put("searchType", searchType);
+	 * map.put("adminUser", adminUser);
+	 * 
+	 * return session.selectList("BlogPostMapper.findBanByAdmin",map); }
+	 */
 	
 	public Integer insertPost(String title, String contents, Integer cateSeq , int writeSeq) {
 		// 1. map 으로 감싸서 보내기
