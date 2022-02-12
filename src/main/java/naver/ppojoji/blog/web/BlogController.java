@@ -567,6 +567,7 @@ public class BlogController {
 	}
 	/**
 	 * 주어진 tagName에 해당하는 태그를 조회함
+	 * FIXME TagService 로 가야함
 	 * @param tagName
 	 * @return
 	 */

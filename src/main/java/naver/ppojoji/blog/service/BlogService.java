@@ -394,6 +394,7 @@ public class BlogService {
 	}
 	/**
 	 * 주어진 태그 문자열로 검색한 후 있으면 반환하고, 없으면 새로 추가한 후 반환
+	 * FIXME TagService 로 가야함
 	 * @param tagName
 	 * @return
 	 */
@@ -407,7 +408,12 @@ public class BlogService {
 		return tag;
 //		return blogDao.tagInsert(tagName);
 	}
-
+	/**
+	 * 태그 조회
+	 * FIXME TagService 로 가야함
+	 * @param tagName
+	 * @return
+	 */
 	public Tag TagSelect(String tagName) {
 		return blogDao.TagSelect(tagName);
 	}
