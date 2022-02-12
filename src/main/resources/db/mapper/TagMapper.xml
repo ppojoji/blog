@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TagMapper">
+	<insert id="bindTag" parameterType="Tag">
+		insert into tb_posttag
+		( post, tag)
+		values
+		( #{postSeq},#{seq} )
+	</insert>
+	<select id="findTagsByPost" parameterType="int" resultType="Tag">
+		SELECT t.*
+		 FROM tb_posttag tp
+		 JOIN tb_tags t
+		   ON tp.tag = t.seq
+		 WHERE tp.post = #{postSeq}
+	</select>
+</mapper>

@@ -86,17 +86,17 @@
 		p.ban
 	</sql>
 	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
-	select
-		<include refid="select_post"></include>
-		, f.*
-	from
-		TB_POST p
-	LEFT join 
-		tb_files f
-	on
-		p.seq = f.post
-	where
-		p.seq = #{id}
+		select
+			<include refid="select_post"></include>
+			, f.*
+		from
+			TB_POST p
+		LEFT join 
+			tb_files f
+		on
+			p.seq = f.post
+		where
+			p.seq = #{id}
 	</select>
 	<select id="findAllByAdmin" resultMap="PostMap" parameterType="map">
 		select 
@@ -330,9 +330,22 @@
 		       ON f.post =  p.seq     
 		WHERE p.DELYN = 'Y'	
 	 </select>
-	 <update id="setPostPolicy" parameterType="map">
+	 <update id="setPostPolicy" parameterType="map" >
 	 	update tb_post
 	 	set ban = #{code}
 	 	where seq = #{postSeq}
 	 </update>
+	 <select id="tagSelect" parameterType="String" resultType="Tag">
+	 	select seq 
+	 	       ,tagName
+	 	  from tb_tags
+	 	  where tagName = #{tagName}     
+	 </select>
+	 <insert id="tagInsert" 
+	 	parameterType="Tag"
+	 	useGeneratedKeys="true"
+	 	keyProperty="seq">
+	 	INSERT INTO tb_tags(tagname) 
+	 	  VALUES(#{tagName})
+	 </insert>
 </mapper>

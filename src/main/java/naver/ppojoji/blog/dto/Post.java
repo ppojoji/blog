@@ -28,6 +28,16 @@ public class Post {
 	
 	private String delYn;
 	
+	private List<Tag> tags; 
+	
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
 	/**
 	 * 글 금지 사유
 	 * TODO enum 으로 교체

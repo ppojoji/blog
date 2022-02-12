@@ -38,6 +38,7 @@ import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Reply;
 import naver.ppojoji.blog.dto.Search;
+import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BanHistoryService;
 import naver.ppojoji.blog.service.BlogService;
@@ -249,12 +250,14 @@ public class BlogController {
 			@RequestParam String title,
 			@RequestParam String contents,
 			@RequestParam Integer cate,
+			@RequestParam List<Integer> tag,
 			@RequestParam List<MultipartFile> files) throws JsonProcessingException {
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다.
 		User loginUser = (User) session.getAttribute(Value.KEY_LOGIN_USER);
+		System.out.println("tags: " + tag); // 출력 [34, 53, 1]
 		System.out.println(title);
 		System.out.println(contents);
-		blogServise.insertPost(title, contents, files, cate, loginUser.getSeq());
+		blogServise.insertPost(title, contents, files, cate, loginUser.getSeq(),tag);
 		Map<String, Object> res = new HashMap<>();
 		res.put("success",true);
 		
@@ -559,6 +562,21 @@ public class BlogController {
 		
 		Map<String, Object> res = new HashMap<>();
 		res.put("ban", ban);
+		res.put("success", true);
+		return res;
+	}
+	/**
+	 * 주어진 tagName에 해당하는 태그를 조회함
+	 * @param tagName
+	 * @return
+	 */
+	@GetMapping("/api/tagSelect/{tagName}")
+	@ResponseBody
+	public Object TagSelect(@PathVariable String tagName) {
+		
+		Tag tag = blogServise.tagInsert(tagName);
+		Map<String, Object> res = new HashMap<>();
+		res.put("tag", tag);
 		res.put("success", true);
 		return res;
 	}

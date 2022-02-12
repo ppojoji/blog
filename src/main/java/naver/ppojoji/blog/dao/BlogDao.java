@@ -13,6 +13,7 @@ import naver.ppojoji.blog.dto.BanHistory;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
+import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
 
 /**
@@ -264,4 +265,21 @@ public class BlogDao {
 		session.update("BlogPostMapper.setPostPolicy",map);
 		
 	}
+
+	public Tag tagInsert(String tagName) {
+		Tag tag = new Tag();
+		tag.setTagName(tagName);
+		/*
+		 * tag.setSeq(6);
+		 */
+		session.insert("BlogPostMapper.tagInsert", tag);
+		return tag;
+	}
+
+	public Tag TagSelect(String tagName) {
+		return session.selectOne("BlogPostMapper.tagSelect",tagName);
+	}
+
+	
+	
 }

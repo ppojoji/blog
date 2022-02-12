@@ -23,6 +23,7 @@ import naver.ppojoji.blog.dto.LocalUpFile;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
+import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
 
 @Service
@@ -42,6 +43,9 @@ public class BlogService {
 	
 	@Autowired 
 	BanHistoryService banHistoryService;
+	
+	@Autowired
+	TagService tagService;
 	
 	/*
 	List<Post> list = new ArrayList<>();
@@ -115,7 +119,10 @@ public class BlogService {
 		if (updateCount) {
 			blogDao.viewCount(seq);			
 		}
-		return blogDao.findPostBySeq(seq);
+		Post post = blogDao.findPostBySeq(seq);
+		List<Tag> tags = tagService.findTagsByPost(post.getSeq());
+		post.setTags(tags);
+		return post;
 		/*
 		for(int i=0; i<list.size(); i++) {
 			Post post = list.get(i);
@@ -140,7 +147,8 @@ public class BlogService {
 			String contents, 
 			List<MultipartFile> files,
 			Integer cateSeq, // null
-			Integer writerSeq) {
+			Integer writerSeq,
+			List<Integer> tagSeqs) {
 			// HttpSession session) {
 		Category cate = cateDao.findCategory(cateSeq);
 		if (cate == null) {
@@ -150,7 +158,8 @@ public class BlogService {
 				throw new BlogException(404, "NO_SUCH_CATEGORY");
 			}
 		}
-		Integer postSeq = blogDao.insertPost(title,contents, cateSeq, writerSeq);
+		Integer postSeq = blogDao.insertPost(title,contents, cateSeq, writerSeq); // 48
+		tagService.bindTags(postSeq,tagSeqs);
 		fileService.uploadSave(postSeq, files);
 		
 		//long seq = nextSeq();
@@ -166,6 +175,7 @@ public class BlogService {
 	*/
 	/**
 	 * 수정
+	 * FIXME 태그도 수정할 수 있음
 	 * @param title
 	 * @param contents
 	 * @param postSeq2 
@@ -381,6 +391,25 @@ public class BlogService {
 		if(!adminUser.getAdmin().equals("Y")) {
 			throw new BlogException(401,Error.NOT_ADMIN);
 		}
+	}
+	/**
+	 * 주어진 태그 문자열로 검색한 후 있으면 반환하고, 없으면 새로 추가한 후 반환
+	 * @param tagName
+	 * @return
+	 */
+	public Tag tagInsert(String tagName) {
+		Tag tag =  blogDao.TagSelect(tagName);
+		if(tag == null) {
+			// FIXME 고칠 곳이 있음(쿼리)
+			tag = blogDao.tagInsert(tagName);
+			System.out.println("[새 태그 입력] " + tag);
+		}
+		return tag;
+//		return blogDao.tagInsert(tagName);
+	}
+
+	public Tag TagSelect(String tagName) {
+		return blogDao.TagSelect(tagName);
 	}
 
 	
