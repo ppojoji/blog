@@ -37,5 +37,9 @@ public class TagDao {
 		session.insert("TagMapper.tagInsert", tag);
 		return tag;
 	}
+	public List<Tag> tagByPost() {
+		return session.selectList("TagMapper.tagByPost");
+		
+	}
 
 }

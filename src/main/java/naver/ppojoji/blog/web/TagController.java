@@ -1,6 +1,7 @@
 package naver.ppojoji.blog.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,10 @@ public class TagController {
 		res.put("tag", tag);
 		res.put("success", true);
 		return res;
+	}
+	@GetMapping("/api/postBytag")
+	@ResponseBody
+	public List<Tag> tagByPost(){
+		return tagServise.tagByPost();
 	}
 }

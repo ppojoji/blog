@@ -47,6 +47,10 @@
 			resultMap="UserMapper.UserMap"/>
 		 -->
 	</resultMap>
+	<resultMap type="Post" id="PostWithTag" extends="PostMap">
+		<collection property="tags" autoMapping="true" notNullColumn="tseq"
+		 resultMap="TagMapper.TagMapInPost"></collection>
+	</resultMap>
 	<resultMap type="Post" id="PostWithCnt" extends="PostMap">
 		<result column="cnt" property="replyCount"/>
 		<result column="ufile_cnt" property="upfileCount"/> 
@@ -85,6 +89,21 @@
 		p.delYn,
 		p.ban
 	</sql>
+	<sql id="select_post_with_tag">
+		p.pseq,
+		p.title,
+		p.contents,
+		p.creation_date,
+		p.view_count,
+		p.writer,
+		p.open,
+		p.view_pass,
+		p.category,
+		p.last_date,
+		p.delYn,
+		p.ban
+	</sql>
+	
 	<select id="findPostBySeq" parameterType="integer" resultMap="PostMap">
 		select
 			<include refid="select_post"></include>
@@ -270,28 +289,47 @@
 		</if>
 		order by p.creation_date desc
 	</select>
-	<select id="findByCate2" parameterType="Integer" resultMap="PostMap" >
-	SELECT
-		<include refid="select_post"></include>
-		,count(rp.seq) AS cnt
-		, f.*
-		FROM 
-			(SELECT
-				  p.seq,
-				  MIN(f.seq) AS fileSeq
-				FROM tb_post p
-				LEFT JOIN tb_files f
-				  ON (f.POST = p.SEQ AND f.CONTENTTYPE like 'image%')
-				WHERE p.CATEGORY = #{cate}
-				GROUP BY p.SEQ
-			) ref
-		LEFT JOIN tb_reply rp
-		         ON rp.PARENT = ref.seq	
-		JOIN tb_post p
-		       ON p.seq = ref.seq
-		LEFT JOIN tb_files f 
-		       ON f.seq =  ref.fileSeq
-		GROUP BY p.seq
+	<select id="findByCate2" parameterType="Integer" resultMap="PostWithTag" >
+		SELECT
+			<include refid="select_post_with_tag"></include>
+	    
+	       , t.seq AS tseq
+	       , t.tagname
+		FROM   (
+					SELECT
+					   p.seq AS pseq,
+		               p.title,
+		               p.contents,
+		               p.creation_date,
+		               p.view_count,
+		               p.writer,
+		               p.open,
+		               p.view_pass,
+		               p.category,
+		               p.last_date,
+		               p.delyn,
+		               p.ban,
+		               Count(rp.seq) AS cnt,
+		               f.*
+		        FROM   (SELECT p.seq,
+		                       Min(f.seq) AS fileseq
+		                FROM   tb_post p
+		                       LEFT JOIN tb_files f
+		                              ON ( f.post = p.seq
+		                                   AND f.contenttype LIKE 'image%' )
+		                WHERE  p.category = #{cate}
+		                GROUP  BY p.seq) ref
+		               LEFT JOIN tb_reply rp
+		                      ON rp.parent = ref.seq
+		               JOIN tb_post p
+		                 ON p.seq = ref.seq
+		               LEFT JOIN tb_files f
+		                      ON f.seq = ref.fileseq
+		        GROUP  BY p.seq) p
+		       LEFT JOIN tb_posttag tp
+		              ON tp.post = p.pseq
+		       LEFT JOIN tb_tags t
+		              ON t.seq = tp.tag
 	</select>
 	<!-- 
 	<select id="findByCateName" parameterType="String" >

@@ -1,16 +1,20 @@
 package naver.ppojoji.blog.dto;
 
+import java.util.List;
+
 public class Tag {
- private Integer seq;
- private String tagName;
- private Integer postSeq;
+	private Integer seq;
+	private String tagName;
+	private Integer postSeq;
+ 
+ 	private List<Post> posts;
  
 	public Integer getPostSeq() {
-	return postSeq;
-}
-public void setPostSeq(Integer postSeq) {
-	this.postSeq = postSeq;
-}
+		return postSeq;
+	}
+	public void setPostSeq(Integer postSeq) {
+		this.postSeq = postSeq;
+	}
 	public Integer getSeq() {
 		return seq;
 	}
@@ -22,6 +26,13 @@ public void setPostSeq(Integer postSeq) {
 	}
 	public void setTagName(String tagName) {
 		this.tagName = tagName;
+	}
+	
+	public List<Post> getPosts() {
+		return posts;
+	}
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 	@Override
 	public String toString() {

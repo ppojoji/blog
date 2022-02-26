@@ -46,4 +46,9 @@ public class TagService {
 		}
 		return tag;
 	}
+
+	public List<Tag> tagByPost() {
+		
+		return tagDao.tagByPost();
+	}
 }

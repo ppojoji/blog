@@ -3,6 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="TagMapper">
+	<!-- TagMap위치가 여기에 있으면 안됨 -->
+	<resultMap type="Tag" id="TagMapInPost" autoMapping="true">
+		<id column="tseq" property="seq"/>
+		<result column="tagname" property="tagName"/>
+	</resultMap>
+	<resultMap type="Tag" id="FullTagMap">
+		<id column="tseq" property="seq"/>
+		<result column="tagname" property="tagName"/>
+		 <collection property="posts" notNullColumn="pseq" resultMap="BlogPostMapper.PostMap"></collection>
+	</resultMap>
 	<insert id="bindTag" parameterType="Tag">
 		insert into tb_posttag
 		( post, tag)
@@ -29,4 +39,16 @@
 	 	INSERT INTO tb_tags(tagname) 
 	 	  VALUES(#{tagName})
 	 </insert>
+	 
+	 <select id="tagByPost" resultMap="FullTagMap" >
+	 	SELECT
+	 		t.seq as tseq,
+	 		t.tagname ,
+	 		<include refid="BlogPostMapper.select_post"></include> 
+		 FROM tb_tags t
+		 LEFT JOIN tb_posttag tp
+		       ON t.seq = tp.tag
+		 LEFT JOIN tb_post p 
+        ON tp.post = p.SEQ   
+	 </select>
 </mapper>
