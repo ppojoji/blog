@@ -16,4 +16,17 @@
 		   ON tp.tag = t.seq
 		 WHERE tp.post = #{postSeq}
 	</select>
+	<select id="tagSelect" parameterType="String" resultType="Tag">
+	 	select seq 
+	 	       ,tagName
+	 	  from tb_tags
+	 	  where tagName = #{tagName}     
+	 </select>
+	 <insert id="tagInsert" 
+	 	parameterType="Tag"
+	 	useGeneratedKeys="true"
+	 	keyProperty="seq">
+	 	INSERT INTO tb_tags(tagname) 
+	 	  VALUES(#{tagName})
+	 </insert>
 </mapper>

@@ -392,32 +392,4 @@ public class BlogService {
 			throw new BlogException(401,Error.NOT_ADMIN);
 		}
 	}
-	/**
-	 * 주어진 태그 문자열로 검색한 후 있으면 반환하고, 없으면 새로 추가한 후 반환
-	 * FIXME TagService 로 가야함
-	 * @param tagName
-	 * @return
-	 */
-	public Tag tagInsert(String tagName) {
-		Tag tag =  blogDao.TagSelect(tagName);
-		if(tag == null) {
-			// FIXME 고칠 곳이 있음(쿼리)
-			tag = blogDao.tagInsert(tagName);
-			System.out.println("[새 태그 입력] " + tag);
-		}
-		return tag;
-//		return blogDao.tagInsert(tagName);
-	}
-	/**
-	 * 태그 조회
-	 * FIXME TagService 로 가야함
-	 * @param tagName
-	 * @return
-	 */
-	public Tag TagSelect(String tagName) {
-		return blogDao.TagSelect(tagName);
-	}
-
-	
-
 }

@@ -24,5 +24,18 @@ public class TagDao {
 	public List<Tag> findTagsByPost(Integer postSeq) {
 		return session.selectList("TagMapper.findTagsByPost", postSeq);
 	}
+	
+	public Tag TagSelect(String tagName) {
+		return session.selectOne("TagMapper.tagSelect",tagName);
+	}
+	public Tag tagInsert(String tagName) {
+		Tag tag = new Tag();
+		tag.setTagName(tagName);
+		/*
+		 * tag.setSeq(6);
+		 */
+		session.insert("TagMapper.tagInsert", tag);
+		return tag;
+	}
 
 }

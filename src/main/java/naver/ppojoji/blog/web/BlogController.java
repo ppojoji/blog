@@ -45,6 +45,7 @@ import naver.ppojoji.blog.service.BlogService;
 import naver.ppojoji.blog.service.CategoryService;
 import naver.ppojoji.blog.service.PostDeletion;
 import naver.ppojoji.blog.service.ReplyService;
+import naver.ppojoji.blog.service.TagService;
 
 @Controller
 public class BlogController {
@@ -562,22 +563,6 @@ public class BlogController {
 		
 		Map<String, Object> res = new HashMap<>();
 		res.put("ban", ban);
-		res.put("success", true);
-		return res;
-	}
-	/**
-	 * 주어진 tagName에 해당하는 태그를 조회함
-	 * FIXME TagService 로 가야함
-	 * @param tagName
-	 * @return
-	 */
-	@GetMapping("/api/tagSelect/{tagName}")
-	@ResponseBody
-	public Object TagSelect(@PathVariable String tagName) {
-		
-		Tag tag = blogServise.tagInsert(tagName);
-		Map<String, Object> res = new HashMap<>();
-		res.put("tag", tag);
 		res.put("success", true);
 		return res;
 	}

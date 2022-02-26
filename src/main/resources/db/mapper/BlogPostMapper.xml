@@ -335,17 +335,4 @@
 	 	set ban = #{code}
 	 	where seq = #{postSeq}
 	 </update>
-	 <select id="tagSelect" parameterType="String" resultType="Tag">
-	 	select seq 
-	 	       ,tagName
-	 	  from tb_tags
-	 	  where tagName = #{tagName}     
-	 </select>
-	 <insert id="tagInsert" 
-	 	parameterType="Tag"
-	 	useGeneratedKeys="true"
-	 	keyProperty="seq">
-	 	INSERT INTO tb_tags(tagname) 
-	 	  VALUES(#{tagName})
-	 </insert>
 </mapper>

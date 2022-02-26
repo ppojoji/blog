@@ -265,21 +265,4 @@ public class BlogDao {
 		session.update("BlogPostMapper.setPostPolicy",map);
 		
 	}
-
-	public Tag tagInsert(String tagName) {
-		Tag tag = new Tag();
-		tag.setTagName(tagName);
-		/*
-		 * tag.setSeq(6);
-		 */
-		session.insert("BlogPostMapper.tagInsert", tag);
-		return tag;
-	}
-
-	public Tag TagSelect(String tagName) {
-		return session.selectOne("BlogPostMapper.tagSelect",tagName);
-	}
-
-	
-	
 }
