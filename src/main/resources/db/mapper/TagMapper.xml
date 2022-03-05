@@ -51,4 +51,16 @@
 		 LEFT JOIN tb_post p 
         ON tp.post = p.SEQ   
 	 </select>
+	 <delete id="deleteTags" parameterType="Integer">
+	 	delete from tb_posttag
+	 	where post = #{postSeq}
+	 </delete>
+	 <select id="postsOfTag" resultMap="BlogPostMapper.PostMap" parameterType="int">
+	 	select 
+	 	 <include refid="BlogPostMapper.select_post"></include>
+		FROM tb_posttag tt
+		  INNER JOIN tb_post p
+		       ON  tt.post = p.seq
+		  WHERE tt.tag = #{tagSeq}
+	 </select>
 </mapper>

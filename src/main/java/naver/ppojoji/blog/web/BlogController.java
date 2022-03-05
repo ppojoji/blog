@@ -274,10 +274,12 @@ public class BlogController {
 			@RequestParam String title ,
 			@RequestParam String contents , 
 			@RequestParam Integer cateSeq,
+			@RequestParam List<Integer> tag, // tag 의 seq 만 배열로 모아서 입력받음
 			@PathVariable Integer postSeq) throws JsonProcessingException {
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다.
-		this.blogServise.updatePost(title, contents, cateSeq, postSeq);
 		System.out.println("##postSeq"+postSeq);
+		System.out.println("tags" + tag);
+		this.blogServise.updatePost(title, contents, cateSeq,tag, postSeq);
 		Map<String, Object> res = new HashMap<>();
 		res.put("success",true);
 		return om.writeValueAsString(res); 

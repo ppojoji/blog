@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Tag;
 
 @Repository
@@ -40,6 +41,16 @@ public class TagDao {
 	public List<Tag> tagByPost() {
 		return session.selectList("TagMapper.tagByPost");
 		
+	}
+	/**
+	 * 주어진 글에 달린 태그 삭제
+	 * @param postSeq
+	 */
+	public void deleteTags(Integer postSeq) {
+		session.delete("TagMapper.deleteTags",postSeq);
+	}
+	public List<Post> postsOfTag(Integer tagSeq) {
+		return session.selectList("TagMapper.postsOfTag",tagSeq);
 	}
 
 }

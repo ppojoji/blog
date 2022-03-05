@@ -67,4 +67,10 @@ public class TestBlogRepository {
 		assertEquals(3, cate.getSeq().intValue());
 		assertEquals("ccc", cate.getName());
 	}
+	
+	@Test
+	public void test_delYn() {
+		List<Post> post = blogService.findpostsDelY();
+		System.out.println("[count] " + post.size());
+	}
 }

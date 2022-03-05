@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.service.TagService;
 
@@ -37,5 +38,10 @@ public class TagController {
 	@ResponseBody
 	public List<Tag> tagByPost(){
 		return tagServise.tagByPost();
+	}
+	@GetMapping("/api/post/tag/{tagSeq}")
+	@ResponseBody
+	public List<Post> postsOfTag(@PathVariable Integer tagSeq){
+		return tagServise.postsOfTag(tagSeq);
 	}
 }

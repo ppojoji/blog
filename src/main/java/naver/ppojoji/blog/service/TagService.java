@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import naver.ppojoji.blog.dao.TagDao;
+import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Tag;
 
 @Service
@@ -50,5 +51,14 @@ public class TagService {
 	public List<Tag> tagByPost() {
 		
 		return tagDao.tagByPost();
+	}
+
+	public void updateTags(List<Integer> tags, Integer postSeq) {
+		tagDao.deleteTags(postSeq);
+		this.bindTags(postSeq, tags);
+	}
+
+	public List<Post> postsOfTag(Integer tagSeq) {
+		return tagDao.postsOfTag(tagSeq);
 	}
 }

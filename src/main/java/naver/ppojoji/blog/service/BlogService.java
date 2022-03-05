@@ -180,8 +180,13 @@ public class BlogService {
 	 * @param contents
 	 * @param postSeq2 
 	 */
-	public void updatePost(String title, String contents ,Integer cateSeq ,Integer postSeq ) {
-		blogDao.updatePost(title,contents,cateSeq ,postSeq);
+	public void updatePost(String title, String contents ,Integer cateSeq ,
+			List<Integer> tags ,Integer postSeq ) {
+		blogDao.updatePost(title,contents,cateSeq, postSeq);
+		
+		tagService.updateTags(tags,postSeq);
+		// 3545 번 글에 달린 태그를 모두 다 지움
+		// 3543번 글에 태그 입력
 	}
 
 	public void deletePost(Integer pid) {
