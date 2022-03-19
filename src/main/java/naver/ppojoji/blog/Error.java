@@ -8,6 +8,10 @@ public enum Error {
 	NOT_FOUND, 
 	BAD_REQUEST, 
 	/**
+	 * 글의 소유자가 아님
+	 */
+	NOT_OWNER_OF_POST,
+	/**
 	 * 관리자가 아님
 	 */
 	NOT_ADMIN

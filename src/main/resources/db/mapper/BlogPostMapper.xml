@@ -178,16 +178,6 @@
 			#{writeSeq}
 		)
 	</insert>
-	<update id="updatePost" parameterType="map">
-		update tb_Post
-		set
-			title = #{title}
-			, contents = #{contents}
-			, category = #{cateSeq}
-			, last_date = current_timestamp
-		where
-			seq = #{postSeq} 
-	</update>
 	<update id="updatePost2" parameterType="Post">
 		update tb_Post
 		set

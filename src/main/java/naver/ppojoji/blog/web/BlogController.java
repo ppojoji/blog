@@ -42,6 +42,7 @@ import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BanHistoryService;
 import naver.ppojoji.blog.service.BlogService;
+import naver.ppojoji.blog.service.BookMarkService;
 import naver.ppojoji.blog.service.CategoryService;
 import naver.ppojoji.blog.service.PostDeletion;
 import naver.ppojoji.blog.service.ReplyService;
@@ -81,6 +82,8 @@ public class BlogController {
 	@Autowired
 	BanHistoryService banHistoryService;
 	
+	@Autowired
+	BookMarkService bookMarkService;
 	
 	@RequestMapping(value="/api/posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
@@ -198,10 +201,14 @@ public class BlogController {
 	@RequestMapping(value="/api/readPosts/{postSeq}", method= RequestMethod.GET, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
 	public String readPosts(
-			@PathVariable int postSeq) 
+			@PathVariable int postSeq,
+			HttpSession session) 
 			throws JsonProcessingException {
 		
 		Post post = blogServise.readPosts(postSeq, true);
+		
+		User loginUser = Util.getUser(session);
+		Integer cnt = bookMarkService.readBookMark(postSeq,loginUser);
 		try {
 			Thread.sleep(1*100);
 		} catch (InterruptedException e) {
@@ -223,6 +230,7 @@ public class BlogController {
 			res.put("success", false);
 			res.put("cause", "NO_SUCH_POST");
 		}
+		res.put("bookMark", cnt);
 		res.put("time", 
 				df.format(post.getCreationDate()));
 		return om.writeValueAsString(res); // jsp 이름이 아님

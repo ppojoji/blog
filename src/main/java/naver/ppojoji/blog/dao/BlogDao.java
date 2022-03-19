@@ -144,24 +144,6 @@ public class BlogDao {
 		
 		
 	}
-	/**
-	 * 글 수정(이거 쓰지 마세요 updatePost(Post post) 쓰세요)
-	 * @param title
-	 * @param contents
-	 * @param cateSeq
-	 * @param postSeq
-	 * @param loginUser 
-	 */
-	@Deprecated
-	public void updatePost(String title, String contents, Integer cateSeq ,Integer postSeq, User loginUser ) {
-		Map<String,Object> param = new HashMap<String, Object>(); 
-		param.put("title", title);
-		param.put("contents", contents);
-		param.put("cateSeq", cateSeq);
-		param.put("postSeq", postSeq);
-		param.put("loginUser", loginUser);
-		session.update("BlogPostMapper.updatePost",param);
-	}
 	public void updatePost(Post post) {
 		session.update("BlogPostMapper.updatePost2", post);		
 	}

@@ -10,7 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,12 +23,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.User;
+import naver.ppojoji.blog.service.BookMarkService;
 import naver.ppojoji.blog.service.UserService;
 
 @Controller
 public class UserController {
 	@Autowired
 	UserService userService;
+	@Autowired
+	BookMarkService bookMarkService;
 	
 	/* FIXME 이것도 나중에 없앨겁니다. 스프링프레임워크 내부에서 다 해주고 있음 */
 	private ObjectMapper om = new ObjectMapper();
@@ -124,5 +129,20 @@ public class UserController {
 	public Object resetPw(@RequestParam String email) {
 		userService.resetPassword(email);
 		return Util.params("success", true, "msg", "메일로 보냈음");
+	}
+	// CRUD : CREATE(INSERT QUERY) + READ(SELECT) , U(UPDATE), D(DELETE)
+	@PostMapping("/user/bookmark/{postSeq}")
+	@ResponseBody
+	public Object addBookMark(@PathVariable Integer postSeq,HttpSession session) {
+		User user = Util.getUser(session);
+		bookMarkService.addBookMark(postSeq, user);
+		return null;
+	}
+	@DeleteMapping("/user/bookmark/{postSeq}")
+	@ResponseBody
+	public Object removeBookMark(@PathVariable Integer postSeq,HttpSession session) {
+		User user = Util.getUser(session);
+		bookMarkService.removeBookMark(postSeq, user);
+		return null;
 	}
 }

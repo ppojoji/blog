@@ -2,11 +2,8 @@ package naver.ppojoji.blog.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Error;
-import naver.ppojoji.blog.dao.BanHistoryDao;
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.CategoryDao;
 import naver.ppojoji.blog.dao.UserDao;
@@ -27,7 +23,6 @@ import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
-import naver.ppojoji.blog.web.Value;
 
 @Service
 @Transactional
@@ -184,13 +179,24 @@ public class BlogService {
 	 * @param postSeq2 
 	 */
 	public void updatePost(String title, String contents ,Integer cateSeq ,
-			List<Integer> tags ,Integer postSeq,User loginUser ) {
+			List<Integer> tags,
+			Integer postSeq,
+			User loginUser ) {
 		// FIXME 자기 글인지도 확인 안하고 있음.
-		blogDao.updatePost(title,contents,cateSeq, postSeq,loginUser);
+		Post post= blogDao.findPostBySeq(postSeq);
+		Category cate = cateDao.findCategory(cateSeq);
 		
-		tagService.updateTags(tags,postSeq);
-		// 3545 번 글에 달린 태그를 모두 다 지움
-		// 3543번 글에 태그 입력
+		// 좋은 구현은 아닌데 일단 작동은 합니다.
+		if(post.getWriter().getSeq() == loginUser.getSeq()) {
+			post.setTitle(title);
+			post.setContents(contents);
+			post.setCategory(cate);
+			// blogDao.updatePost(title,contents,cateSeq, postSeq);
+			blogDao.updatePost(post);
+			tagService.updateTags(tags,postSeq);
+		} else {
+			throw new BlogException(403,Error.NOT_OWNER_OF_POST);
+		}
 	}
 
 	public void deletePost(Integer pid) {
@@ -274,7 +280,7 @@ public class BlogService {
 		if(userSeq == post.getWriter().getSeq()) {
 			blogDao.setAsdeleted(pid);
 		}else {
-			throw new BlogException(403, "NOT_A_USER");
+			throw new BlogException(403, Error.NOT_OWNER_OF_POST);
 		}
 		
 	}

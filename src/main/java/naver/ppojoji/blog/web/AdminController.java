@@ -102,7 +102,7 @@ public class AdminController {
 	@GetMapping(value = "/categories")
 	@ResponseBody
 	public List<Category> cateList(HttpSession session) {
-		// FIXME 로그인 정보가 있는1지 확인해야함
+		// FIXME 로그인 정보가 있는지 확인해야함
 		return cateService.findAllCate();
 	}
 	

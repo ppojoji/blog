@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BookMarkMapper">
+	<insert id="addBookMark" parameterType="map">
+		INSERT INTO tb_bookmark(user_ref,post_ref)
+		VALUES (#{userSeq},#{postSeq})
+	</insert>
+	<delete id="removeBookMark" parameterType="map">
+		delete from tb_bookmark
+		where user_ref=#{userSeq}
+		and post_ref = #{postSeq}
+	</delete>
+	<select id="readBookMark" parameterType="map" resultType="int">
+		select count(user_ref)
+		from tb_bookmark
+		where user_ref = #{loginUser.seq}
+		and post_ref = #{postSeq}
+	</select>
+</mapper>
