@@ -275,11 +275,15 @@ public class BlogController {
 			@RequestParam String contents , 
 			@RequestParam Integer cateSeq,
 			@RequestParam List<Integer> tag, // tag 의 seq 만 배열로 모아서 입력받음
-			@PathVariable Integer postSeq) throws JsonProcessingException {
+			@PathVariable Integer postSeq,
+			HttpSession session
+			) throws JsonProcessingException {
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다.
+		// FIXME 로그인 확인 안함. 그리고 자기 글인지도 확인 안함.
 		System.out.println("##postSeq"+postSeq);
 		System.out.println("tags" + tag);
-		this.blogServise.updatePost(title, contents, cateSeq,tag, postSeq);
+		User loginUser = (User) session.getAttribute(Value.KEY_LOGIN_USER);
+		this.blogServise.updatePost(title, contents, cateSeq,tag, postSeq,loginUser);
 		Map<String, Object> res = new HashMap<>();
 		res.put("success",true);
 		return om.writeValueAsString(res); 

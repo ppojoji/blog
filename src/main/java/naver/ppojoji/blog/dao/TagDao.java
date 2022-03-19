@@ -49,6 +49,7 @@ public class TagDao {
 	public void deleteTags(Integer postSeq) {
 		session.delete("TagMapper.deleteTags",postSeq);
 	}
+	
 	public List<Post> postsOfTag(Integer tagSeq) {
 		return session.selectList("TagMapper.postsOfTag",tagSeq);
 	}

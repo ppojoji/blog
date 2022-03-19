@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
+import naver.ppojoji.blog.web.Value;
 
 @Service
 @Transactional
@@ -181,8 +184,9 @@ public class BlogService {
 	 * @param postSeq2 
 	 */
 	public void updatePost(String title, String contents ,Integer cateSeq ,
-			List<Integer> tags ,Integer postSeq ) {
-		blogDao.updatePost(title,contents,cateSeq, postSeq);
+			List<Integer> tags ,Integer postSeq,User loginUser ) {
+		// FIXME 자기 글인지도 확인 안하고 있음.
+		blogDao.updatePost(title,contents,cateSeq, postSeq,loginUser);
 		
 		tagService.updateTags(tags,postSeq);
 		// 3545 번 글에 달린 태그를 모두 다 지움
