@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import naver.ppojoji.blog.BlogException;
+import naver.ppojoji.blog.Error;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BookMarkService;
@@ -148,7 +149,7 @@ public class UserController {
 	public Object removeBookMark(@PathVariable Integer postSeq,HttpSession session) {
 		User user = Util.getUser(session);
 		if(user == null) {
-			throw new BlogException(401, "LOGIN_REQUIRED");
+			throw new BlogException(401, Error.LOGIN_REQUIRED);
 		}
 		
 		bookMarkService.removeBookMark(postSeq, user);

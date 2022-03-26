@@ -7,6 +7,7 @@ public enum Error {
 	EMPTY_CATE_NAME,
 	NOT_FOUND, 
 	BAD_REQUEST, 
+	LOGIN_REQUIRED,
 	/**
 	 * 글의 소유자가 아님
 	 */
