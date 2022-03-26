@@ -18,4 +18,12 @@
 		where user_ref = #{loginUser.seq}
 		and post_ref = #{postSeq}
 	</select>
+	<select id="loadBookMarks" parameterType="Integer" resultMap="BlogPostMapper.PostMap">
+		select
+			<include refid="BlogPostMapper.select_post"></include>
+		,bmk.post_ref
+		from tb_bookmark bmk LEFT JOIN tb_post p
+		                            ON bmk.post_ref = p.seq
+		where user_ref = #{userSeq}
+	</select>
 </mapper>

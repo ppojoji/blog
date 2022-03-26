@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BookMarkService;
@@ -135,14 +136,22 @@ public class UserController {
 	@ResponseBody
 	public Object addBookMark(@PathVariable Integer postSeq,HttpSession session) {
 		User user = Util.getUser(session);
+		if(user == null) {
+			throw new BlogException(401, "LOGIN_REQUIRED");
+		}
+		
 		bookMarkService.addBookMark(postSeq, user);
-		return null;
+		return Util.params("success", true);
 	}
 	@DeleteMapping("/user/bookmark/{postSeq}")
 	@ResponseBody
 	public Object removeBookMark(@PathVariable Integer postSeq,HttpSession session) {
 		User user = Util.getUser(session);
+		if(user == null) {
+			throw new BlogException(401, "LOGIN_REQUIRED");
+		}
+		
 		bookMarkService.removeBookMark(postSeq, user);
-		return null;
+		return Util.params("success", true);
 	}
 }

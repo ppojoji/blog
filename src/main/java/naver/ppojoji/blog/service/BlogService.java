@@ -294,9 +294,9 @@ public class BlogService {
 		return blogDao.findByCate(cateSeq, delYn);
 	}
 	
-	public List<Post> findByCate2(String cateName) {
+	public List<Post> findByCate2(String cateName,Integer userSeq) {
 		Category cate = cateDao.findByCateName(cateName);
-		return blogDao.findByCate2(cate.getSeq());
+		return blogDao.findByCate2(cate.getSeq(),userSeq);
 	}
 	
 	public List<Map<String,Object>> findRecentNForCates(int n) {

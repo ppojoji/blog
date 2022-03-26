@@ -31,6 +31,7 @@
 		<result property="open" column="open"
 			typeHandler="naver.ppojoji.blog.typehandler.StringYnTypeHandler" />
 		<result property="ban" column="ban"/>
+		<result property="bookmarked" column="post_ref"/>
 		<association 
 			column="writer" 
 			property="writer" 
@@ -279,12 +280,13 @@
 		</if>
 		order by p.creation_date desc
 	</select>
-	<select id="findByCate2" parameterType="Integer" resultMap="PostWithTag" >
+	<select id="findByCate2" parameterType="map" resultMap="PostWithTag" >
 		SELECT
 			<include refid="select_post_with_tag"></include>
 	    
 	       , t.seq AS tseq
 	       , t.tagname
+	       , tb.post_ref
 		FROM   (
 					SELECT
 					   p.seq AS pseq,
@@ -307,7 +309,7 @@
 		                       LEFT JOIN tb_files f
 		                              ON ( f.post = p.seq
 		                                   AND f.contenttype LIKE 'image%' )
-		                WHERE  p.category = #{cate}
+		                WHERE  p.category = #{cateSeq}
 		                GROUP  BY p.seq) ref
 		               LEFT JOIN tb_reply rp
 		                      ON rp.parent = ref.seq
@@ -320,6 +322,9 @@
 		              ON tp.post = p.pseq
 		       LEFT JOIN tb_tags t
 		              ON t.seq = tp.tag
+		       LEFT JOIN tb_bookmark tb
+              		  ON p.pseq = tb.post_ref
+				      AND tb.user_ref = #{userSeq}       
 	</select>
 	<!-- 
 	<select id="findByCateName" parameterType="String" >

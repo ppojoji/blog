@@ -123,9 +123,13 @@ public class BlogController {
 	
 	@RequestMapping(value="/api/posts/cate/{cateName}")
 	@ResponseBody
-	public Object ListPostsByCata(@PathVariable String cateName) {
+	public Object ListPostsByCata(@PathVariable String cateName, HttpSession session) {
 //		List<Post> list = blogServise.findByCateName(cateName);
-		List<Post> list = blogServise.findByCate2(cateName);
+		
+		User loginUser = Util.getUser(session);
+		
+		Integer userSeq = loginUser != null ? loginUser.getSeq() : null;
+		List<Post> list = blogServise.findByCate2(cateName, userSeq);
 		
 		return Util.success("posts", list,"limit", 6*60*60*1000);
 	}

@@ -29,10 +29,21 @@ public class Post {
 	private String delYn;
 	
 	private List<Tag> tags; 
+	private boolean bookmarked; 
 	
 	public List<Tag> getTags() {
 		return tags;
 	}
+
+	public boolean isBookmarked() {
+		return bookmarked;
+	}
+
+
+	public void setBookmarked(boolean bookmarked) {
+		this.bookmarked = bookmarked;
+	}
+
 
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;

@@ -1,12 +1,14 @@
 package naver.ppojoji.blog.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.User;
 
 @Repository
@@ -37,5 +39,10 @@ public class BookMarkDao {
 		map.put("loginUser", loginUser);
 		
 		return session.selectOne("BookMarkMapper.readBookMark", map);
+	}
+
+	public List<Post> loadBookMarks(Integer userSeq) {
+		
+		return session.selectList("BookMarkMapper.loadBookMarks", userSeq);		
 	}
 }

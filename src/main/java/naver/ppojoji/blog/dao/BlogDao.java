@@ -225,8 +225,12 @@ public class BlogDao {
 		return session.selectList("BlogPostMapper.findByCateName",cateName);
 	}
 	
-	public List<Post> findByCate2(Integer cateSeq) {
-		return session.selectList("BlogPostMapper.findByCate2", cateSeq);
+	public List<Post> findByCate2(Integer cateSeq, Integer userSeq) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("cateSeq", cateSeq);
+		map.put("userSeq", userSeq);
+		
+		return session.selectList("BlogPostMapper.findByCate2", map);
 	}
 
 	public int postDelete(Post post) {
