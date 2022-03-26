@@ -74,10 +74,10 @@ public class BlogService {
 		return posts;
 	}
 	
-	public List<Post> findAllByAdmin(String searchType, User adminUser){
-		checkAdmin(adminUser);
+	public List<Post> findAllByAdmin(String searchType, User adminUser, Integer userSeq){
+		//checkAdmin(adminUser);
 		
-		List<Post> posts = blogDao.findAllByAdmin(searchType,adminUser);
+		List<Post> posts = blogDao.findAllByAdmin(searchType,adminUser,userSeq);
 		for (Post post : posts) {
 			BanHistory ban = banHistoryService.findRecentBan(post);
 			post.setRecentBan(ban);

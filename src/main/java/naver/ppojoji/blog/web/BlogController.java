@@ -114,7 +114,8 @@ public class BlogController {
 	@ResponseBody
 	public Object findAllByAdmin(HttpSession session,String searchType){
 		User adminUser = Util.getUser(session);
-		List<Post> posts = blogServise.findAllByAdmin(searchType,adminUser);
+		System.out.println("[userSeq]" + adminUser.getSeq());
+		List<Post> posts = blogServise.findAllByAdmin(searchType,adminUser,adminUser.getSeq());
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("posts", posts);
 		map.put("success", true);

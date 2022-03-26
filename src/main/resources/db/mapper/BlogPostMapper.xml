@@ -121,7 +121,7 @@
 	<select id="findAllByAdmin" resultMap="PostMap" parameterType="map">
 		select 
 		 <include refid ="select_post"></include>
-		 from tb_post p
+		 from tb_post p 
 		 where delyn = 'N'
 		 <if test="banTypes != null">
 		 	and ban in
@@ -132,6 +132,7 @@
 		 <if test="searchType != null">
 		 	and ban = #{searchType}
 		 </if>
+		    and writer = #{userSeq}
 	</select>
 	<select id="findBanByAdmin" resultMap="PostMap" parameterType="map">
 		select 

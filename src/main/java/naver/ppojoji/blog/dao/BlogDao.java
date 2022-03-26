@@ -80,9 +80,11 @@ public class BlogDao {
 	 * 내글 가져오기(관리용이므로 delYn 제외한 모든글 반환0
 	 * @param searchType 
 	 * @param adminUser 
+	 * @param userSeq 
+	 * @param userSeq 
 	 * @return
 	 */
-	public List<Post> findAllByAdmin(String searchType, User adminUser) {
+	public List<Post> findAllByAdmin(String searchType, User adminUser, Integer userSeq) {
 //		if(searchType.equals("all")) {
 //			searchType = null;
 //		}
@@ -90,8 +92,11 @@ public class BlogDao {
 		Map<String,Object> map = new HashMap<>();
 		map.put("searchType", searchType);
 		map.put("adminUser", adminUser);
+		map.put("userSeq", userSeq);
 		
 		System.out.println("### searchType " + searchType);
+		System.out.println("### userSeq " + userSeq);
+		
 		return session.selectList("BlogPostMapper.findAllByAdmin",map);
 	}
 	
