@@ -77,38 +77,33 @@ public class BlogDao {
 	}
 	
 	/**
-	 * 내글 가져오기(관리용이므로 delYn 제외한 모든글 반환0
+	 * 주어진 사용자가 자신의 글을 조히홤
 	 * @param searchType 
-	 * @param adminUser 
 	 * @param userSeq 
 	 * @param userSeq 
 	 * @return
 	 */
-	public List<Post> findAllByAdmin(String searchType, User adminUser, Integer userSeq) {
-//		if(searchType.equals("all")) {
-//			searchType = null;
-//		}
-		
+	public List<Post> findPostsByUser(Integer userSeq) {
 		Map<String,Object> map = new HashMap<>();
-		map.put("searchType", searchType);
-		map.put("adminUser", adminUser);
-		map.put("userSeq", userSeq);
+		// map.put("searchType", searchType);
+		 map.put("userSeq", userSeq);
 		
-		System.out.println("### searchType " + searchType);
-		System.out.println("### userSeq " + userSeq);
-		
-		return session.selectList("BlogPostMapper.findAllByAdmin",map);
+		return session.selectList("BlogPostMapper.findPostByUser",map);
 	}
-	
-	public List<Post> findAllByAdmin(List<String> banTypes, User adminUser) {
+	/**
+	 * 관리자가 글을 조회함
+	 * @param banTypes
+	 * @param adminUser
+	 * @return
+	 */
+	public List<Post> findAllByAdmin(List<String> banTypes) {
 //		if(searchType.equals("all")) {
 //			searchType = null;
 //		}
 		
 		Map<String,Object> map = new HashMap<>();
 		map.put("banTypes", banTypes);
-		map.put("adminUser", adminUser);
-		
+		// map.put("userSeq", adminUser.getSeq());
 		return session.selectList("BlogPostMapper.findAllByAdmin",map);
 	}
 	/**
@@ -219,10 +214,11 @@ public class BlogDao {
 	 * @param delYn
 	 * @return
 	 */
-	public List<Post> findByCate(Integer cateSeq, String delYn) {
+	public List<Post> findByCate(Integer cateSeq, String delYn, String openYn) {
 		Map<String,Object> map = new HashMap<>();
 		map.put("seq", cateSeq);
 		map.put("delYn", delYn);
+		map.put("openYn", openYn);
 		return session.selectList("BlogPostMapper.findByCate", map);
 	}
 

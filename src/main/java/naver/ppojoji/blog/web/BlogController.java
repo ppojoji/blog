@@ -110,12 +110,18 @@ public class BlogController {
 		return om.writeValueAsString(map);
 		// { "seq": 3000, "title": "ㅇㅇㅇㅇ", "content": "ㅇ미암리ㅏㅇ", viewCount: 1}
 	}
+	/**
+	 * 내가 쓴 글 조회
+	 * @param session
+	 * @param searchType
+	 * @return
+	 */
 	@GetMapping("/api/admin/posts")
 	@ResponseBody
-	public Object findAllByAdmin(HttpSession session,String searchType){
-		User adminUser = Util.getUser(session);
-		System.out.println("[userSeq]" + adminUser.getSeq());
-		List<Post> posts = blogServise.findAllByAdmin(searchType,adminUser,adminUser.getSeq());
+	public Object findMyPosts(HttpSession session,String searchType){
+		User loginUser = Util.getUser(session);
+		System.out.println("[userSeq]" + loginUser.getSeq());
+		List<Post> posts = blogServise.findPostsByUser(searchType, loginUser.getSeq());
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("posts", posts);
 		map.put("success", true);

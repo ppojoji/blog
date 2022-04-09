@@ -73,22 +73,32 @@ public class BlogService {
 		}
 		return posts;
 	}
-	
-	public List<Post> findAllByAdmin(String searchType, User adminUser, Integer userSeq){
-		//checkAdmin(adminUser);
+	/**
+	 * 주어진 사용자가 쓴 글 조회
+	 * @param searchType
+	 * @param adminUser
+	 * @param userSeq
+	 * @return
+	 */
+	public List<Post> findPostsByUser(String searchType, Integer userSeq){
 		
-		List<Post> posts = blogDao.findAllByAdmin(searchType,adminUser,userSeq);
+		List<Post> posts = blogDao.findPostsByUser(userSeq);
 		for (Post post : posts) {
 			BanHistory ban = banHistoryService.findRecentBan(post);
 			post.setRecentBan(ban);
 		}
 		return posts;
 	}
-	
+	/**
+	 * 관리자용 글 조회 기능
+	 * @param banTypes
+	 * @param adminUser
+	 * @return
+	 */
 	public List<Post> findAllByAdmin(List<String> banTypes, User adminUser){
 		checkAdmin(adminUser);
 		
-		List<Post> posts = blogDao.findAllByAdmin(banTypes,adminUser);
+		List<Post> posts = blogDao.findAllByAdmin(banTypes);
 		for (Post post : posts) {
 			BanHistory ban = banHistoryService.findRecentBan(post);
 			post.setRecentBan(ban);
@@ -291,7 +301,7 @@ public class BlogService {
 //		return posts;
 //	}
 	public List<Post> findByCate(Integer cateSeq, String delYn) {
-		return blogDao.findByCate(cateSeq, delYn);
+		return blogDao.findByCate(cateSeq, delYn, null);
 	}
 	
 	public List<Post> findByCate2(String cateName,Integer userSeq) {
@@ -306,7 +316,7 @@ public class BlogService {
 		List<Map<String,Object>> overviews = new ArrayList<>();
 		for(int i=0; i<cates.size(); i++) {
 			Category cate = cates.get(i);
-			List<Post> posts = blogDao.findByCate(cate.getSeq(),"N"); // 2, 34
+			List<Post> posts = blogDao.findByCate(cate.getSeq(),"N", "Y"); // 2, 34
 			int length = Math.min(n, posts.size());
 			List<Post> maxN = posts.subList(0, length);
 			Map<String,Object> overview = new HashMap<>();

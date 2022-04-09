@@ -123,6 +123,9 @@
 		 <include refid ="select_post"></include>
 		 from tb_post p 
 		 where delyn = 'N'
+		 <if test = "userSeq != null">
+			 and p.writer = #{userSeq}
+		 </if>
 		 <if test="banTypes != null">
 		 	and ban in
 		 	<foreach collection="banTypes" item="ban" index="index" separator="," open="(" close=")">
@@ -132,7 +135,13 @@
 		 <if test="searchType != null">
 		 	and ban = #{searchType}
 		 </if>
-		    and writer = #{userSeq}
+	</select>
+	<select id="findPostByUser" resultMap="PostMap" parameterType="map">
+	select 
+		 <include refid ="select_post"></include>
+		 from tb_post p 
+		 where delyn = 'N'
+		 and p.writer = #{userSeq}
 	</select>
 	<select id="findBanByAdmin" resultMap="PostMap" parameterType="map">
 		select 
@@ -273,10 +282,11 @@
 	          group by p.seq )rp
 	      ON rp.seq = p.seq	
 		where
-			1 = 1 
-		and open = 'Y'
-		and category = #{seq}
-		<if test="delYn != null || delYn = ''">
+			category = #{seq}
+		<if test = "openYn != null">
+			and open = #{openYn}
+		</if> 	
+		<if test="delYn != null">
 			and delYN = #{delYn}
 		</if>
 		order by p.creation_date desc
