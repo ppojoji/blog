@@ -17,6 +17,8 @@
 		FROM tb_category ct
 		LEFT JOIN tb_post p 
 		     ON p.CATEGORY = ct.seq
+		     AND  p.OPEN = 'Y'
+		     AND p.DELYN = 'N'
 		GROUP BY ct.seq 
 		ORDER BY ct.ordernum 
 	</select>
