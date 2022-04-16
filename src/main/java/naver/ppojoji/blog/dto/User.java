@@ -5,6 +5,8 @@ public class User {
 	private String id;
 	private String pwd; 
 	private String email;
+	private String pwhint;
+	private String pwhintans;
 	private String admin;
 	
 	
@@ -43,19 +45,35 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+	public String getPwhint() {
+		return pwhint;
+	}
+	public void setPwhint(String pwhint) {
+		this.pwhint = pwhint;
+	}
+	public String getPwhintans() {
+		return pwhintans;
+	}
+	public void setPwhintans(String pwhintans) {
+		this.pwhintans = pwhintans;
+	}
 	public String getAutoLoginKey() {
 		return autoLoginKey;
 	}
 	public void setAutoLoginKey(String autoLoginKey) {
 		this.autoLoginKey = autoLoginKey;
 	}
+	/*
+	 * @Override public String toString() { return "User [seq=" + seq + ", id=" + id
+	 * + ", pwd=" + pwd + ", email=" + email + ", autoLoginKey=" + autoLoginKey +
+	 * ", getSeq()=" + getSeq() + ", getId()=" + getId() + ", getPwd()=" + getPwd()
+	 * + ", getEmail()=" + getEmail() + ", getAutoLoginKey()=" + getAutoLoginKey() +
+	 * ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
+	 * + super.toString() + "]"; }
+	 */
 	@Override
 	public String toString() {
-		return "User [seq=" + seq + ", id=" + id + ", pwd=" + pwd + ", email=" + email + ", autoLoginKey="
-				+ autoLoginKey + ", getSeq()=" + getSeq() + ", getId()=" + getId() + ", getPwd()=" + getPwd()
-				+ ", getEmail()=" + getEmail() + ", getAutoLoginKey()=" + getAutoLoginKey() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+		return "User [seq=" + seq + ", id=" + id + ", pwd=" + pwd + ", email=" + email + ", pwhint=" + pwhint
+				+ ", pwhintans=" + pwhintans + ", admin=" + admin + ", autoLoginKey=" + autoLoginKey + "]";
 	}
-	
 }

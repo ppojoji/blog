@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.web;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,12 +54,43 @@ public class UserController {
 	@ResponseBody
 	public String login(@RequestParam String id ,@RequestParam String pwd, 
 			HttpServletRequest req, HttpServletResponse response,
-			HttpSession session , @RequestParam String useCookie) throws JsonProcessingException {
+			HttpSession session, @RequestParam String useCookie) throws JsonProcessingException {
 		User loginUser = userService.login(id, pwd,useCookie);
 		
 		Map<String, Object> res = new HashMap<>();
+		
+		String strLoginFailCnt = Util.getSession(req, "LOGIN_FAIL_CNT", "0");
+		Integer loginFailCnt = Integer.parseInt(strLoginFailCnt);
+		// step : 5번 틀렸는지 확인
+		Date banTime = Util.getDate(req, "LOGIN_BAN_TIME");
+		if(banTime != null) {
+			Date now = new Date();
+			if (now.after(banTime)) {
+				// 1) banTime < now
+				System.out.println("banTime < now");
+				loginFailCnt = 0;
+				Util.setSession(req, "LOGIN_FAIL_CNT", null);
+				Util.setSession(req, "LOGIN_BAN_TIME", null);
+			} else {
+				// 2) now < banTime - 아직 30분 안지남
+				System.out.println("now < banTime");
+				/*
+				 * WebUtil.ajax(...)
+				 * return null;
+				 */
+				return "{\"success\": false, \"cause\": 30}";
+			}
+		}
+		
 		if (loginUser == null) {
 			// id pwd 뭐가 틀림 로그인 실패
+//			loginFailCnt += 1;
+			System.out.println("[로그인 실패 횟수] " + (loginFailCnt+1));
+			Util.setSession(req,  "LOGIN_FAIL_CNT", (loginFailCnt+1)+"");
+			if (loginFailCnt.intValue() >= 4) {
+				System.out.println("[5회 틀렸음] 브라우저에 alert");
+				Util.setSession(req, "LOGIN_BAN_TIME", Util.dateAfter(new Date(), 1*60*1000));
+			}
 			res.put("success", false);
 		} else {
 			// 로그인 성공 // session에 담아줌!
@@ -82,6 +115,8 @@ public class UserController {
 			res.put("nextUrl",nextUrl);
 			res.put("user", loginUser);
 		}
+		
+		
 		return om.writeValueAsString(res);
 	}
 	
@@ -154,5 +189,32 @@ public class UserController {
 		
 		bookMarkService.removeBookMark(postSeq, user);
 		return Util.params("success", true);
+	}
+	
+	@RequestMapping(value="/user/join" ,method = RequestMethod.POST)
+	@ResponseBody
+	public Object Join(
+			@RequestParam String id ,
+			@RequestParam String email ,
+			@RequestParam String pwd, 
+			@RequestParam String pwhint,
+			@RequestParam String pwhintans) {
+		System.out.println(id + " , " + email+ " , " +pwd + " , " + pwhint + " , " + pwhintans); 
+		User user = userService.join(id,email,pwd,pwhint,pwhintans);
+		
+//		Map map = new HashMap<String, Object>();
+//		map.put("email", email);
+//		map.put("Pwd", Pwd);
+//		map.put("SUCCESS", true);
+		
+		return Util.params("success", true);
+	}
+	
+	@GetMapping("/user/join/checked")
+	@ResponseBody
+	public Object checkProp(@RequestParam String prop , @RequestParam String value) {
+		userService.checkProp(prop,value);
+		return Util.params("success", true);
+		
 	}
 }

@@ -3,6 +3,7 @@ package naver.ppojoji.blog;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,23 @@ public class Util {
 
 	public static User getUser(HttpSession session) {
 		return (User)session.getAttribute(Value.KEY_LOGIN_USER);
+	}
+	public static String getSession(HttpServletRequest req, String key) {
+		String v = (String) req.getSession().getAttribute(key);
+		return v;
+	}
+	
+	public static String getSession(HttpServletRequest req, String key, String defaultValue) {
+		String v = (String) req.getSession().getAttribute(key);
+		if (v == null) {
+			return (String)defaultValue;
+		} else {			
+			return v;
+		}
+	}
+	
+	public static Date getDate(HttpServletRequest req, String key) {
+		return (Date) req.getSession().getAttribute(key);
 	}
 	/**
 	 * 메일 템플릿 읽어들임
@@ -82,5 +100,23 @@ public class Util {
 			param.put(key, val);
 		}
 		return param;
+	}
+	
+	public static void setSession(
+			HttpServletRequest req, 
+			String key,
+			Object value) {
+		req.getSession().setAttribute(key, value);
+		
+	}
+	/**
+	 * 
+	 * @param date
+	 * @param millis
+	 * @return
+	 */
+	public static Date dateAfter(Date date, int millis) {
+		long after30min = date.getTime() + millis;
+		return new Date(after30min);
 	}
 }
