@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -210,11 +211,36 @@ public class UserController {
 		return Util.params("success", true);
 	}
 	
+	@RequestMapping(value="/user/join2" ,method = RequestMethod.POST)
+	@ResponseBody
+	public Object Join2(
+			@RequestBody User user) {
+		// user = userService.join(user); 
+		
+		return Util.params("success", true);
+	}
+	
 	@GetMapping("/user/join/checked")
 	@ResponseBody
 	public Object checkProp(@RequestParam String prop , @RequestParam String value) {
 		userService.checkProp(prop,value);
 		return Util.params("success", true);
 		
+	}
+	
+	@RequestMapping(value="/api/user/hint" ,method = RequestMethod.POST)
+	@ResponseBody
+	public Object Hint(
+			@RequestParam String email , 
+			@RequestParam String hint ,
+			@RequestParam String hintAns) {
+		// user = userService.join(user); 
+		System.out.println(email + ", " + hint + ", " + hintAns);
+		
+		User user = userService.hint(email,hint,hintAns);
+		String id = user.getId();
+		String pwd = user.getPwd();
+		
+		return Util.params("success", true, "id", id, "pwd", pwd);
 	}
 }

@@ -1,7 +1,7 @@
 package naver.ppojoji.blog.dto;
 
 public class User {
-	private int seq;
+	private Integer seq; // null;
 	private String id;
 	private String pwd; 
 	private String email;
@@ -21,7 +21,7 @@ public class User {
 	private String autoLoginKey;
 	
 	
-	public int getSeq() {
+	public Integer getSeq() {
 		return seq;
 	}
 	public void setSeq(int seq) {

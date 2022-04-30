@@ -88,8 +88,23 @@
 		set pwd = #{pwd}
 		where email = #{email}
 	</update>
-	<insert id="join" parameterType="Map">
+	<insert id="join" parameterType="User">
 		insert into tb_user(id,email,pwd,pwhint,pwhintans)
 		values(#{id},#{email},#{pwd},#{pwhint},#{pwhintans}) 
 	</insert>
+	<select id="hint" parameterType="User" resultType="User">
+		SELECT
+			seq,
+			id,
+			pwd,
+			email,
+			admin,
+			autoLoginKey,
+			pwhint,
+			pwhintans 
+ 		FROM tb_user 
+ 		WHERE email = #{email}
+ 		 and pwhint = #{pwhint}
+ 		 and pwhintans = #{pwhintans}
+	</select>
 </mapper>

@@ -119,4 +119,10 @@ public class Util {
 		long after30min = date.getTime() + millis;
 		return new Date(after30min);
 	}
+	
+	public static void notEmpty(String value, String cause) {
+		if (value == null || value.trim().equals("")) {
+			throw new BlogException(400, cause);
+		}
+	}
 }

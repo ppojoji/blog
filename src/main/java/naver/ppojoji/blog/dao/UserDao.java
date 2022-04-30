@@ -48,14 +48,18 @@ public class UserDao {
 		Map<String, Object> user =Util.params("email",email ,"pwd",pwd);
 		return session.update("UserMapper.updatePwd", user);
 	}
-	public void join(String id, String email, String pwd, String pwhint, String pwhintans) {
-		Map map = new HashMap<String, Object>();
-		map.put("id", id);
-		map.put("pwd", pwd);
-		map.put("email", email);
-		map.put("pwhint", pwhint);
-		map.put("pwhintans", pwhintans);
+	public void join(User user) {
+//		Map map = new HashMap<String, Object>();
+//		map.put("id", id);
+//		map.put("pwd", pwd);
+//		map.put("email", email);
+//		map.put("pwhint", pwhint);
+//		map.put("pwhintans", pwhintans);
 		
-		session.insert("UserMapper.join",map);
+		session.insert("UserMapper.join",user);
+	}
+	
+	public User hint(User searchOption) {
+		return session.selectOne("UserMapper.hint",searchOption);
 	}
 }
