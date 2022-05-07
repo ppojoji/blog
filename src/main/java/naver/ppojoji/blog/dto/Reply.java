@@ -6,7 +6,7 @@ public class Reply {
 	private Integer seq;
 	private String title;
 	private String content; 
-	private String writer;
+	private User writer;
 	private String pwd;
 	private Date replyTime;
 	private Integer parent;
@@ -14,7 +14,7 @@ public class Reply {
 	public Reply() {
 	}
 	
-	public Reply(Integer seq, String title, String content, String writer, String pwd,
+	public Reply(Integer seq, String title, String content, User writer, String pwd,
 			Integer parent) {
 		super();
 		this.seq = seq;
@@ -44,10 +44,10 @@ public class Reply {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getWriter() {
+	public User getWriter() {
 		return writer;
 	}
-	public void setWriter(String writer) {
+	public void setWriter(User writer) {
 		this.writer = writer;
 	}
 	public String getPwd() {

@@ -25,7 +25,6 @@
 		select 
 			seq,
 			id,
-			pwd,
 			email,
 			admin
 		from tb_user

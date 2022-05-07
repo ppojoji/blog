@@ -3,24 +3,31 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="ReplyMapper">
- 	<insert id="replyInsert" parameterType="Reply">
- 		insert into TB_REPLY(seq,title,content,writer,pwd,reply_time,parent) 
+ 	<resultMap type="Reply" id="ReplyMap">
+ 		<id column="seq" property="seq" />
+ 		<result column="content" property="content"/>
+ 		<result column="replyTime" property="replyTime"/>
+ 		<!-- <result column="writer" property="writer"/> -->
+ 		<result column="parent" property="parent"/>
+ 		<association 
+			column="writer" 	
+			property="writer" 
+			select="UserMapper.findUserV1"/>
+ 	</resultMap>
+ 	<insert id="replyInsert" parameterType="Reply" useGeneratedKeys="true" keyProperty="seq">
+ 		insert into TB_REPLY(content,writer,reply_time,parent) 
  		values(
- 			tb_reply_seq.nextval,
- 			#{title},
  			#{content},
- 			#{writer},
- 			#{pwd},
+ 			#{writer.seq},
  			#{replyTime},
  			#{parent})
  	</insert>
- 	<select id="selectReply" parameterType="Integer" resultType="Reply">
+ 	
+ 	<select id="selectReply" parameterType="Integer" resultMap="ReplyMap">
  		select  
  			seq,
- 			title,
  			content,
  			writer,
- 			pwd,
  			reply_time as replyTime,
  			parent
 		from TB_Reply 
