@@ -1,11 +1,13 @@
 package naver.ppojoji.blog.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Reply;
 
 @Repository
@@ -31,5 +33,9 @@ public class ReplyDao {
 	public Reply findReply(Integer replySeq) {
 		return session.selectOne("ReplyMapper.selectReplyBySeq", replySeq);
 	}
+	public int replyDelete(Integer seq) {
+		return session.delete("ReplyMapper.replyDelete", seq);
+	}
+	
 
 }

@@ -34,16 +34,19 @@
 		where parent = #{parent}
 		order by reply_time desc
  	</select>
- 	<select id="selectReplyBySeq" parameterType="Integer" resultType="Reply">
+ 	<select id="selectReplyBySeq" parameterType="Integer" resultMap="ReplyMap">
  		select  
  			seq,
- 			title,
  			content,
  			writer,
- 			pwd,
  			reply_time as replyTime,
  			parent
 		from TB_Reply 
 		where seq = #{id}
  	</select>
+ 	<delete id="replyDelete" parameterType="Integer">
+	 	delete from tb_reply
+	 	where seq=#{seq} 
+	 </delete>
+	 
  </mapper>

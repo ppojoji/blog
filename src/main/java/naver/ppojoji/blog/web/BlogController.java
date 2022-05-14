@@ -378,51 +378,6 @@ public class BlogController {
 		res.put("open",post.getOpen());
 		return om.writeValueAsString(res);
 	}
-	@RequestMapping(value="/article/reply" ,method = RequestMethod.GET)
-	public String reply(HttpServletRequest req, HttpSession session, @RequestParam Integer pid) {
-		Post post = blogServise.readPosts(pid, false);
-		// model.setAttribute("", post);
-		req.setAttribute("post", post);
-		return "reply";
-	}
-	@RequestMapping(value = "/article/replyPost",method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> replyPost(
-			@RequestParam Integer parent,
-			@RequestParam String contents,
-			HttpSession session
-			){
-		String title = null;
-		String writer = null;
-		String pwd = null;
-		
-		User user = Util.getUser(session);
-		
-		Reply reply = new Reply(null, title, contents, user, pwd, parent);
-		replyServise.replyInsert(reply);
-		/*
-		 * http://localhost:8080/blog/article/pageReadPost/5013
-		 */
-		Map<String, Object> res = new HashMap<>();
-		res.put("reply", reply);
-		res.put("success", true);
-		return res;
-	}
-	@RequestMapping(value = "article/replies/{seq}" , method = RequestMethod.GET)
-	@ResponseBody
-	public List<Reply> selectReply(@PathVariable Integer seq) {
-		List<Reply> reply = replyServise.selectReply(seq);
-		return reply;
-	}
-	@DeleteMapping("article/reply/{seq}")
-	@ResponseBody
-	public Object removeReply(@PathVariable Integer seq) {
-		// TODO 답글 지움 로직 필요함
-		// 지웠다고 가저하고...
-		Map<String, Object> res = new HashMap<>();
-		res.put("success", true);
-		return res;
-	}
 	
 	@RequestMapping(value = "/api/checkPass", method = RequestMethod.POST, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody

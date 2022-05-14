@@ -24,6 +24,7 @@ import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.service.AdminService;
+import naver.ppojoji.blog.service.BanReporterService;
 import naver.ppojoji.blog.service.BlogService;
 import naver.ppojoji.blog.service.CategoryService;
 
@@ -31,6 +32,9 @@ import naver.ppojoji.blog.service.CategoryService;
 public class AdminController {
 	@Autowired 
 	AdminService adminService;
+	
+	@Autowired
+	BanReporterService banService;
 	
 	@Autowired 
 	BlogService blogService;
@@ -111,5 +115,11 @@ public class AdminController {
 	public Object deleteCate(@RequestParam Integer seq) {
 		cateService.deleteCate(seq);
 		return Util.success("cate", seq);
+	}
+	
+	@GetMapping(value = "/admin/api/banList")
+	@ResponseBody
+	public Object banList(HttpSession session) {
+		return banService.getBanList();
 	}
 }

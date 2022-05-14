@@ -20,10 +20,7 @@ public class TestUserDao {
 	
 	@Test
 	public void test() {
-		User user = userDao.findUser(204);
-		assertNotNull(user);
-		assertEquals(204, user.getSeq());
-		assertEquals("test2@naver.com", user.getEmail());
+		 // userDao.join("44", "44", "44", "44", "44");
 		
 	}
 
