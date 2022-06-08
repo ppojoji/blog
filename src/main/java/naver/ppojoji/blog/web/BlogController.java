@@ -41,6 +41,7 @@ import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BanHistoryService;
+import naver.ppojoji.blog.service.BanReporterService;
 import naver.ppojoji.blog.service.BlogService;
 import naver.ppojoji.blog.service.BookMarkService;
 import naver.ppojoji.blog.service.CategoryService;
@@ -84,6 +85,9 @@ public class BlogController {
 	
 	@Autowired
 	BookMarkService bookMarkService;
+	
+	@Autowired
+	BanReporterService banService;
 	
 	@RequestMapping(value="/api/posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
@@ -561,6 +565,17 @@ public class BlogController {
 		
 		Map<String, Object> res = new HashMap<>();
 		res.put("ban", ban);
+		res.put("success", true);
+		return res;
+	}
+	
+	@RequestMapping(value="/api/post/{postSeq}/ban/{banCode}" ,method = RequestMethod.POST)
+	@ResponseBody
+	public Object insertPostBan(HttpSession session, @PathVariable Integer postSeq, @PathVariable String banCode) {
+		User user = Util.getUser(session);
+		banService.insertPostBan(user,postSeq, banCode);
+		
+		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		return res;
 	}

@@ -2,13 +2,78 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="BanReporterMapper">
-	<insert id="insertBan" parameterType="map">
+<mapper namespace="BanReporterMapper">
+	<insert id="insertBan" parameterType="BanRepoter">
 	 	INSERT INTO tb_ban_report(reporter,target,targettype,bancode) 
-	 	values(#{user.seq},#{replySeq},#{targetType},#{banCode}) 
+	 	values(#{repoter},#{seq},#{targetType},#{banCode}) 
 	 </insert>
-	 <select id="banList" resultType="map">
-	 	select * 
-	 	from tb_ban_report
+	 
+	 <insert id="insertPostBan" parameterType="BanRepoter">
+	 	INSERT INTO tb_ban_report(reporter,target,targettype,bancode) 
+	 	values(#{repoter},#{seq},#{targetType},#{banCode}) 
+	 </insert>
+	 
+	 <select id="banPostList" resultType="map">
+	 	SELECT 
+			  tbr.*,
+		      tu.ID,
+		      tp.*
+		from tb_ban_report tbr 
+		INNER JOIN tb_user tu 
+				 ON tbr.reporter = tu.seq	 
+		LEFT JOIN tb_post tp
+		  ON tbr.target = tp.seq
+		WHERE tbr.targettype = 'P'
+		 and tbr.ban_result IS NULL	 	
 	 </select>
-  </mapper>
+	  <select id="banReplyList" resultType="map">
+	 	SELECT 
+			tbr.*,
+	        tu.ID,
+	        tr.*
+		from tb_ban_report tbr 
+		INNER JOIN tb_user tu 
+				 ON tbr.reporter = tu.seq	 
+		LEFT JOIN tb_reply tr
+		  ON tbr.target = tr.seq
+		WHERE tbr.targettype = 'R' 	 
+		and tbr.ban_result IS NULL	 	
+	 </select>
+	 <select id="findBanSeq" parameterType="Integer" resultType="BanRepoter">
+	 	select
+	 		seq,
+	 		reporter,
+	 		BanCode,
+	 		ban_result,
+	 		targettype
+	 	 from tb_ban_report
+	 	 where seq = #{seq}
+	 </select>
+	 <update id="processBan" parameterType="BanRepoter">
+	 	update tb_ban_report
+	 	 set ban_result = #{ban_result}
+	 	 where seq = #{seq}
+	 </update>
+	 
+	 <select id="badUser" resultMap="UserMapper.banUserMap">
+	 	SELECT  
+			tu.*,
+			COUNT(tbr.seq) AS ban_cnt
+ 		FROM tb_ban_report tbr INNER JOIN tb_reply tr
+                            ON  tbr.target = tr.seq
+                        INNER JOIN tb_user tu 
+								    ON tr.WRITER = tu.SEQ    
+		 WHERE tbr.ban_result = 1 
+		 GROUP BY tu.SEQ
+	 </select>
+	 <select id="loadDetail" parameterType="int" resultType="map">
+	 SELECT 
+		tbr.*, 
+	    tr.*
+	FROM tb_ban_report tbr 
+	INNER JOIN tb_reply tr 
+			 ON tbr.target = tr.seq	 
+	           AND tr.WRITER = #{seq}
+	WHERE tbr.ban_result = 1
+	 </select>
+</mapper>

@@ -21,8 +21,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import naver.ppojoji.blog.Util;
+import naver.ppojoji.blog.dto.BanRepoter;
 import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.AdminService;
 import naver.ppojoji.blog.service.BanReporterService;
 import naver.ppojoji.blog.service.BlogService;
@@ -117,9 +119,51 @@ public class AdminController {
 		return Util.success("cate", seq);
 	}
 	
-	@GetMapping(value = "/admin/api/banList")
+	@GetMapping(value = "/admin/api/ban/post")
 	@ResponseBody
-	public Object banList(HttpSession session) {
-		return banService.getBanList();
+	public Object banPostList(HttpSession session) {
+		return banService.getBanPostList();
+	}
+	
+	@GetMapping(value = "/admin/api/ban/reply")
+	@ResponseBody
+	public Object banReplyList(HttpSession session) {
+		return banService.getBanReplyList();
+	}
+	
+	@PostMapping(value = "/admin/api/ban/{banSeq}/approve")
+	@ResponseBody
+	public Object banHandle(HttpSession session,@PathVariable Integer banSeq) {
+		System.out.println("[ban seq: ] " + banSeq);
+		User adminUser = Util.getUser(session);
+		BanRepoter ban = banService.processBan(adminUser, banSeq, true);
+		
+		if(ban.getTargetType().equals("P")) {
+			return banService.getBanPostList();
+		}else {
+			return banService.getBanReplyList();
+		}
+	}
+	@PostMapping(value = "/admin/api/ban/{banSeq}/reject")
+	@ResponseBody
+	public Object banRejectHandle(HttpSession session,@PathVariable Integer banSeq) {
+		System.out.println("[ban seq: ] " + banSeq);
+		User adminUser = Util.getUser(session);
+		banService.processBan(adminUser, banSeq, false);
+		return null;
+		// return banService.getBanReplyList();
+	}
+	
+	@GetMapping(value = "/admin/api/ban/badUser")
+	@ResponseBody
+	public List<User> badUser() {
+		List<User> list = banService.badUser();
+		return list;
+	}
+	
+	@GetMapping(value = "/admin/api/ban/detail/{banUserSeq}")
+	@ResponseBody
+	public List<Map<String,Object>> loadDetail(@PathVariable Integer banUserSeq) {
+		return banService.loadDetail(banUserSeq);
 	}
 }

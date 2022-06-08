@@ -11,6 +11,10 @@
 		<result column="admin" property="admin"/>
 	</resultMap>
 	
+	<resultMap type="User" id="banUserMap" extends="UserMap">
+		<result column="ban_cnt" property="banCnt"/>
+	</resultMap>
+	
 	<select id="findUser" parameterType="Integer" resultType="User">
 		select 
 			seq,

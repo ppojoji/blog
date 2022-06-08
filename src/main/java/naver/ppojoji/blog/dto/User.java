@@ -9,7 +9,10 @@ public class User {
 	private String pwhintans;
 	private String admin;
 	
-	
+	/**
+	 * 신고 먹은 글(댓글) 갯수
+	 */
+	private Integer banCnt;
 	
 	public String getAdmin() {
 		return admin;
@@ -62,6 +65,16 @@ public class User {
 	}
 	public void setAutoLoginKey(String autoLoginKey) {
 		this.autoLoginKey = autoLoginKey;
+	}
+	
+	public Integer getBanCnt() {
+		return banCnt;
+	}
+	public void setBanCnt(Integer banCnt) {
+		this.banCnt = banCnt;
+	}
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 	/*
 	 * @Override public String toString() { return "User [seq=" + seq + ", id=" + id
