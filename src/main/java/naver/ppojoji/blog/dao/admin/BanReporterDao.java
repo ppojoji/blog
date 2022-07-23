@@ -1,5 +1,7 @@
 package naver.ppojoji.blog.dao.admin;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +61,20 @@ public class BanReporterDao {
 	}
 	public List<Map<String,Object>> loadDetail(Integer banUserSeq) {
 		return session.selectList("BanReporterMapper.loadDetail",banUserSeq);
+		
+	}
+	/**
+	 * 정지 기간 적용
+	 * @param banUserSeq 정지시킬 사용자
+	 * @param banTime 시점
+	 */
+	public void banDuration(Integer banUserSeq, Date banTime) {
+		Map<String,Object> map = new HashMap<>();
+		
+		map.put("banUserSeq", banUserSeq);
+		map.put("banTime", banTime);
+		
+		session.update("BanReporterMapper.banDuration",map);
 		
 	}
 }

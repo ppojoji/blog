@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="MessageMapper">
  <insert id="messageInsert" parameterType="Message">
- 	insert into tb_message(seq, sender, receiver ,CONTENT, sendtime ) 
+ 	insert into tb_message(seq, sender, receiver ,content, sendtime ) 
 			values(tb_message_seq.nextval,#{sender},#{receiver},#{content},CURRENT_TIMESTAMP) 
  </insert>
  <select id="findMessages" parameterType="Integer" resultType="Message">

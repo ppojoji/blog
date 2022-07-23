@@ -110,7 +110,7 @@
 			<include refid="select_post"></include>
 			, f.*
 		from
-			TB_POST p
+			tb_post p
 		LEFT join 
 			tb_files f
 		on
@@ -177,8 +177,8 @@
 			order by p.creation_date desc
 	</select>
 	<insert id="insertPost" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
-		insert into TB_POST (
-			TITLE,
+		insert into tb_post (
+			title,
 			contents,
 			category,
 			writer
@@ -190,7 +190,7 @@
 		)
 	</insert>
 	<update id="updatePost2" parameterType="Post">
-		update tb_Post
+		update tb_post
 		set
 			title = #{title}
 			, contents = #{contents}
@@ -200,11 +200,11 @@
 			seq = #{seq} 
 	</update>
 	<delete id="deletePost" parameterType="Integer">
-		delete from tb_Post
+		delete from tb_post
 		where seq=#{id}
 	</delete>
 	<update id="viewCount" parameterType="Integer">
-		update TB_POST 
+		update tb_post 
 		set view_count = view_count + 1
 		where seq = #{seq}
 	</update>
@@ -212,7 +212,7 @@
 		select
 		<include refid="select_post"></include>
 		from
-			TB_POST p
+			tb_post p
 		where open=#{id}
 	</select>
 	<update id="updateOpen" parameterType="map">
@@ -224,30 +224,30 @@
 		select
 			<include refid="select_post"></include>
 		from
-			TB_POST p
+			tb_post p
 		where writer = #{writerSeq}	
 	</select>
 	<select id="SearchPost" parameterType="Search" resultMap="PostMap">
 		select 
 			<include refid="select_post"></include> 
-		from TB_POST p
+		from tb_post p
 		where replace(${searchType}, chr(13),'') like '%${keyword}%'
 		<!-- where  contains(${searchType},'%${keyword}%') >0 -->
 	</select>
 	<select id="MultiSearchPost" parameterType="multiSearch" resultMap="PostMap">
 		select 
 			<include refid="select_post"></include> 
-		from TB_POST p
+		from tb_post p
 		where 1=1
 			<trim prefix="AND (" suffix=")" prefixOverrides="OR">
 				<if test="title == true">
-					OR TITLE like '%' || #{multiKeyword, jdbcType=VARCHAR} || '%'
+					OR title like '%' || #{multiKeyword, jdbcType=VARCHAR} || '%'
 				</if>
 				<if test="contents == true">
-					OR CONTENTS like '%' || #{multiKeyword, jdbcType=VARCHAR} || '%'
+					OR contents like '%' || #{multiKeyword, jdbcType=VARCHAR} || '%'
 				</if>
 				<if test="writer == true">
-					 OR WRITER = #{writerKeyword,jdbcType=INTEGER} 
+					 OR writer = #{writerKeyword,jdbcType=INTEGER} 
 				</if>
 			</trim>
 	</select>
@@ -271,14 +271,14 @@
 		<include refid="select_post"></include>
 		,rp.cnt
 		from
-			TB_POST p
+			tb_post p
 		LEFT JOIN (select
 	            p.seq, 
-	            count(p.SEQ) as cnt
-	          from TB_POST p 
-	          inner join TB_REPLY r
-	          on p.seq = r.PARENT
-	          where p.OPEN = 'Y'
+	            count(p.seq) as cnt
+	          from tb_post p 
+	          inner join tb_reply r
+	          on p.seq = r.parent
+	          where p.open = 'Y'
 	          group by p.seq )rp
 	      ON rp.seq = p.seq	
 		where
@@ -287,7 +287,7 @@
 			and open = #{openYn}
 		</if> 	
 		<if test="delYn != null">
-			and delYN = #{delYn}
+			and delyn = #{delYn}
 		</if>
 		order by p.creation_date desc
 	</select>
@@ -321,6 +321,8 @@
 		                              ON ( f.post = p.seq
 		                                   AND f.contenttype LIKE 'image%' )
 		                WHERE  p.category = #{cateSeq}
+		                AND p.open ='Y'
+						AND p.delyn = 'N'
 		                GROUP  BY p.seq) ref
 		               LEFT JOIN tb_reply rp
 		                      ON rp.parent = ref.seq
@@ -372,7 +374,7 @@
 			tb_post p
 		LEFT JOIN tb_files f 
 		       ON f.post =  p.seq     
-		WHERE p.DELYN = 'Y'	
+		WHERE p.delyn = 'Y'	
 	 </select>
 	 <update id="setPostPolicy" parameterType="map" >
 	 	update tb_post

@@ -5,7 +5,7 @@
 <mapper namespace="BanHistoryMapper">
 
 	<insert id="ban" parameterType="BanHistory">
-		INSERT INTO tb_ban_history (ADMIN, REASON,POST)
+		INSERT INTO tb_ban_history (admin, reason,post)
 		VALUES(#{admin}, #{reason},#{post});
 	</insert>
 	

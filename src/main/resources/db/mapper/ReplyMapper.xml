@@ -15,7 +15,7 @@
 			select="UserMapper.findUserV1"/>
  	</resultMap>
  	<insert id="replyInsert" parameterType="Reply" useGeneratedKeys="true" keyProperty="seq">
- 		insert into TB_REPLY(content,writer,reply_time,parent) 
+ 		insert into tb_reply(content,writer,reply_time,parent) 
  		values(
  			#{content},
  			#{writer.seq},
@@ -30,7 +30,7 @@
  			writer,
  			reply_time as replyTime,
  			parent
-		from TB_Reply 
+		from tb_reply 
 		where parent = #{parent}
 		order by reply_time desc
  	</select>
@@ -41,7 +41,7 @@
  			writer,
  			reply_time as replyTime,
  			parent
-		from TB_Reply 
+		from tb_reply 
 		where seq = #{id}
  	</select>
  	<delete id="replyDelete" parameterType="Integer">

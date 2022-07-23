@@ -62,7 +62,7 @@
 	</select>
 	<update id="updateAutoLoginKey" parameterType="map">
 		update tb_user 
-		set AUTOLOGINKEY = #{autoLoginKey}
+		set autoLoginKey = #{autoLoginKey}
 		where seq = #{seq}
 	</update>
 	<select id="autoLoginKey" parameterType="String" resultType="User">

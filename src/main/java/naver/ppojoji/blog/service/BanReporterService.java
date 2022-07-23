@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,7 @@ public class BanReporterService {
 	 * @param approve
 	 * @return 
 	 */
+	/*
 	public BanRepoter processBan(User adminUser, Integer banSeq, boolean approve) {
 		BanRepoter ban= banDao.findBanSeq(banSeq);
 		if (ban == null) {
@@ -91,6 +93,20 @@ public class BanReporterService {
 		banDao.processBan(ban);
 		return ban;
 	}
+	*/
+	public BanRepoter processBan(User adminUser, Integer banSeq, boolean decision) {
+		BanRepoter ban= banDao.findBanSeq(banSeq);
+		
+		if(decision) {
+			ban.setBan_result(1);
+		}else {
+			ban.setBan_result(0);
+		}
+		
+		banDao.processBan(ban);
+		return ban;
+	}
+	
 	public List<User> badUser() {
 		return banDao.badUser();
 		
@@ -98,5 +114,16 @@ public class BanReporterService {
 	public List<Map<String,Object>> loadDetail(Integer banUserSeq) {
 		return banDao.loadDetail(banUserSeq);
 		
+	}
+	public List<Map<String, Object>> banDuration(Integer banUserSeq, Integer durationInDays) {
+		
+		Date now = new Date();
+		long currentMillis = now.getTime(); // 현재시간 ms
+		long banMillis =  currentMillis + 1000L * 60 * 60 * 24 * durationInDays;
+		
+		Date banTime = new Date(banMillis);
+		System.out.println("[ban time] " + banTime);
+		banDao.banDuration(banUserSeq, banTime);
+		return null;
 	}
 }

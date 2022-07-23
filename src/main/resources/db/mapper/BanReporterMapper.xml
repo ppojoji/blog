@@ -76,4 +76,9 @@
 	           AND tr.WRITER = #{seq}
 	WHERE tbr.ban_result = 1
 	 </select>
+	 <update id="banDuration" parameterType="map">
+	 	update tb_user 
+	 	 set banTime = #{banTime}
+	 	 where seq=#{banUserSeq}
+	 </update>
 </mapper>

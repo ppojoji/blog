@@ -13,12 +13,12 @@
 		from tb_category   -->
 		SELECT
 			ct.*
- 		  , COUNT(p.SEQ) AS post_cnt
+ 		  , COUNT(p.seq) AS post_cnt
 		FROM tb_category ct
 		LEFT JOIN tb_post p 
-		     ON p.CATEGORY = ct.seq
-		     AND  p.OPEN = 'Y'
-		     AND p.DELYN = 'N'
+		     ON p.category = ct.seq
+		     AND  p.open = 'Y'
+		     AND p.delyn = 'N'
 		GROUP BY ct.seq 
 		ORDER BY ct.ordernum 
 	</select>

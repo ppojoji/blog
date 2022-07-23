@@ -42,10 +42,7 @@ public class UserController {
 	private ObjectMapper om = new ObjectMapper();
 	
 	
-	@RequestMapping(value="/login", method= RequestMethod.GET)
-	public String login() {
-		return "login";
-	}
+	
 	
 	// @CrossOrigin(origins = "*", allowCredentials = "true")
 	@RequestMapping(

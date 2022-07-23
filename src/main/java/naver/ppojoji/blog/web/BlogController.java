@@ -61,7 +61,8 @@ public class BlogController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 //		System.out.println(">>>>>> :: " + del.deletePost());
-		return "main";
+		//return "main";
+		return "index";
 	}
 	
 	/**
@@ -135,7 +136,7 @@ public class BlogController {
 	@RequestMapping(value="/api/posts/cate/{cateName}")
 	@ResponseBody
 	public Object ListPostsByCata(@PathVariable String cateName, HttpSession session) {
-//		List<Post> list = blogServise.findByCateName(cateName);
+//		List<Post> list = blogServise.findByCateName(cateName); // "60"
 		
 		User loginUser = Util.getUser(session);
 		

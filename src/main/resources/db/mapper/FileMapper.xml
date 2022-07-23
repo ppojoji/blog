@@ -4,8 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="FileMapper">
 	<insert id="fileSave" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
-		INSERT INTO TB_FILES(
-			ORIGINNAME,GENNAME,FILESIZE,CONTENTTYPE,POST)
+		INSERT INTO tb_files(
+			originname,genname,filesize,contenttype,post)
 		VALUES (
 			#{originName},
 			#{genName},
@@ -17,7 +17,7 @@
 	<select id="FindFile" parameterType="String" resultMap="BlogPostMapper.upFileMap">
 		select * 
 		from tb_files 
-		where GENNAME = #{id}
+		where genname = #{id}
 	</select>
 	<delete id="deleteFile" parameterType="LocalUpFile">
 		delete from tb_files

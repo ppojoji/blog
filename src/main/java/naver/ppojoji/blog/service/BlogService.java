@@ -306,6 +306,9 @@ public class BlogService {
 	
 	public List<Post> findByCate2(String cateName,Integer userSeq) {
 		Category cate = cateDao.findByCateName(cateName);
+		if (cate == null) {
+			// 카테고리 없음! 404 예외처리 해줘야 ㅎ
+		}
 		return blogDao.findByCate2(cate.getSeq(),userSeq);
 	}
 	

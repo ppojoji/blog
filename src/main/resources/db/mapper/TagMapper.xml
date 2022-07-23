@@ -49,7 +49,7 @@
 		 LEFT JOIN tb_posttag tp
 		       ON t.seq = tp.tag
 		 LEFT JOIN tb_post p 
-        ON tp.post = p.SEQ   
+        ON tp.post = p.seq  
 	 </select>
 	 <delete id="deleteTags" parameterType="Integer">
 	 	delete from tb_posttag

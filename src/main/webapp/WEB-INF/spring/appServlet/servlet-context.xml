@@ -13,7 +13,8 @@
 	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-	<resources mapping="/resources/**" location="/resources/" />
+	<!-- <resources mapping="/resources/**" location="/resources/" /> -->
+		 <resources mapping="/**" location="/resources/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -44,6 +45,6 @@
 			allow-credentials="true"
 			allowed-methods="*"
 			allowed-headers="*"
-			allowed-origins="http://localhost"/>
+			allowed-origins="http://localhost:8888,http://localhost:8080,http://my-blog.kr"/>
 	</cors>
 </beans:beans>

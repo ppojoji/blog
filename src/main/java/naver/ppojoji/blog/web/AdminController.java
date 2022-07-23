@@ -130,7 +130,7 @@ public class AdminController {
 	public Object banReplyList(HttpSession session) {
 		return banService.getBanReplyList();
 	}
-	
+	/*
 	@PostMapping(value = "/admin/api/ban/{banSeq}/approve")
 	@ResponseBody
 	public Object banHandle(HttpSession session,@PathVariable Integer banSeq) {
@@ -153,6 +153,33 @@ public class AdminController {
 		return null;
 		// return banService.getBanReplyList();
 	}
+	*/
+	@PostMapping(value = "/admin/api/ban/{banSeq}/{decision}")
+	@ResponseBody
+	public Object banHandle(HttpSession session,@PathVariable Integer banSeq,
+			@PathVariable String decision) {
+		System.out.println("[ban seq: ] " + banSeq);
+		User adminUser = Util.getUser(session);
+		
+		boolean approve; 
+		if(decision.equals("approve")) {
+			approve = true;
+		}else if(decision.equals("reject")){
+			approve = false;
+		}else {
+			// FIXME 애플리케이션 예외로 나중에 바꿔야 함
+			throw new RuntimeException("!!!!!!!!");
+		}
+		
+		BanRepoter ban = banService.processBan(adminUser, banSeq, approve);
+		
+		return ban;
+//		if(ban.getTargetType().equals("P")) {
+//			return banService.getBanPostList();
+//		}else {
+//			return banService.getBanReplyList();
+//		}
+	}
 	
 	@GetMapping(value = "/admin/api/ban/badUser")
 	@ResponseBody
@@ -165,5 +192,10 @@ public class AdminController {
 	@ResponseBody
 	public List<Map<String,Object>> loadDetail(@PathVariable Integer banUserSeq) {
 		return banService.loadDetail(banUserSeq);
+	}
+	@PostMapping(value = "/admin/api/ban/user/{banUserSeq}/days/{duration}")
+	@ResponseBody
+	public List<Map<String,Object>> banDuration(@PathVariable Integer banUserSeq, @PathVariable Integer duration) {
+		return banService.banDuration(banUserSeq,duration);
 	}
 }
