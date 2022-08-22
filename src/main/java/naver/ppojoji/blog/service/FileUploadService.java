@@ -21,7 +21,9 @@ import naver.ppojoji.blog.dto.LocalUpFile;
 public class FileUploadService {
 	@Autowired 
 	FileDao fileDao;
-	
+	/*
+	 * FIXME : 아래의 경로는 로컬 테스트 환경에서만 유효함. 아래의 값을 환경설정 파이롤 빼내야 합니다.
+	 */
 	String rootDir = "D:\\uproot\\blog";
 	public String uploadSave(Integer postSeq, List<MultipartFile> files) {
 		for(MultipartFile file : files) {

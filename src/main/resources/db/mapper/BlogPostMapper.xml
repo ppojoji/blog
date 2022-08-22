@@ -5,14 +5,13 @@
 <mapper namespace="BlogPostMapper">
 	<resultMap type="LocalUpFile" id="upFileMap">
 		<id column="seq" property="seq"/>
-		<result column="originName" property="originalName"/>
-		<result column="genName" property="genName"/>
-		<result column="fileSize" property="fileSize"/>
-		<result column="contentType" property="contentType"/>
+		<result column="originname" property="originalName"/>
+		<result column="genname" property="genName"/>
+		<result column="filesize" property="fileSize"/>
+		<result column="contenttype" property="contentType"/>
 		<result column="post" property="post"/>
 		<result column="origin" property="origin"/>
 		<!-- 변환에 사용될 핸들러 클래스 지정 -->
-		
 		<!-- <result property="open" column="open" jdbcType="VARCHAR"
 			typeHandler="naver.ppojoji.blog.typehandler.StringYnTypeHandler" /> -->
 	</resultMap>
@@ -32,6 +31,7 @@
 			typeHandler="naver.ppojoji.blog.typehandler.StringYnTypeHandler" />
 		<result property="ban" column="ban"/>
 		<result property="bookmarked" column="post_ref"/>
+		
 		<association 
 			column="writer" 
 			property="writer" 
@@ -295,9 +295,10 @@
 		SELECT
 			<include refid="select_post_with_tag"></include>
 	    
-	       , t.seq AS tseq
+	        , t.seq AS tseq
 	       , t.tagname
 	       , tb.post_ref
+	       , f.*
 		FROM   (
 					SELECT
 					   p.seq AS pseq,
@@ -312,8 +313,8 @@
 		               p.last_date,
 		               p.delyn,
 		               p.ban,
-		               Count(rp.seq) AS cnt,
-		               f.*
+		               ref.fileseq,
+		               Count(rp.seq) AS cnt
 		        FROM   (SELECT p.seq,
 		                       Min(f.seq) AS fileseq
 		                FROM   tb_post p
@@ -328,9 +329,9 @@
 		                      ON rp.parent = ref.seq
 		               JOIN tb_post p
 		                 ON p.seq = ref.seq
-		               LEFT JOIN tb_files f
-		                      ON f.seq = ref.fileseq
 		        GROUP  BY p.seq) p
+		        LEFT JOIN tb_files f
+		                      ON f.seq = p.fileseq
 		       LEFT JOIN tb_posttag tp
 		              ON tp.post = p.pseq
 		       LEFT JOIN tb_tags t

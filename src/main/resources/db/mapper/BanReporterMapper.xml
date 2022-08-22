@@ -16,7 +16,7 @@
 	 <select id="banPostList" resultType="map">
 	 	SELECT 
 			  tbr.*,
-		      tu.ID,
+		      tu.ID As reporterId,
 		      tp.*
 		from tb_ban_report tbr 
 		INNER JOIN tb_user tu 
@@ -29,7 +29,7 @@
 	  <select id="banReplyList" resultType="map">
 	 	SELECT 
 			tbr.*,
-	        tu.ID,
+	        tu.ID AS reporterId,
 	        tr.*
 		from tb_ban_report tbr 
 		INNER JOIN tb_user tu 
@@ -69,11 +69,14 @@
 	 <select id="loadDetail" parameterType="int" resultType="map">
 	 SELECT 
 		tbr.*, 
-	    tr.*
+	    tr.*,
+	    tu.ID AS reporterId
 	FROM tb_ban_report tbr 
 	INNER JOIN tb_reply tr 
 			 ON tbr.target = tr.seq	 
-	           AND tr.WRITER = #{seq}
+	           AND tr.writer = #{seq}
+	INNER JOIN tb_user tu 
+			 ON tbr.reporter = tu.seq            
 	WHERE tbr.ban_result = 1
 	 </select>
 	 <update id="banDuration" parameterType="map">

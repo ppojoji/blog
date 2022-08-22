@@ -1,6 +1,7 @@
 package naver.ppojoji.blog.web;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import naver.ppojoji.blog.BanType;
 import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.BanHistory;
@@ -38,16 +37,15 @@ import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
 import naver.ppojoji.blog.dto.Reply;
 import naver.ppojoji.blog.dto.Search;
-import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BanHistoryService;
 import naver.ppojoji.blog.service.BanReporterService;
 import naver.ppojoji.blog.service.BlogService;
 import naver.ppojoji.blog.service.BookMarkService;
 import naver.ppojoji.blog.service.CategoryService;
+import naver.ppojoji.blog.service.FileUploadService;
 import naver.ppojoji.blog.service.PostDeletion;
 import naver.ppojoji.blog.service.ReplyService;
-import naver.ppojoji.blog.service.TagService;
 
 @Controller
 public class BlogController {
@@ -89,6 +87,9 @@ public class BlogController {
 	
 	@Autowired
 	BanReporterService banService;
+	
+	@Autowired
+	FileUploadService fileUploadService;
 	
 	@RequestMapping(value="/api/posts", method = RequestMethod.GET, produces = Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
@@ -264,7 +265,7 @@ public class BlogController {
 	}
 	
 	/**
-	 * FIXME 새로운 글을 추가합니다. 
+	 * 새로운 글을 추가합니다. 
 	 * @return
 	 * @throws JsonProcessingException 
 	 */
@@ -575,6 +576,32 @@ public class BlogController {
 	public Object insertPostBan(HttpSession session, @PathVariable Integer postSeq, @PathVariable String banCode) {
 		User user = Util.getUser(session);
 		banService.insertPostBan(user,postSeq, banCode);
+		
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		return res;
+	}
+	@PostMapping(value = "/article/api/upFile/{postSeq}")
+	@ResponseBody
+	public Object uploadFile(
+			@PathVariable Integer postSeq,
+			@RequestParam MultipartFile file) {
+		System.out.println("upfile: " + file.getContentType() +", " + file.getOriginalFilename());
+		
+		List<MultipartFile> list = new ArrayList<>();
+		list.add(file);
+		
+		fileUploadService.uploadSave(postSeq, list);
+		
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		return res;
+	}
+	@DeleteMapping(value = "/article/api/deleteFile/{genName}")
+	@ResponseBody
+	public Object deleteFile(@PathVariable String genName) {
+		
+		fileUploadService.deleteFile(genName);
 		
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);

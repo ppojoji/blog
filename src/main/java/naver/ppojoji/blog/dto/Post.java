@@ -29,8 +29,19 @@ public class Post {
 	private String delYn;
 	
 	private List<Tag> tags; 
-	private boolean bookmarked; 
+	private boolean bookmarked;
 	
+	private Date bookMarkTime;
+	
+	
+	public Date getBookMarkTime() {
+		return bookMarkTime;
+	}
+
+	public void setBookMarkTime(Date bookMarkTime) {
+		this.bookMarkTime = bookMarkTime;
+	}
+
 	public List<Tag> getTags() {
 		return tags;
 	}

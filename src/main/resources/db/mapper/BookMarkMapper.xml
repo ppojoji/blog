@@ -3,6 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="BookMarkMapper">
+
+	<resultMap type="Post" id="bookmarkMap" extends="BlogPostMapper.PostMap">
+		<result property="bookMarkTime" column="bookmark_time"/>
+	</resultMap>
 	<insert id="addBookMark" parameterType="map">
 		INSERT INTO tb_bookmark(user_ref,post_ref)
 		VALUES (#{userSeq},#{postSeq})
@@ -18,12 +22,14 @@
 		where user_ref = #{loginUser.seq}
 		and post_ref = #{postSeq}
 	</select>
-	<select id="loadBookMarks" parameterType="Integer" resultMap="BlogPostMapper.PostMap">
+	<select id="loadBookMarks" parameterType="Integer" resultMap="bookmarkMap">
 		select
 			<include refid="BlogPostMapper.select_post"></include>
-		,bmk.post_ref
+			,bmk.post_ref
+			,bmk.bookmark_time
 		from tb_bookmark bmk LEFT JOIN tb_post p
 		                            ON bmk.post_ref = p.seq
 		where user_ref = #{userSeq}
+		AND p.delyn = 'N'
 	</select>
 </mapper>
