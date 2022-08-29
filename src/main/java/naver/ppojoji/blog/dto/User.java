@@ -1,5 +1,7 @@
 package naver.ppojoji.blog.dto;
 
+import java.util.Date;
+
 public class User {
 	private Integer seq; // null;
 	private String id;
@@ -8,6 +10,8 @@ public class User {
 	private String pwhint;
 	private String pwhintans;
 	private String admin;
+	
+	private Date bandTime;
 	
 	/**
 	 * 신고 먹은 글(댓글) 갯수
@@ -75,6 +79,13 @@ public class User {
 	}
 	public void setSeq(Integer seq) {
 		this.seq = seq;
+	}
+	
+	public Date getBandTime() {
+		return bandTime;
+	}
+	public void setBandTime(Date bandTime) {
+		this.bandTime = bandTime;
 	}
 	/*
 	 * @Override public String toString() { return "User [seq=" + seq + ", id=" + id

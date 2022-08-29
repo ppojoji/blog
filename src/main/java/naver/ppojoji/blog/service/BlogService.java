@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Error;
+import naver.ppojoji.blog.YesNo;
 import naver.ppojoji.blog.dao.BlogDao;
 import naver.ppojoji.blog.dao.CategoryDao;
 import naver.ppojoji.blog.dao.UserDao;
@@ -44,6 +45,7 @@ public class BlogService {
 	
 	@Autowired
 	TagService tagService;
+	
 	
 	/*
 	List<Post> list = new ArrayList<>();
@@ -319,13 +321,16 @@ public class BlogService {
 		List<Map<String,Object>> overviews = new ArrayList<>();
 		for(int i=0; i<cates.size(); i++) {
 			Category cate = cates.get(i);
-			List<Post> posts = blogDao.findByCate(cate.getSeq(),"N", "Y"); // 2, 34
-			int length = Math.min(n, posts.size());
-			List<Post> maxN = posts.subList(0, length);
-			Map<String,Object> overview = new HashMap<>();
-			overview.put("cate", cate);
-			overview.put("posts", maxN);
-			overviews.add(overview);
+			
+			if (cate.getUseYn() == YesNo.Y) {
+				List<Post> posts = blogDao.findByCate(cate.getSeq(),"N", "Y"); // 2, 34
+				int length = Math.min(n, posts.size());
+				List<Post> maxN = posts.subList(0, length);
+				Map<String,Object> overview = new HashMap<>();
+				overview.put("cate", cate);
+				overview.put("posts", maxN);
+				overviews.add(overview);
+			}
 		}
 		return overviews;
 		

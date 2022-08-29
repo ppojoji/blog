@@ -34,6 +34,10 @@ public class TagController {
 		res.put("success", true);
 		return res;
 	}
+	/**
+	 * 태그 목록 나열(전부)
+	 * @return
+	 */
 	@GetMapping("/api/postBytag")
 	@ResponseBody
 	public List<Tag> tagByPost(){

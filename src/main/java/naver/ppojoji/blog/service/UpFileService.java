@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import naver.ppojoji.blog.dao.FileDao;
@@ -20,7 +21,9 @@ public class UpFileService {
 	@Autowired
 	FileDao fileDao;
 
-	String rootDir = "D:\\uproot\\blog";
+	@Value("${blog.upfile.root}")
+	String rootDir;
+	
 	public LocalUpFile FindFile(String genName) {
 		return fileDao.FindFile(genName);
 	}
@@ -44,7 +47,7 @@ public class UpFileService {
 		LocalUpFile file = fileDao.FindFile(genName);
 		
 		String subPath = file.getGenName();
-		String filePath = rootDir + "\\" + subPath; // 
+		String filePath = rootDir + "/" + subPath; // 
 		
 		File f = new File(filePath);
 		if (f.exists()) {

@@ -15,6 +15,10 @@ public enum Error {
 	/**
 	 * 관리자가 아님
 	 */
-	NOT_ADMIN
+	NOT_ADMIN,
+	/**
+	 * 사용정지에 걸린 사용자
+	 */
+	BANNED_USER
 	
 }

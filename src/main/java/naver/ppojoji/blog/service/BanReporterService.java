@@ -126,4 +126,26 @@ public class BanReporterService {
 		banDao.banDuration(banUserSeq, banTime);
 		return null;
 	}
+	/**
+	 * 정지기간인지 확인함. 
+	 * 정지기간에 해당하면 true, 만일 정지기간이 없거나, 정지기간이 지났으면 banTime을 null로 해제함
+	 * @param user
+	 */
+	public boolean checkBannedUser(User user) {
+		Date bandTime = user.getBandTime();
+		if (bandTime == null) {
+			return false;
+		}
+		
+		Date now = new Date(); // 현재 시간
+		/*
+		 * 현재 시간과 bandTime 비교함
+		 */
+		if(bandTime.after(now)) {
+			bandTime = null;
+			return false;
+		}
+		
+		return false;
+	}
 }

@@ -28,6 +28,7 @@ import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Error;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.User;
+import naver.ppojoji.blog.service.BanReporterService;
 import naver.ppojoji.blog.service.BookMarkService;
 import naver.ppojoji.blog.service.UserService;
 
@@ -37,6 +38,9 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	BookMarkService bookMarkService;
+	
+	 @Autowired
+	 BanReporterService banService;
 	
 	/* FIXME 이것도 나중에 없앨겁니다. 스프링프레임워크 내부에서 다 해주고 있음 */
 	private ObjectMapper om = new ObjectMapper();
@@ -56,6 +60,11 @@ public class UserController {
 		User loginUser = userService.login(id, pwd,useCookie);
 		
 		Map<String, Object> res = new HashMap<>();
+		
+		if (banService.checkBannedUser(loginUser)) {
+			// 얘는 정지기간임
+			throw new BlogException(410, Error.BANNED_USER);
+		}
 		
 		String strLoginFailCnt = Util.getSession(req, "LOGIN_FAIL_CNT", "0");
 		Integer loginFailCnt = Integer.parseInt(strLoginFailCnt);

@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,20 @@ public class TagService {
 	}
 
 	public List<Tag> tagByPost() {
+		/**
+		 * FIXME 태그마다 모든 글들을 다 달아서 반환함.
+		 * 태그마다 갯수만 필요함. 글을 전부 반환할 필요 없음.
+		 */
+		List<Tag> tags = tagDao.tagByPost();
+		List<Tag> list = new ArrayList<>();
 		
-		return tagDao.tagByPost();
+		for (Tag tag : tags) {
+			if(tag.getPosts().size() > 0) {
+				list.add(tag);
+			}
+		}
+		
+		return list;
 	}
 
 	public void updateTags(List<Integer> tags, Integer postSeq) {

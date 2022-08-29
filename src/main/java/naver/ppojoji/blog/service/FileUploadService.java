@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +25,9 @@ public class FileUploadService {
 	/*
 	 * FIXME : 아래의 경로는 로컬 테스트 환경에서만 유효함. 아래의 값을 환경설정 파이롤 빼내야 합니다.
 	 */
-	String rootDir = "D:\\uproot\\blog";
+	@Value("${blog.upfile.root}")
+	String rootDir;
+	
 	public String uploadSave(Integer postSeq, List<MultipartFile> files) {
 		for(MultipartFile file : files) {
 			// 1. 유일한 이름을 가짜로 생성함 - genName
@@ -36,7 +39,9 @@ public class FileUploadService {
 				byte [] data = file.getBytes();
 				// 2.1. 파일부터 생성합니다.
 				File localFile = new File(rootDir, genName);
+				
 				localFile.createNewFile();
+				System.out.println(localFile.getAbsolutePath());
 				
 				// 2.2. 파일을 저장하는 메소드를 호출함
 				Path filepath = localFile.toPath();
