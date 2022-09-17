@@ -19,6 +19,10 @@ public enum Error {
 	/**
 	 * 사용정지에 걸린 사용자
 	 */
-	BANNED_USER
+	BANNED_USER,
+	/**
+	 * 로그인 실패
+	 */
+	LOGIN_FAILED
 	
 }

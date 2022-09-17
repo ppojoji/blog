@@ -59,6 +59,10 @@ public class UserController {
 			HttpSession session, @RequestParam String useCookie) throws JsonProcessingException {
 		User loginUser = userService.login(id, pwd,useCookie);
 		
+		if(loginUser == null) {
+			throw new BlogException(410, Error.LOGIN_FAILED);
+		}
+		
 		Map<String, Object> res = new HashMap<>();
 		
 		if (banService.checkBannedUser(loginUser)) {

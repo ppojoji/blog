@@ -77,4 +77,9 @@ public class BanReporterDao {
 		session.update("BanReporterMapper.banDuration",map);
 		
 	}
+	public void clearBanTime(Integer banUserSeq) {
+		// session.update("BanReporterMapper.clearBanTime",banUserSeq);
+		banDuration(banUserSeq, null);
+		
+	}
 }

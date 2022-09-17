@@ -11,7 +11,7 @@ public class User {
 	private String pwhintans;
 	private String admin;
 	
-	private Date bandTime;
+	private Date banTime;
 	
 	/**
 	 * 신고 먹은 글(댓글) 갯수
@@ -81,11 +81,11 @@ public class User {
 		this.seq = seq;
 	}
 	
-	public Date getBandTime() {
-		return bandTime;
+	public Date getBanTime() {
+		return banTime;
 	}
-	public void setBandTime(Date bandTime) {
-		this.bandTime = bandTime;
+	public void setBanTime(Date bandTime) {
+		this.banTime = bandTime;
 	}
 	/*
 	 * @Override public String toString() { return "User [seq=" + seq + ", id=" + id

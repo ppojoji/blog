@@ -44,6 +44,7 @@ import naver.ppojoji.blog.service.BlogService;
 import naver.ppojoji.blog.service.BookMarkService;
 import naver.ppojoji.blog.service.CategoryService;
 import naver.ppojoji.blog.service.FileUploadService;
+import naver.ppojoji.blog.service.NoteService;
 import naver.ppojoji.blog.service.PostDeletion;
 import naver.ppojoji.blog.service.ReplyService;
 
@@ -55,6 +56,9 @@ public class BlogController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@Autowired PostDeletion del;
+	
+	@Autowired
+	NoteService noteService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -410,9 +414,15 @@ public class BlogController {
 	
 	@GetMapping("/api/post/overviews")
 	@ResponseBody
-	public Object MaxNByCate() {
+	public Object MaxNByCate(HttpSession session) {
 		List<Map<String,Object>> maxNData = blogServise.findRecentNForCates(3);
+		User loginUser = Util.getUser(session);
 		Map<String, Object> res = new HashMap<>();
+		if (loginUser != null) {
+			// 새로운 쪽지 갯수만 넣어줌
+			Integer notesCnt = noteService.countNewNotes(loginUser);
+			res.put("notes", notesCnt);
+		}
 		res.put("success", true);
 		res.put("overviews", maxNData);
 		return res;

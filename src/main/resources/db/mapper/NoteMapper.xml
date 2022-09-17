@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="NoteMapper">
+	<sql id="note_cols">
+		tn.seq
+	    ,tn.sender
+	    ,tn.receiver
+	    ,tn.content
+	    ,tn.sendtime
+	    ,tn.readtime
+	    ,tn.sender_delete
+	    ,tn.receiver_delete
+	    ,tu.id as senderId
+	    ,recv.id AS receiverId
+    </sql>
+	<insert id="createNote" parameterType="Note" useGeneratedKeys="true" keyProperty="seq">
+		insert into tb_note(sender,receiver,content,sendtime)
+		values(#{sender},#{receiver},#{content},#{sendTime}) 
+	</insert>
+	
+	<select id="countNewNotes" parameterType="int" resultType="int">
+		select count(seq)
+		  from tb_note
+		  where receiver = #{receiver}
+		   and readtime is null 
+	</select>
+	
+	<select id="loadSendNote" parameterType="int" resultType="Note">
+	 	 select
+	 	 	<include refid="note_cols"></include>
+		  from  tb_note tn
+		  inner join tb_user tu 
+			 on tn.sender = tu.seq 
+		  inner join tb_user recv 
+			 on tn.receiver = recv.seq     
+		 where sender = #{sender}
+		 and sender_delete = 'N'       
+	</select>
+	<select id="loadReceiverNote" parameterType="int" resultType="Note">
+	 	 select 
+	 	 	<include refid="note_cols"></include>
+		  from  tb_note tn
+		  inner join tb_user tu 
+			 on tn.sender = tu.seq 
+		  inner join tb_user recv 
+			 on tn.receiver = recv.seq     
+		 where receiver = #{receiver} 
+		 and receiver_delete = 'N'      
+	</select>
+	<select id="readNote" parameterType="map" resultType="Note">
+		 select 
+		 	<include refid="note_cols"></include>
+		  from  tb_note tn
+		  inner join tb_user tu 
+			 on tn.sender = tu.seq 
+		  inner join tb_user recv 
+			 on tn.receiver = recv.seq     
+		 where receiver = #{receiverSeq} 
+		 and tn.seq = #{noteSeq}
+	</select>
+	<update id="updateReadTime" parameterType="Note">
+		update tb_note
+		set readtime = #{readTime}
+		where seq = #{seq}
+	</update>
+	<select id="senderNote" resultType="Note" parameterType="map">
+		select 
+			<include refid="note_cols"></include>
+		from  tb_note tn
+		inner join tb_user tu 
+		  on tn.sender = tu.seq 
+		inner join tb_user recv 
+		  on tn.receiver = recv.seq     
+		where sender = #{senderSeq} 
+		      and
+		      tn.seq = #{noteSeq}
+	</select>
+	<update id="markAsDelete" parameterType="map">
+		update tb_note
+		set	
+			<if test='"S" == mode'>
+				sender_delete = 'Y'
+			</if>
+			<if test='"R" == mode'>
+				receiver_delete = 'Y'
+			</if>
+		where seq = #{noteSeq}	
+		
+	</update>
+ </mapper> 

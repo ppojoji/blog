@@ -13,7 +13,8 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
-	<context:property-placeholder location="classpath:*.properties" />
+	<!-- <context:property-placeholder location="classpath:*.properties" /> -->
+	<context:property-placeholder location="classpath:application-${spring.profiles.active}.properties" />
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!--  1. jdbc 연결 정보 -->

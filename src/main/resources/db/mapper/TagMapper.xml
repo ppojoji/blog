@@ -11,7 +11,7 @@
 	<resultMap type="Tag" id="FullTagMap">
 		<id column="tseq" property="seq"/>
 		<result column="tagname" property="tagName"/>
-		 <collection property="posts" notNullColumn="pseq" resultMap="BlogPostMapper.PostMap"></collection>
+		<result column="cnt" property="tagCount"/> 
 	</resultMap>
 	<insert id="bindTag" parameterType="Tag">
 		insert into tb_posttag
@@ -44,12 +44,13 @@
 	 	SELECT
 	 		t.seq as tseq,
 	 		t.tagname ,
-	 		<include refid="BlogPostMapper.select_post"></include> 
+	 		COUNT(t.tagname) as cnt
 		 FROM tb_tags t
 		 LEFT JOIN tb_posttag tp
 		       ON t.seq = tp.tag
 		 LEFT JOIN tb_post p 
-        ON tp.post = p.seq  
+        ON tp.post = p.seq 
+       GROUP BY  tagname  
 	 </select>
 	 <delete id="deleteTags" parameterType="Integer">
 	 	delete from tb_posttag

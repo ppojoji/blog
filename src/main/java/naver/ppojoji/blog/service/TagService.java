@@ -58,7 +58,7 @@ public class TagService {
 		List<Tag> list = new ArrayList<>();
 		
 		for (Tag tag : tags) {
-			if(tag.getPosts().size() > 0) {
+			if(tag.getTagCount() > 0) {
 				list.add(tag);
 			}
 		}

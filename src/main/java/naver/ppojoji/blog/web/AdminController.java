@@ -193,6 +193,7 @@ public class AdminController {
 	public List<Map<String,Object>> loadDetail(@PathVariable Integer banUserSeq) {
 		return banService.loadDetail(banUserSeq);
 	}
+	
 	@PostMapping(value = "/admin/api/ban/user/{banUserSeq}/days/{duration}")
 	@ResponseBody
 	public List<Map<String,Object>> banDuration(@PathVariable Integer banUserSeq, @PathVariable Integer duration) {

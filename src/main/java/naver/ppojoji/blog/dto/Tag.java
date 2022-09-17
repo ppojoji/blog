@@ -8,7 +8,16 @@ public class Tag {
 	private Integer postSeq;
  
  	private List<Post> posts;
- 
+ 	
+ 	private Integer tagCount;
+	
+ 	public Integer getTagCount() {
+		return tagCount;
+	}
+	public void setTagCount(Integer tagCount) {
+		this.tagCount = tagCount;
+	}
+	
 	public Integer getPostSeq() {
 		return postSeq;
 	}

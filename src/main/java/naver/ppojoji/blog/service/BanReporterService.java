@@ -132,7 +132,7 @@ public class BanReporterService {
 	 * @param user
 	 */
 	public boolean checkBannedUser(User user) {
-		Date bandTime = user.getBandTime();
+		Date bandTime = user.getBanTime();
 		if (bandTime == null) {
 			return false;
 		}
@@ -141,11 +141,15 @@ public class BanReporterService {
 		/*
 		 * 현재 시간과 bandTime 비교함
 		 */
-		if(bandTime.after(now)) {
+		if(bandTime.before(now)) { // now ..... bandTime
+			// bandTime.after(now) => now.after(badnTie)
+			// bandTime ... now
 			bandTime = null;
+			banDao.clearBanTime(user.getSeq());
 			return false;
-		}
+		} 
 		
-		return false;
+		
+		return true;
 	}
 }

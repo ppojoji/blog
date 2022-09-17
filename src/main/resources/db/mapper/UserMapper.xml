@@ -40,7 +40,8 @@
 		 	id,
 		 	pwd,
 		 	email,
-		 	admin
+		 	admin,
+		 	banTime
 		 from tb_user
 		 where id = #{id}
 		 and pwd = #{pwd}	
