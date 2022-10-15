@@ -415,8 +415,17 @@ public class BlogController {
 	@GetMapping("/api/post/overviews")
 	@ResponseBody
 	public Object MaxNByCate(HttpSession session) {
+		if (session.isNew()) {
+			System.out.println("[overview][new session]");
+		}
+		User loginUser = null;
+		try {
+			loginUser = Util.getUser(session);			
+		} catch(IllegalStateException e) {
+			// FIXME 로그아웃 후 SESSION이 삭제되지 않고 이곳에서 조회됨
+			System.out.println("[SESSION ERROR] invalidated session!");
+		}
 		List<Map<String,Object>> maxNData = blogServise.findRecentNForCates(3);
-		User loginUser = Util.getUser(session);
 		Map<String, Object> res = new HashMap<>();
 		if (loginUser != null) {
 			// 새로운 쪽지 갯수만 넣어줌

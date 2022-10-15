@@ -77,16 +77,30 @@
 		      and
 		      tn.seq = #{noteSeq}
 	</select>
-	<update id="markAsDelete" parameterType="map">
+	<update id="markAsDelete" parameterType="Note">
 		update tb_note
 		set	
-			<if test='"S" == mode'>
-				sender_delete = 'Y'
-			</if>
-			<if test='"R" == mode'>
-				receiver_delete = 'Y'
-			</if>
-		where seq = #{noteSeq}	
-		
+			sender_delete = #{sender_Delete},
+			receiver_delete = #{receiver_Delete}
+		where seq = #{seq}	
 	</update>
+	<delete id="deleteNote" parameterType="Integer">
+		delete from tb_note
+		where seq = #{noteSeq}
+	</delete>
+	<select id="queryMessage" parameterType="map" resultType="Note">
+		  select 
+	 	 	<include refid="note_cols"></include>
+		  from  tb_note tn
+		  inner join tb_user tu 
+			 on tn.sender = tu.seq 
+		  inner join tb_user recv 
+			 on tn.receiver = recv.seq     
+		 where receiver = #{userSeq} 
+		 and readtime is null
+		<![CDATA[
+		 and sendtime <= #{current}
+		 and tn.seq > #{maxSeq}
+		]]>
+	</select>
  </mapper> 

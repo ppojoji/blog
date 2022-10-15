@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.dao;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,12 +60,24 @@ public class NoteDao {
 	 * @param note
 	 * @param mode - 'S' or 'R'
 	 */
-	public void markAsDelete(Note note, String mode) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("noteSeq", note.getSeq());
-		map.put("mode", mode);
+	public void markAsDelete(Note note) {
+//		Map<String, Object> map = new HashMap<>();
+//		map.put("noteSeq", note.getSeq());
+//		map.put("mode", mode);
 		
-		session.update("NoteMapper.markAsDelete",map);
+		session.update("NoteMapper.markAsDelete",note);
+	}
+
+	public void deleteNote(Integer noteSeq) {
+		session.delete("NoteMapper.deleteNote",noteSeq);
+	}
+	public List<Note> queryMessage(Integer userSeq, Date current, Integer maxSeq) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("userSeq", userSeq);
+		map.put("current", current);
+		map.put("maxSeq", maxSeq);
+		
+		return session.selectList("NoteMapper.queryMessage", map);
 	}
 
 }

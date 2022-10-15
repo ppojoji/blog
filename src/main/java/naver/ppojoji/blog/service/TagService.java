@@ -40,6 +40,9 @@ public class TagService {
 	 * @return
 	 */
 	public Tag tagInsert(String tagName) {
+		
+		tagName = tagName.trim(); // 입력을 정규화함
+		
 		Tag tag =  tagDao.TagSelect(tagName);
 		if(tag == null) {
 			// FIXME 고칠 곳이 있음(쿼리)

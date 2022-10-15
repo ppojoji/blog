@@ -41,16 +41,13 @@
 	 </insert>
 	 
 	 <select id="tagByPost" resultMap="FullTagMap" >
-	 	SELECT
-	 		t.seq as tseq,
-	 		t.tagname ,
-	 		COUNT(t.tagname) as cnt
-		 FROM tb_tags t
-		 LEFT JOIN tb_posttag tp
-		       ON t.seq = tp.tag
-		 LEFT JOIN tb_post p 
-        ON tp.post = p.seq 
-       GROUP BY  tagname  
+	 	SELECT 
+			t.seq AS tseq,
+			 t.tagname, COUNT(p.seq) AS cnt
+		FROM tb_tags t
+		LEFT JOIN tb_posttag tp ON t.seq = tp.tag
+		LEFT JOIN tb_post p ON tp.post = p.seq
+		GROUP BY t.seq
 	 </select>
 	 <delete id="deleteTags" parameterType="Integer">
 	 	delete from tb_posttag

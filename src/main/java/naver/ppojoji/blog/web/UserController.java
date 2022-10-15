@@ -168,6 +168,12 @@ public class UserController {
 	@ResponseBody
 	public String logout(HttpSession session) throws JsonProcessingException {
 		session.invalidate();
+		System.out.println("[LOGOUT] 되냐? ");
+//		User user = Util.getUser(session);
+//		if (user != null) {
+//			System.out.println("[user] 있음!! " + user);
+//		}
+		
 		// FIXME 로그인 한 시간, 로그아웃한 시간을 기록하고 싶습니다. 
 		// 사용시간을 지원하려면 테이블을 어떻게 만들어야 할지....
 //		this.userService.userDelete(id);

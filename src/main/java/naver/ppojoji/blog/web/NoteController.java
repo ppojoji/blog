@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Res;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.Note;
@@ -38,17 +40,24 @@ public class NoteController {
 		
 		return Res.success("note", insertedNote);
 	}
-	
+	/**
+	 * 쪽지 목록 조회(보낸 쪽지, 받은쪽지)
+	 * @param session
+	 * @param type
+	 * @return
+	 */
 	@GetMapping(value = "/notes/{type}")
 	public List<Note> loadNote(HttpSession session, @PathVariable String type) {
 		User loginUser = Util.getUser(session);
 		List<Note> list = null;
 		if(type.equals("S")) {
-			 list = noteService.loadSendNote(loginUser.getSeq());
-			
-		}else if(type.equals("R")) {
+			list = noteService.loadSendNote(loginUser.getSeq());			
+		} else if(type.equals("R")) {
 			list = noteService.loadReceiverNote(loginUser.getSeq());
+		} else {
+			throw new BlogException(401, "INVALIDATE_TYPE");
 		}
+		
 		return list;
 	}
 	/**
@@ -77,6 +86,13 @@ public class NoteController {
 		Note note = noteService.SenderNote(loginUser.getSeq(),noteSeq);
 		return note;
 	}
+	/**
+	 * 쪽지 삭제 처리
+	 * @param session
+	 * @param noteSeq
+	 * @param mode
+	 * @return
+	 */
 	@DeleteMapping(value = "/note/{noteSeq}/{mode}")
 	public Note deleteNote(HttpSession session, @PathVariable Integer noteSeq,@PathVariable String mode){
 		User loginUser = Util.getUser(session);
@@ -84,6 +100,18 @@ public class NoteController {
 		Note note = noteService.deleteNote(mode, loginUser.getSeq(), noteSeq);
 		return note;
 	}
-	
-	
+	@GetMapping(value = "/notes/new/{maxSeq}")
+	public List<Note> QueryMessage(HttpSession session, @PathVariable Integer maxSeq) {
+		User loginUser = Util.getUser(session);
+		
+		List<Note> list = null;
+
+		if(loginUser != null) {
+			list = noteService.queryMessage(loginUser.getSeq(),maxSeq);
+		}else {
+			list = new ArrayList<>();
+		}
+		
+		return list;
+	}
 }
