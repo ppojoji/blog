@@ -20,12 +20,20 @@ import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.Note;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.NoteService;
+import naver.ppojoji.blog.service.UserService;
 
 @RestController
 public class NoteController {
 	@Autowired
 	NoteService noteService;
 	
+	@Autowired
+	UserService userService;
+	/**
+	 * 새로운 쪽지 작성
+	 * @param note
+	 * @return
+	 */
 	@PostMapping("/note")
 	// @ResponseBody
 	private Object CreateNote(@RequestBody Note note) {
@@ -39,6 +47,25 @@ public class NoteController {
 		Note insertedNote = noteService.createNote(note);
 		
 		return Res.success("note", insertedNote);
+	}
+	@PostMapping("/note/reply")
+	// @ResponseBody
+	private Object ReplyNote(HttpSession session , @RequestBody Note note) {
+		
+		User loginUser = Util.getUser(session);
+		
+		Integer senderSeq = (Integer) note.getSender();
+		Integer receiverSeq = (Integer) note.getReceiver();
+		String content = (String) note.getContent();
+		Integer prevNote = note.getPrev_note();
+		
+		System.out.println(senderSeq + " > " + receiverSeq);
+		System.out.println(content);
+		
+		Note insertedReplyNote = noteService.replyNote(loginUser,note);
+		
+		
+		return Res.success("note", insertedReplyNote);
 	}
 	/**
 	 * 쪽지 목록 조회(보낸 쪽지, 받은쪽지)
@@ -108,10 +135,12 @@ public class NoteController {
 
 		if(loginUser != null) {
 			list = noteService.queryMessage(loginUser.getSeq(),maxSeq);
+			userService.UpdateReadNote(loginUser.getSeq(), maxSeq);
 		}else {
 			list = new ArrayList<>();
 		}
 		
 		return list;
 	}
+
 }

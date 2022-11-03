@@ -62,4 +62,13 @@ public class UserDao {
 	public User hint(User searchOption) {
 		return session.selectOne("UserMapper.hint",searchOption);
 	}
+	public void updateReadNote(User user, Integer readNote) {
+		/* map 안써도 됨*/
+//		Map map = new HashMap<>();
+//		map.put("userSeq",user);
+//		map.put("readNote",readNote);
+		user.setRead_note(readNote);
+		
+		session.update("UserMapper.updateReadNote",user);
+	}
 }

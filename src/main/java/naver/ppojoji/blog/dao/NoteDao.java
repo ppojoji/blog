@@ -79,5 +79,10 @@ public class NoteDao {
 		
 		return session.selectList("NoteMapper.queryMessage", map);
 	}
-
+	public void updateOriginNote(Integer noteSeq) {
+		session.update("NoteMapper.updateOriginNote",noteSeq);
+	}
+	public int countReplyNote(Integer noteSeq) {
+		return session.selectOne("NoteMapper.countReplyNote",noteSeq);
+	}
 }

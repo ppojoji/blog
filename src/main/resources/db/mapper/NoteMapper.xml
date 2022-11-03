@@ -14,10 +14,14 @@
 	    ,tn.receiver_delete
 	    ,tu.id as senderId
 	    ,recv.id AS receiverId
+	    ,tn.origin_note
+	    ,tn.prev_note
     </sql>
-	<insert id="createNote" parameterType="Note" useGeneratedKeys="true" keyProperty="seq">
-		insert into tb_note(sender,receiver,content,sendtime)
-		values(#{sender},#{receiver},#{content},#{sendTime}) 
+	<insert id="createNote" parameterType="Note" 
+		useGeneratedKeys="true"
+		keyProperty="seq">
+		insert into tb_note(sender,receiver,content,sendtime,prev_note,origin_note)
+		values(#{sender},#{receiver},#{content},#{sendTime},#{prev_note},#{origin_note}) 
 	</insert>
 	
 	<select id="countNewNotes" parameterType="int" resultType="int">
@@ -65,6 +69,11 @@
 		set readtime = #{readTime}
 		where seq = #{seq}
 	</update>
+	<update id="updateOriginNote" parameterType="int">
+		update tb_note
+		set origin_note = #{seq}
+		where seq = #{seq}
+	</update>
 	<select id="senderNote" resultType="Note" parameterType="map">
 		select 
 			<include refid="note_cols"></include>
@@ -102,5 +111,10 @@
 		 and sendtime <= #{current}
 		 and tn.seq > #{maxSeq}
 		]]>
+	</select>
+	<select id="countReplyNote" parameterType="int" resultType="int">
+		SELECT COUNT(seq)
+		  FROM tb_note
+		 WHERE prev_note = #{prev_note}
 	</select>
  </mapper> 

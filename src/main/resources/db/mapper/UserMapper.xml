@@ -21,7 +21,8 @@
 			id,
 			pwd,
 			email,
-			admin
+			admin,
+			read_note
 		from tb_user
 		where seq = #{id}	
 	</select>
@@ -30,7 +31,8 @@
 			seq,
 			id,
 			email,
-			admin
+			admin,
+			read_note
 		from tb_user
 		where seq = #{id}	
 	</select>
@@ -41,7 +43,8 @@
 		 	pwd,
 		 	email,
 		 	admin,
-		 	banTime
+		 	banTime,
+			read_note
 		 from tb_user
 		 where id = #{id}
 		 and pwd = #{pwd}	
@@ -57,7 +60,8 @@
 			id,
 			pwd,
 			email,
-			admin
+			admin,
+			read_note
 		from tb_user
 		where id = #{id}
 	</select>
@@ -73,7 +77,8 @@
 			pwd,
 			email,
 			admin,
-			autoLoginKey
+			autoLoginKey,
+			read_note
 		from tb_user
 		where autoLoginKey = #{autoLoginKey}
 	</select>
@@ -83,7 +88,8 @@
 			id,
 			pwd,
 			email,
-			admin
+			admin,
+			read_note
 		from tb_user
 		where email = #{email}
 	</select>
@@ -111,4 +117,9 @@
  		 and pwhint = #{pwhint}
  		 and pwhintans = #{pwhintans}
 	</select>
+	<update id="updateReadNote" parameterType="user">
+		update tb_user
+		set read_note = #{read_note}
+		where seq = #{seq}	
+	</update>
 </mapper>

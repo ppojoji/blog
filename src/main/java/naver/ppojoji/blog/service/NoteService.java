@@ -1,7 +1,9 @@
 package naver.ppojoji.blog.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,9 +49,43 @@ public class NoteService {
 		note.setSendTime(new Date());
 		note.setSender_Delete("N");
 		note.setReceiver_Delete("N");
+		
 		noteDao.createNote(note);
 
+		if(note.getPrev_note() == null) {
+			Integer seq = note.getSeq();
+			note.setOrigin_note(seq);
+			
+			noteDao.updateOriginNote(seq);
+		}
+		
 		return note;
+	}
+	/**
+	 * 답장 쪽지 생성
+	 * @param loginUser 
+	 * @param replyNote
+	 * @return
+	 */
+	public Note replyNote(User loginUser, Note replyNote) {
+		/**
+		 * 1. 원글 쪽지가 존재해야함
+		 */
+		Integer prevNoteSeq = replyNote.getPrev_note();
+		if(prevNoteSeq == null) {
+			throw new BlogException(409, "NO_PREV_NOTE");
+		}
+		Note prevNote = noteDao.readNote(loginUser.getSeq(), prevNoteSeq);
+		
+		if(prevNote == null) {
+			throw new BlogException(409, "NO_PREV_NOTE");
+		}
+		
+		replyNote.setOrigin_note(prevNote.getOrigin_note());
+		replyNote.setPrev_note(prevNote.getSeq()); 
+		
+		this.createNote(replyNote);
+		return replyNote;
 	}
 	/**
 	 * 새로운 쪽지 갯수 반환
@@ -93,12 +129,20 @@ public class NoteService {
 			note.setReadTime(new Date());
 			noteDao.updateReadTime(note);
 		}
+		// 3. 이 쪽에 답글이 있는지 첨부함
+		int count = noteDao.countReplyNote(noteSeq);
+		note.setCount(count);
+		
 		return note;
 	}
 	
 	public Note SenderNote(Integer senderSeq, Integer noteSeq) {
 		Note note = noteDao.SenderNote(senderSeq,noteSeq);
 		
+		// 3. 이 쪽에 답글이 있는지 첨부함
+		int count = noteDao.countReplyNote(noteSeq);
+		note.setCount(count);
+				
 		return note;
 	}
 	public Note deleteNote(String mode, Integer userSeq, Integer noteSeq) {
@@ -130,5 +174,6 @@ public class NoteService {
 		return noteDao.queryMessage(userSeq, current,maxSeq);
 	}
 	
-
+	
+	
 }

@@ -10,13 +10,21 @@ public class User {
 	private String pwhint;
 	private String pwhintans;
 	private String admin;
-	
+	private Integer read_note;
+
 	private Date banTime;
 	
 	/**
 	 * 신고 먹은 글(댓글) 갯수
 	 */
 	private Integer banCnt;
+	
+	public Integer getRead_note() {
+		return read_note;
+	}
+	public void setRead_note(Integer read_note) {
+		this.read_note = read_note;
+	}
 	
 	public String getAdmin() {
 		return admin;

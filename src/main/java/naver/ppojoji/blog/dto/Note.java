@@ -4,16 +4,45 @@ import java.util.Date;
 
 public class Note {
 	private Integer seq;
-	private Integer sender;
-	private Integer receiver;
 	private Date readTime;
 	private Date sendTime;
 	private String sender_Delete;
 	private String receiver_Delete;
 	private String content;
-	private String senderId;
-	private String receiverId;
 	
+	private Integer sender;
+	private String senderId;
+	// private User sender; // 
+	
+	private Integer receiver;
+	private String receiverId;
+	// private User receiver;
+	
+	private Integer prev_note;
+	private Integer origin_note;
+	
+	
+	private Integer count;
+	
+	
+	public Integer getCount() {
+		return count;
+	}
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+	public Integer getPrev_note() {
+		return prev_note;
+	}
+	public void setPrev_note(Integer prev_note) {
+		this.prev_note = prev_note;
+	}
+	public Integer getOrigin_note() {
+		return origin_note;
+	}
+	public void setOrigin_note(Integer origin_note) {
+		this.origin_note = origin_note;
+	}
 	
 	public String getReceiverId() {
 		return receiverId;

@@ -1,5 +1,7 @@
 package naver.ppojoji.blog.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -10,6 +12,7 @@ import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dao.UserDao;
 import naver.ppojoji.blog.dto.Mail;
+import naver.ppojoji.blog.dto.Note;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.mail.MailingService;
 import naver.ppojoji.blog.service.oauth.OAuthService;
@@ -177,8 +180,10 @@ public class UserService {
 			// 뭔가 틀림!
 			throw new BlogException(404, "NO_SEARCH_USER");
 		}
-		
-		
 	}
 
+	public void UpdateReadNote(Integer userSeq, Integer readNote) {
+		User user = userDao.findUser(userSeq);
+		userDao.updateReadNote(user,readNote);
+	}
 }
