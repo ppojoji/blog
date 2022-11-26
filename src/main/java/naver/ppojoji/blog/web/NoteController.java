@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import naver.ppojoji.blog.BlogException;
@@ -69,16 +70,20 @@ public class NoteController {
 	}
 	/**
 	 * 쪽지 목록 조회(보낸 쪽지, 받은쪽지)
+	 * url: http://.../notes/S?last=98
 	 * @param session
-	 * @param type
+	 * @param type - "S" or "R"
 	 * @return
 	 */
 	@GetMapping(value = "/notes/{type}")
-	public List<Note> loadNote(HttpSession session, @PathVariable String type) {
+	public List<Note> loadNote(HttpSession session,
+			@PathVariable String type,
+			@RequestParam(required = false, defaultValue = "100000000") Integer last,
+			@RequestParam(required = false, defaultValue = "5") Integer size) {
 		User loginUser = Util.getUser(session);
 		List<Note> list = null;
 		if(type.equals("S")) {
-			list = noteService.loadSendNote(loginUser.getSeq());			
+			list = noteService.loadSendNote(loginUser.getSeq(), last, size);			
 		} else if(type.equals("R")) {
 			list = noteService.loadReceiverNote(loginUser.getSeq());
 		} else {
@@ -142,5 +147,12 @@ public class NoteController {
 		
 		return list;
 	}
-
+	@GetMapping(value = "/note/history/{noteSeq}/{mode}")
+	public List<Note> NoteHistory(HttpSession session,@PathVariable Integer noteSeq,@PathVariable String mode) {
+		User loginUser = Util.getUser(session);
+		
+		List<Note> note = noteService.noteHistory(loginUser.getSeq(),noteSeq,mode);
+			
+		return note;
+	}
 }

@@ -31,8 +31,14 @@ public class NoteDao {
 		 */
 		return session.selectOne("NoteMapper.countNewNotes", receiverSeq);
 	}
-	public List<Note> loadSendNote(Integer sender) {
-		return session.selectList("NoteMapper.loadSendNote",sender);
+	public List<Note> loadSendNote(Integer sender, Integer lastNoteSeq, Integer size) {
+//		return session.selectList("NoteMapper.loadSendNote",sender);
+		Map map = new HashMap<>();
+		map.put("sender", sender);
+		map.put("lastNoteSeq", lastNoteSeq);
+		map.put("size", size);
+		
+		return session.selectList("NoteMapper.loadSendNoteByRange",map);
 	}
 	public List<Note> loadReceiverNote(Integer receiver) {
 		return session.selectList("NoteMapper.loadReceiverNote",receiver);
@@ -84,5 +90,11 @@ public class NoteDao {
 	}
 	public int countReplyNote(Integer noteSeq) {
 		return session.selectOne("NoteMapper.countReplyNote",noteSeq);
+	}
+	public List<Note> noteHistory(Integer origin_note_Seq) {
+		Map<String,Integer> map = new HashMap<>();
+		map.put("origin_note_Seq", origin_note_Seq);
+		
+		return session.selectList("NoteMapper.noteHistory",map);
 	}
 }

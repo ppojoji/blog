@@ -83,6 +83,12 @@ public class NoteService {
 		
 		replyNote.setOrigin_note(prevNote.getOrigin_note());
 		replyNote.setPrev_note(prevNote.getSeq()); 
+
+		replyNote.setSender(prevNote.getReceiver());
+		replyNote.setSenderId(prevNote.getReceiverId());
+		
+		replyNote.setReceiver(prevNote.getSender());
+		replyNote.setReceiverId(prevNote.getSenderId());
 		
 		this.createNote(replyNote);
 		return replyNote;
@@ -109,8 +115,8 @@ public class NoteService {
 			
 		});
 	}
-	public List<Note> loadSendNote(Integer sender) {
-		List<Note> notes = noteDao.loadSendNote(sender);
+	public List<Note> loadSendNote(Integer sender, Integer lastNoteSeq, Integer size) {
+		List<Note> notes = noteDao.loadSendNote(sender,lastNoteSeq, size);
 		this.stripContent(notes, 20);
 		return notes;
 	}
@@ -172,6 +178,20 @@ public class NoteService {
 	public List<Note> queryMessage(Integer userSeq, Integer maxSeq) {
 		Date current = new Date();
 		return noteDao.queryMessage(userSeq, current,maxSeq);
+	}
+	public List<Note> noteHistory(Integer userSeq, Integer noteSeq, String mode) {
+		if (userSeq == null || noteSeq == null) {
+			// 
+		}
+		System.out.println(userSeq + ", " + noteSeq);
+		Note note = null;
+		if(mode.equals("S")) {
+			 note = noteDao.SenderNote(userSeq, noteSeq);
+		}else {
+			 note = noteDao.readNote(userSeq, noteSeq);
+		}
+		List<Note> notes = noteDao.noteHistory(note.getOrigin_note());
+		return notes;
 	}
 	
 	

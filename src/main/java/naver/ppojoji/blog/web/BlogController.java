@@ -282,8 +282,19 @@ public class BlogController {
 			@RequestParam Integer cate,
 			@RequestParam List<Integer> tag,
 			@RequestParam List<MultipartFile> files) throws JsonProcessingException {
+		
+		List<Category> findNc = cateGoryService.findAllCate();
+		System.out.println("[findNc]" + findNc.toString());
+		//findNc.get("공지게시판");
+		//findNc.get(4);
+		
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다.
 		User loginUser = (User) session.getAttribute(Value.KEY_LOGIN_USER);
+		
+		if(loginUser.getSeq() == 3) {
+			
+		}
+
 		System.out.println("tags: " + tag); // 출력 [34, 53, 1]
 		System.out.println(title);
 		System.out.println(contents);

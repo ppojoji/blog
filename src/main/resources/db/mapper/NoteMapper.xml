@@ -42,6 +42,22 @@
 		 where sender = #{sender}
 		 and sender_delete = 'N'       
 	</select>
+	<select id="loadSendNoteByRange" parameterType="map" resultType="Note">
+	 	 select
+	 	 	<include refid="note_cols"></include>
+		  from  tb_note tn
+		  inner join tb_user tu 
+			 on tn.sender = tu.seq 
+		  inner join tb_user recv 
+			 on tn.receiver = recv.seq     
+		 where sender = #{sender}
+		   and sender_delete = 'N'
+		   <![CDATA[
+			   and tn.seq < #{lastNoteSeq}
+		   ]]>
+		 order by tn.seq desc    
+		 limit #{size}  
+	</select>
 	<select id="loadReceiverNote" parameterType="int" resultType="Note">
 	 	 select 
 	 	 	<include refid="note_cols"></include>
@@ -116,5 +132,15 @@
 		SELECT COUNT(seq)
 		  FROM tb_note
 		 WHERE prev_note = #{prev_note}
+	</select>
+	<select id="noteHistory" parameterType="map" resultType="Note">
+		 select 
+		 	<include refid="note_cols"></include>
+		  from  tb_note tn
+		  inner join tb_user tu 
+			 on tn.sender = tu.seq 
+		  inner join tb_user recv 
+			 on tn.receiver = recv.seq     
+		  where tn.origin_note = #{origin_note_Seq}
 	</select>
  </mapper> 
