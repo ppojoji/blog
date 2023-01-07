@@ -38,10 +38,15 @@ public class NoteDao {
 		map.put("lastNoteSeq", lastNoteSeq);
 		map.put("size", size);
 		
-		return session.selectList("NoteMapper.loadSendNoteByRange",map);
+		return session.selectList("NoteMapper.loadSendNote",map);
 	}
-	public List<Note> loadReceiverNote(Integer receiver) {
-		return session.selectList("NoteMapper.loadReceiverNote",receiver);
+	public List<Note> loadReceiverNote(Integer receiver, Integer lastNoteSeq, Integer size) {
+		Map map = new HashMap<>();
+		map.put("receiver", receiver);
+		map.put("lastNoteSeq", lastNoteSeq);
+		map.put("size", size);
+		
+		return session.selectList("NoteMapper.loadReceiverNote",map);
 	}
 	public Note readNote(Integer receiverSeq, Integer noteSeq) {
 		

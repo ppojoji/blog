@@ -9,6 +9,7 @@
 		<result column="pwd" property="pwd"/>
 		<result column="email" property="email"/>
 		<result column="admin" property="admin"/>
+		<result column="userpic" property="userpic"/>
 	</resultMap>
 	
 	<resultMap type="User" id="banUserMap" extends="UserMap">
@@ -22,7 +23,8 @@
 			pwd,
 			email,
 			admin,
-			read_note
+			read_note,
+			userpic
 		from tb_user
 		where seq = #{id}	
 	</select>
@@ -32,7 +34,8 @@
 			id,
 			email,
 			admin,
-			read_note
+			read_note,
+			userpic
 		from tb_user
 		where seq = #{id}	
 	</select>
@@ -44,14 +47,15 @@
 		 	email,
 		 	admin,
 		 	banTime,
-			read_note
+			read_note,
+			userpic
 		 from tb_user
 		 where id = #{id}
 		 and pwd = #{pwd}	
 	</select>
 	<delete id="userDelete" parameterType="map">
 		delete from tb_user
-			where id = #{id}
+			where seq = #{user.seq}
 				and email = #{email}
 	</delete>
 	<select id="findUserId" parameterType="String" resultType="User">
@@ -61,7 +65,8 @@
 			pwd,
 			email,
 			admin,
-			read_note
+			read_note,
+			userpic
 		from tb_user
 		where id = #{id}
 	</select>
@@ -78,7 +83,8 @@
 			email,
 			admin,
 			autoLoginKey,
-			read_note
+			read_note,
+			userpic
 		from tb_user
 		where autoLoginKey = #{autoLoginKey}
 	</select>
@@ -89,7 +95,8 @@
 			pwd,
 			email,
 			admin,
-			read_note
+			read_note,
+			userpic
 		from tb_user
 		where email = #{email}
 	</select>
@@ -111,7 +118,8 @@
 			admin,
 			autoLoginKey,
 			pwhint,
-			pwhintans 
+			pwhintans,
+			userpic
  		FROM tb_user 
  		WHERE email = #{email}
  		 and pwhint = #{pwhint}
@@ -121,5 +129,10 @@
 		update tb_user
 		set read_note = #{read_note}
 		where seq = #{seq}	
+	</update>
+	<update id="updateProfile" parameterType="user">
+		update tb_user
+		set userpic= #{userpic}
+		where seq = #{seq}
 	</update>
 </mapper>

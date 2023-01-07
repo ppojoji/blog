@@ -28,6 +28,10 @@ public class FileUploadService {
 	@Value("${blog.upfile.root}")
 	String rootDir;
 	
+	public List findUserfiles(Integer userSeq) {
+		List<LocalUpFile> files = fileDao.findUserfiles(userSeq);
+		return files;
+	}
 	public String uploadSave(Integer postSeq, List<MultipartFile> files) {
 		for(MultipartFile file : files) {
 			// 1. 유일한 이름을 가짜로 생성함 - genName

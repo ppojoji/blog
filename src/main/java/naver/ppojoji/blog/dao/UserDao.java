@@ -13,6 +13,11 @@ import naver.ppojoji.blog.dto.User;
 @Repository
 public class UserDao {
 	@Autowired SqlSession session;
+	/**
+	 * pk 로 사용자 정보 조회. 사용자 기본 정보만 반환함
+	 * @param userSeq
+	 * @return
+	 */
 	public User findUser(int userSeq) {
 		return session.selectOne("UserMapper.findUserV1",userSeq);
 	}
@@ -26,9 +31,9 @@ public class UserDao {
 		return session.selectOne("UserMapper.autoLoginKey", autoLoginKey);
 	}
 	
-	public void userDelete(String id, String email) {
+	public void userDelete(User user, String email) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("id", id);
+		map.put("user", user);
 		map.put("email", email);
 		session.delete("UserMapper.userDelete", map);
 	}
@@ -70,5 +75,8 @@ public class UserDao {
 		user.setRead_note(readNote);
 		
 		session.update("UserMapper.updateReadNote",user);
+	}
+	public void updateProfile(User user) {
+		session.update("UserMapper.updateProfile",user);
 	}
 }

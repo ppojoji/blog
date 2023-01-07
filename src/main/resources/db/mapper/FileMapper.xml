@@ -23,4 +23,12 @@
 		delete from tb_files
 		where seq = #{seq}
 	</delete>
+	<select id="findUserfiles" parameterType="int" resultMap="BlogPostMapper.upFileMap">
+		  SELECT
+		  	f.* 
+		  FROM tb_post p
+		  INNER JOIN tb_files f
+		          ON p.seq = f.post
+		  WHERE writer = #{seq}
+	</select>
 </mapper>

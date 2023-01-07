@@ -121,8 +121,8 @@ public class NoteService {
 		return notes;
 	}
 	
-	public List<Note> loadReceiverNote(Integer receiver) {
-		List<Note> notes = noteDao.loadReceiverNote(receiver);
+	public List<Note> loadReceiverNote(Integer receiver, Integer lastNoteSeq, Integer size) {
+		List<Note> notes = noteDao.loadReceiverNote(receiver,lastNoteSeq,size);
 		this.stripContent(notes, 20);
 		return notes;
 	}

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import naver.ppojoji.blog.BlogException;
+import naver.ppojoji.blog.BoardType;
 import naver.ppojoji.blog.Error;
 import naver.ppojoji.blog.YesNo;
 import naver.ppojoji.blog.dao.BlogDao;
@@ -46,7 +47,8 @@ public class BlogService {
 	@Autowired
 	TagService tagService;
 	
-	
+	@Autowired
+	UserService userService;
 	/*
 	List<Post> list = new ArrayList<>();
 	{
@@ -62,10 +64,15 @@ public class BlogService {
 	/**
 	 * 공개글을 조회함
 	 * @param isOpen
+	 * @param lastPostSeq 
+	 * @param size 
+	 * @param dir 
 	 * @return
 	 */
-	public List<Post> findAllPosts(boolean isOpen) {
-		List<Post> posts = blogDao.findAllPost(isOpen);
+	public List<Post> findAllPosts(boolean isOpen, Integer lastPostSeq, Integer size, String dir) {
+//		List<Post> posts = blogDao.findAllPost(isOpen);
+		List<Post> posts = blogDao.findPostByRange(isOpen, lastPostSeq, size,dir);
+		
 		// 1 비번을 "*****" 로 뭉게버림
 		for(int i=0;i<posts.size();i++) {
 			posts.get(i);
@@ -162,12 +169,24 @@ public class BlogService {
 			// HttpSession session) {
 		Category cate = cateDao.findCategory(cateSeq);
 		if (cate == null) {
+			/**
+			 * 카테고리가 없는 예전 글들이 있음.
+			 * 이런 글들은 cateSeq 가 0으로 입력됨
+			 * 0을 null로 변경함
+			 */
 			if(cateSeq == 0) {
 				cateSeq = null;
-			} else {
+			} else  {
 				throw new BlogException(404, "NO_SUCH_CATEGORY");
 			}
 		}
+		
+		// 공지 게시판인지 홗인
+		User writer = userService.findBySeq(writerSeq);
+		if(cate.getType() == BoardType.NC && !writer.isAdmin()) {
+			throw new BlogException(404, "NOT_ADMIN");
+		}
+		
 		Integer postSeq = blogDao.insertPost(title,contents, cateSeq, writerSeq); // 48
 		tagService.bindTags(postSeq,tagSeqs);
 		fileService.uploadSave(postSeq, files);
@@ -306,12 +325,13 @@ public class BlogService {
 		return blogDao.findByCate(cateSeq, delYn, null);
 	}
 	
-	public List<Post> findByCate2(String cateName,Integer userSeq) {
-		Category cate = cateDao.findByCateName(cateName);
+	public List<Post> findByCate2(String cateName,Integer userSeq, Integer basePostSeq, String dir) {
+		Category cate = cateName != null ? cateDao.findByCateName(cateName) : null;
 		if (cate == null) {
 			// 카테고리 없음! 404 예외처리 해줘야 ㅎ
 		}
-		return blogDao.findByCate2(cate.getSeq(),userSeq);
+		Integer cateSeq = cate != null ? cate.getSeq() : null;
+		return blogDao.findByCate2(cateSeq,userSeq,basePostSeq,dir);
 	}
 	
 	public List<Map<String,Object>> findRecentNForCates(int n) {

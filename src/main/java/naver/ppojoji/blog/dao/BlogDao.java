@@ -76,6 +76,16 @@ public class BlogDao {
 		return session.selectList("BlogPostMapper.findAllPost",isOpen);
 	}
 	
+	public List<Post> findPostByRange(boolean isOpen, Integer lastPostSeq, Integer size, String dir) {
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("open", isOpen);
+		map.put("lastPostSeq", lastPostSeq);
+		map.put("size", size);
+		map.put("dir", dir);
+		
+		return session.selectList("BlogPostMapper.findPostByRange",map);
+	}
 	/**
 	 * 주어진 사용자가 자신의 글을 조히홤
 	 * @param searchType 
@@ -226,10 +236,12 @@ public class BlogDao {
 		return session.selectList("BlogPostMapper.findByCateName",cateName);
 	}
 	
-	public List<Post> findByCate2(Integer cateSeq, Integer userSeq) {
+	public List<Post> findByCate2(Integer cateSeq, Integer userSeq, Integer basePostSeq, String dir) {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("cateSeq", cateSeq);
 		map.put("userSeq", userSeq);
+		map.put("basePostSeq", basePostSeq);
+		map.put("dir", dir);
 		
 		return session.selectList("BlogPostMapper.findByCate2", map);
 	}

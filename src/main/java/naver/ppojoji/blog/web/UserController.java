@@ -1,5 +1,7 @@
 package naver.ppojoji.blog.web;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,17 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import naver.ppojoji.blog.BlogException;
 import naver.ppojoji.blog.Error;
 import naver.ppojoji.blog.Util;
+import naver.ppojoji.blog.dto.LocalUpFile;
 import naver.ppojoji.blog.dto.User;
 import naver.ppojoji.blog.service.BanReporterService;
 import naver.ppojoji.blog.service.BookMarkService;
@@ -157,8 +163,17 @@ public class UserController {
 	
 	@RequestMapping(value="/article/api/userDelete", method= RequestMethod.POST, produces =Value.APPLICATION_JSON_CHARSET_UTF_8)
 	@ResponseBody
-	public String userDelete(@RequestParam String id ,@RequestParam String email) throws JsonProcessingException {
-		this.userService.userDelete(id,email);
+	public String userDelete(
+			HttpSession session,
+			@RequestParam String email) throws JsonProcessingException {
+		
+		User user = (User) session.getAttribute("LOGIN_USER");
+		
+		this.userService.userDelete(user,email);
+		
+		session.removeAttribute("LOGIN_USER");
+		session.invalidate();
+		
 		Map<String, Object> res = new HashMap<>();
 		res.put("success",true);
 		return om.writeValueAsString(res); 
@@ -258,5 +273,38 @@ public class UserController {
 		String pwd = user.getPwd();
 		
 		return Util.params("success", true, "id", id, "pwd", pwd);
+	}
+	
+	@GetMapping("/u/profile/{imagePath}")
+	public void UserPic(@PathVariable String imagePath,HttpServletResponse res) throws IOException {
+		// imagePath = "adoek-383k--gddd.jpg"
+		LocalUpFile profile = userService.readProfile(imagePath);
+		
+		String contentType = profile.getContentType();
+		System.out.println("[content type]"+ contentType);
+		OutputStream out = res.getOutputStream();
+		/*
+		 * 1. 브라우저한테 지금 보내는 바이트의 타입이 뭔지... 
+		 */
+		res.setContentType(contentType);
+		/*
+		 * 2. 반드시 데이터의 크기를 알려줘야 함!!
+		 */
+		byte [] data = profile.getContent();
+		res.setContentLength(data.length);
+		IOUtils.write(data, out);
+		out.flush(); // 버퍼에 남아있는 데이터 전부 내려보내라!
+	}
+	@PostMapping("/user/profile")
+	@ResponseBody
+	public Object UpdateProfile(@RequestParam MultipartFile profile, HttpSession session) {
+		//System.out.println("[file]" + profile.getOriginalFilename() + ", " + profile.getSize());
+		User user =  Util.getUser(session);
+		String genFileName = userService.updateProfile(user.getSeq() , profile);
+		
+//		Map<String, Object>param =new HashMap<>();
+//		param.put("userpic", genFileName);
+//		return param;
+		return Util.params("userpic", genFileName);
 	}
 }

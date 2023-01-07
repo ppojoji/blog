@@ -30,4 +30,7 @@ public class FileDao {
 	public int deleteFile(LocalUpFile file) {
 		return session.delete("FileMapper.deleteFile" , file);
 	}
+	public List<LocalUpFile> findUserfiles(Integer userSeq) {
+		return session.selectList("FileMapper.findUserfiles",userSeq);
+	}
 }

@@ -30,25 +30,13 @@
 		  where receiver = #{receiver}
 		   and readtime is null 
 	</select>
-	
-	<select id="loadSendNote" parameterType="int" resultType="Note">
+	<select id="loadSendNote" parameterType="map" resultType="Note">
 	 	 select
 	 	 	<include refid="note_cols"></include>
 		  from  tb_note tn
 		  inner join tb_user tu 
 			 on tn.sender = tu.seq 
-		  inner join tb_user recv 
-			 on tn.receiver = recv.seq     
-		 where sender = #{sender}
-		 and sender_delete = 'N'       
-	</select>
-	<select id="loadSendNoteByRange" parameterType="map" resultType="Note">
-	 	 select
-	 	 	<include refid="note_cols"></include>
-		  from  tb_note tn
-		  inner join tb_user tu 
-			 on tn.sender = tu.seq 
-		  inner join tb_user recv 
+		  left join tb_user recv 
 			 on tn.receiver = recv.seq     
 		 where sender = #{sender}
 		   and sender_delete = 'N'
@@ -58,16 +46,21 @@
 		 order by tn.seq desc    
 		 limit #{size}  
 	</select>
-	<select id="loadReceiverNote" parameterType="int" resultType="Note">
+	<select id="loadReceiverNote" parameterType="map" resultType="Note">
 	 	 select 
 	 	 	<include refid="note_cols"></include>
 		  from  tb_note tn
-		  inner join tb_user tu 
+		  left join tb_user tu 
 			 on tn.sender = tu.seq 
 		  inner join tb_user recv 
 			 on tn.receiver = recv.seq     
 		 where receiver = #{receiver} 
-		 and receiver_delete = 'N'      
+		 and receiver_delete = 'N' 
+		 <![CDATA[
+			   and tn.seq < #{lastNoteSeq}
+		   ]]>
+		 order by tn.seq desc  
+		 limit #{size}       
 	</select>
 	<select id="readNote" parameterType="map" resultType="Note">
 		 select 

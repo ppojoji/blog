@@ -176,6 +176,46 @@
 			and delYn = 'N'
 			order by p.creation_date desc
 	</select>
+	<select id="findPostByRange" resultMap="PostWithCnt" parameterType="map">
+	SELECT
+		<include refid="select_post"></include>
+		,rp.cnt
+		,fcnt.ufile_cnt
+	FROM   tb_post p
+       LEFT JOIN (SELECT p.seq,
+                         Count(p.seq) AS cnt
+                  FROM   tb_post p
+                         INNER JOIN tb_reply r
+                                 ON p.seq = r.parent
+                  WHERE  p.open = 'Y'
+                  GROUP  BY p.seq) rp
+              ON rp.seq = p.seq
+       LEFT JOIN (SELECT p.seq,
+                         Count(tf.seq) AS ufile_cnt
+                  FROM   tb_post p
+                         LEFT JOIN tb_files tf
+                                ON p.seq = tf.post
+                  GROUP  BY p.seq) fcnt
+              ON fcnt.seq = p.seq
+		WHERE  1 = 1
+			and open = #{open,typeHandler=naver.ppojoji.blog.typehandler.StringYnTypeHandler}
+			and delYn = 'N'
+			<if test='dir.equals("next")'>
+				<![CDATA[
+					AND p.seq < #{lastPostSeq}
+					order by p.creation_date desc
+				 ]]>
+
+ 			</if>
+ 			<if test='dir.equals("prev")'>
+				<![CDATA[
+					AND p.seq > #{lastPostSeq}
+					order by p.creation_date asc
+				 ]]>
+ 			</if>
+			
+		LIMIT #{size}
+	</select>
 	<insert id="insertPost" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
 		insert into tb_post (
 			title,
@@ -321,15 +361,33 @@
 		                       LEFT JOIN tb_files f
 		                              ON ( f.post = p.seq
 		                                   AND f.contenttype LIKE 'image%' )
-		                WHERE  p.category = #{cateSeq}
+		                WHERE  1 = 1 
+		                <if test="cateSeq != null">
+		                AND p.category = #{cateSeq}
+		                </if>
 		                AND p.open ='Y'
 						AND p.delyn = 'N'
-		                GROUP  BY p.seq) ref
+						<if test="dir == 'next'">
+							<![CDATA[
+							AND p.seq < #{basePostSeq}
+						 ]]>	
+						</if>
+						<if test="dir == 'prev'">
+							<![CDATA[
+							AND p.seq > #{basePostSeq}
+						 ]]>	
+						</if>
+		                GROUP  BY p.seq
+		                ) ref
 		               LEFT JOIN tb_reply rp
 		                      ON rp.parent = ref.seq
 		               JOIN tb_post p
 		                 ON p.seq = ref.seq
-		        GROUP  BY p.seq) p
+		        GROUP  BY p.seq
+		        <if test="dir == 'next'">ORDER BY p.seq DESC</if>
+		        <if test="dir == 'prev'">ORDER BY p.seq ASC</if>
+		        LIMIT 5
+		        ) p
 		        LEFT JOIN tb_files f
 		                      ON f.seq = p.fileseq
 		       LEFT JOIN tb_posttag tp
@@ -338,7 +396,8 @@
 		              ON t.seq = tp.tag
 		       LEFT JOIN tb_bookmark tb
               		  ON p.pseq = tb.post_ref
-				      AND tb.user_ref = #{userSeq}       
+				      AND tb.user_ref = #{userSeq}  
+				ORDER BY p.pseq DESC  
 	</select>
 	<!-- 
 	<select id="findByCateName" parameterType="String" >

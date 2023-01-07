@@ -30,6 +30,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import naver.ppojoji.blog.BlogException;
+import naver.ppojoji.blog.Error;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dto.BanHistory;
 import naver.ppojoji.blog.dto.Category;
@@ -99,13 +100,19 @@ public class BlogController {
 	@ResponseBody // string 이거 가지고 jsp 찾지 말고 바로 보내라 내가 다 했음
 	public String listPosts(
 			@RequestParam(required = false) String searchType ,
-			@RequestParam(required = false) String keyword) throws JsonProcessingException {
+			@RequestParam(required = false) String keyword,
+			@RequestParam(defaultValue = "1000000000") Integer postSeq,
+			@RequestParam(defaultValue = "5") Integer size,
+			@RequestParam(defaultValue = "next") String dir
+			) throws JsonProcessingException 
+	
+			{
 	//public String listPosts() throws JsonProcessingException {
 		// ctrl + alt + 아래/위 화살표 : 복사해서 만듬
 		//List<Post> list = blogServise.findAllPosts("Y");
 		
 		
-		List<Post> list = blogServise.findAllPosts(true);
+		List<Post> list = blogServise.findAllPosts(true,postSeq,size,dir);
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Category> cata = cateGoryService.findAllCate();
 		/*
@@ -138,15 +145,19 @@ public class BlogController {
 		return map;
 	}
 	
-	@RequestMapping(value="/api/posts/cate/{cateName}")
+	@RequestMapping(value={"/api/posts/cate", "/api/posts/cate/{cateName}"})
 	@ResponseBody
-	public Object ListPostsByCata(@PathVariable String cateName, HttpSession session) {
+	public Object ListPostsByCata(
+			@PathVariable(required = false) String cateName,
+			@RequestParam (defaultValue = "100000000") Integer basePostSeq,
+			@RequestParam (defaultValue = "next") String dir,
+			HttpSession session) {
 //		List<Post> list = blogServise.findByCateName(cateName); // "60"
 		
 		User loginUser = Util.getUser(session);
 		
 		Integer userSeq = loginUser != null ? loginUser.getSeq() : null;
-		List<Post> list = blogServise.findByCate2(cateName, userSeq);
+		List<Post> list = blogServise.findByCate2(cateName, userSeq,basePostSeq,dir);
 		
 		return Util.success("posts", list,"limit", 6*60*60*1000);
 	}
@@ -283,17 +294,14 @@ public class BlogController {
 			@RequestParam List<Integer> tag,
 			@RequestParam List<MultipartFile> files) throws JsonProcessingException {
 		
-		List<Category> findNc = cateGoryService.findAllCate();
-		System.out.println("[findNc]" + findNc.toString());
-		//findNc.get("공지게시판");
-		//findNc.get(4);
-		
 		// FIXME 지금은 무조건 페이지로 넘어가는데, 실제로는 로그인 정보가 있을때만 페이지로 넘어가아 햡니다.
 		User loginUser = (User) session.getAttribute(Value.KEY_LOGIN_USER);
 		
-		if(loginUser.getSeq() == 3) {
-			
+		// FIXME 이거 나중에 LoginCheck 으로 빼내야 함
+		if (loginUser == null) {
+			throw new BlogException(403, Error.LOGIN_REQUIRED);
 		}
+		
 
 		System.out.println("tags: " + tag); // 출력 [34, 53, 1]
 		System.out.println(title);
@@ -637,4 +645,5 @@ public class BlogController {
 		res.put("success", true);
 		return res;
 	}
+	
 }

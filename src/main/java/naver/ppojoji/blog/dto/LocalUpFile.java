@@ -8,6 +8,7 @@ public class LocalUpFile {
 	private String ContentType; 
 	private Integer Post; 
 	private String Origin;
+	private byte [] data;
 	public Integer getSeq() {
 		return Seq;
 	}
@@ -54,6 +55,12 @@ public class LocalUpFile {
 	public String toString() {
 		return "LocalUpFile [Seq=" + Seq + ", OriginalName=" + OriginalName + ", GenName=" + GenName + ", FileSize="
 				+ FileSize + ", ContentType=" + ContentType + ", Post=" + Post + ", Origin=" + Origin + "]";
+	}
+	public byte [] getContent () {
+		return this.data;
+	}
+	public void setContent(byte[] data) {
+		this.data = data;
 	} 
 	
 }

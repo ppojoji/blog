@@ -11,9 +11,18 @@ public class User {
 	private String pwhintans;
 	private String admin;
 	private Integer read_note;
+	private String userpic;
 
 	private Date banTime;
 	
+	
+	public String getUserpic() {
+		return userpic;
+	}
+	public void setUserpic(String userpic) {
+		this.userpic = userpic;
+	}
+
 	/**
 	 * 신고 먹은 글(댓글) 갯수
 	 */
@@ -94,6 +103,13 @@ public class User {
 	}
 	public void setBanTime(Date bandTime) {
 		this.banTime = bandTime;
+	}
+	/**
+	 * 관리자인지 확인함
+	 * @return 관리자이면 true 반환
+	 */
+	public boolean isAdmin() {
+		return this.admin.equals("Y");
 	}
 	/*
 	 * @Override public String toString() { return "User [seq=" + seq + ", id=" + id

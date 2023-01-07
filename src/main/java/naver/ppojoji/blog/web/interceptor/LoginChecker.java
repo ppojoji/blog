@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import naver.ppojoji.blog.BlogException;
+import naver.ppojoji.blog.Error;
 import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dao.UserDao;
 import naver.ppojoji.blog.dto.User;
@@ -19,8 +21,8 @@ import naver.ppojoji.blog.web.Value;
 public class LoginChecker extends HandlerInterceptorAdapter {
 
 	private List<String> urls = Arrays.asList(
-			"/artice/write",
-			"/artice/api/write",
+			"/article/write",
+			"/article/api/write",
 			"/myPage"
 	);
 	
@@ -49,13 +51,33 @@ public class LoginChecker extends HandlerInterceptorAdapter {
 		}
 		
 		if(loginUser == null) {
-			session.setAttribute(Value.KEY_NEXT_URL, uri);
-			/*
-			 * 일단 쿠키를 읽어야 함
+			/**
+			 * 자동 로그인 정보도 없음
 			 */
-//			Cookie [] cookies = req.getCookies();
-			res.sendRedirect(req.getContextPath() + "/login");
-			return false;
+			/*
+			 * if (글쓰기 uri 인 경우) {
+			 *   // axios => 
+			 *   
+			 * } else {
+			 *   
+			 * }
+			 */
+			if(uri.equals("/article/api/write")){
+				res.setStatus(403);
+				res.setContentType("application/json");
+//				res.getWriter().write("[]");
+				res.setContentLength(0);
+				res.sendError(400);
+				throw new BlogException(400, Error.LOGIN_REQUIRED);
+			}else {
+				session.setAttribute(Value.KEY_NEXT_URL, uri);
+				/*
+				 * 일단 쿠키를 읽어야 함
+				 */
+	//			Cookie [] cookies = req.getCookies();
+				res.sendRedirect(req.getContextPath() + "/login");
+				return false;
+			}
 		} else {
 			
 			return true;			

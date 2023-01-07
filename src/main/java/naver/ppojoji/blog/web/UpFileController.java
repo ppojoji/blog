@@ -25,7 +25,7 @@ public class UpFileController {
 	@Autowired 
 	UpFileService upFileService;
 	@RequestMapping(value = "/upfile/{genName}" ,method = RequestMethod.GET)
-	public String UpFile(@PathVariable String genName,
+	public void UpFile(@PathVariable String genName,
 			HttpServletResponse res) throws IOException {
 		LocalUpFile file = null; // req
 		// /blog/WEB-INF/views/upfile/6161c120-1618-4c17-b8f9-4a760a20592e.jsp
@@ -33,7 +33,6 @@ public class UpFileController {
 		if(file == null)
 		{
 			res.setStatus(404);
-			return "error/404";
 			// 404 응답을 전송합니다.
 		} else {
 			System.out.println(file);
@@ -65,7 +64,6 @@ public class UpFileController {
 			res.setContentLength(data.length);
 			IOUtils.write(data, out);
 			out.flush(); // 버퍼에 남아있는 데이터 전부 내려보내라!
-			return null;
 		}
 		
 	}

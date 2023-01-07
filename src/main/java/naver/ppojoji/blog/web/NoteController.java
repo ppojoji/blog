@@ -85,7 +85,7 @@ public class NoteController {
 		if(type.equals("S")) {
 			list = noteService.loadSendNote(loginUser.getSeq(), last, size);			
 		} else if(type.equals("R")) {
-			list = noteService.loadReceiverNote(loginUser.getSeq());
+			list = noteService.loadReceiverNote(loginUser.getSeq(), last, size);
 		} else {
 			throw new BlogException(401, "INVALIDATE_TYPE");
 		}
