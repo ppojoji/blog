@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,9 @@ public class UserService {
 	TagService tagService;
 	@Autowired
 	BlogService blogService;
+	
+	@Autowired
+	StatService statService;
 	
 	@Value("${blog.user.pic}")
 	String profileRootDir;
@@ -176,9 +180,12 @@ public class UserService {
 		user.setPwd(pwd);
 		user.setPwhint(pwhint);
 		user.setPwhintans(pwhintans);
+		user.setJoindate(new Date());
 		
 		// System.out.println(id + " , " + email+ " , " +pwd + " , " + pwhint + " , " + pwhintans); 
 		userDao.join(user);
+		statService.insertUserStat("J", user.getJoindate(), user.getSeq());
+		
 		return user;
 	}
 

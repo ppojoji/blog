@@ -14,7 +14,15 @@ public class User {
 	private String userpic;
 
 	private Date banTime;
+
+	private Date joindate;
 	
+	public Date getJoindate() {
+		return joindate;
+	}
+	public void setJoindate(Date joindate) {
+		this.joindate = joindate;
+	}
 	
 	public String getUserpic() {
 		return userpic;

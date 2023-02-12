@@ -105,7 +105,10 @@
 		set pwd = #{pwd}
 		where email = #{email}
 	</update>
-	<insert id="join" parameterType="User">
+	<insert id="join" parameterType="User"
+		useGeneratedKeys="true"
+		keyProperty="seq"
+		keyColumn="seq">
 		insert into tb_user(id,email,pwd,pwhint,pwhintans)
 		values(#{id},#{email},#{pwd},#{pwhint},#{pwhintans}) 
 	</insert>
