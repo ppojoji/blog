@@ -11,13 +11,6 @@
 		FROM tb_stat_users tu
 		GROUP BY tu.joindate
 	</select>
-	<!-- <select id="statDayJoinUser" resultType="CountStat">
-		SELECT
-			DATE_FORMAT(joindate, '%Y-%m-%d') AS `range`,
-			count(seq) AS cnt
-		FROM tb_user
-		GROUP BY DATE_FORMAT(joindate, '%Y-%m-%d')
-	</select> -->
 	
 	<select id="statWeekJoinUser" resultType="CountStat">
 		SELECT 
@@ -46,5 +39,56 @@
 			#{joindate},
 			#{user_ref}
 		) 
+	</insert>
+	
+	<select id="statDayCommunity" resultType="CountCommunityStat">
+		SELECT DATE_FORMAT(tc.stat_ymd,'%Y-%m-%d') AS `range`,
+		       SUM(CASE WHEN tc.`mode` = 'C' THEN 1 ELSE 0 END) AS postCnt,
+		       SUM(CASE WHEN tc.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
+		 FROM tb_stat_post tc
+		 GROUP BY tc.stat_ymd
+	</select>
+	
+	<select id="statWeekCommunity" resultType="CountCommunityStat">
+		SELECT 
+			concat(tc.stat_year,'-',tc.stat_week) AS `range`,
+		   SUM(CASE WHEN tc.`mode` = 'C' THEN 1 ELSE 0 END) AS postCnt,
+		   SUM(CASE WHEN tc.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
+		FROM tb_stat_post tc
+		GROUP BY tc.stat_year,tc.stat_week 
+	</select>
+	
+	<select id="statMonthCommunity" resultType="CountCommunityStat">
+		SELECT 
+			CONCAT(stat_year,'-',stat_month) AS `range`,
+		   SUM(CASE WHEN tc.`mode` = 'C' THEN 1 ELSE 0 END) AS postCnt,
+		   SUM(CASE WHEN tc.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
+		FROM tb_stat_post tc
+		GROUP BY tc.stat_year, tc.stat_month
+	</select>
+	
+	<select id="statYearCommunity" resultType="CountCommunityStat">
+		SELECT 
+			stat_year AS `range`,
+		   SUM(CASE WHEN tc.`mode` = 'C' THEN 1 ELSE 0 END) AS postCnt,
+		   SUM(CASE WHEN tc.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
+		FROM tb_stat_post tc
+		GROUP BY tc.stat_year
+	</select>
+	
+	<select id="statHourCommunity" resultType="CountCommunityStat">
+		SELECT 
+       		 stat_hour AS `range`, 
+			 COUNT(stat_hour) AS postCnt,
+			 0 AS delCnt
+		 FROM tb_stat_post
+		 WHERE MODE = 'C'
+		 GROUP BY stat_hour
+		 ORDER BY stat_hour
+	</select>
+	
+	<insert id="insertPostStat" parameterType="PostStat" >
+		INSERT INTO tb_stat_post(`MODE`, stat_year ,stat_month, stat_week , stat_ymd, stat_hour, stat_ampm, ref)
+    		 VALUES(#{mode},#{stat_year},#{stat_month},#{stat_week},#{stat_ymd},#{stat_hour}, #{stat_ampm},#{ref})
 	</insert>
 </mapper>

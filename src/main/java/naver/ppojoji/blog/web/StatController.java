@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import naver.ppojoji.blog.dto.CountCommunityStat;
 import naver.ppojoji.blog.dto.CountStat;
 import naver.ppojoji.blog.service.StatService;
 /**
@@ -55,6 +56,61 @@ public class StatController {
 		 * 2021-09-13 12
 		 */
 		List<CountStat> list = statService.statMonthJoinUser();
+		return list;
+	}
+	
+	@GetMapping(value = "/admin/api/stat/community/day")
+	@ResponseBody
+	public Object statDayCommunity() {
+		/*
+		 * 2021-09-11 34
+		 * 2021-09-13 12
+		 */
+		List<CountCommunityStat> list = statService.statDayCommunity();
+		return list;
+	}
+	
+	@GetMapping(value = "/admin/api/stat/community/week")
+	@ResponseBody
+	public Object statWeekCommunity() {
+		/*
+		 * 2021-09-11 34
+		 * 2021-09-13 12
+		 */
+		List<CountCommunityStat> list = statService.statWeekCommunity();
+		return list;
+	}
+	
+	@GetMapping(value = "/admin/api/stat/community/month")
+	@ResponseBody
+	public Object statMonthCommunity() {
+		/*
+		 * 2021-09-11 34
+		 * 2021-09-13 12
+		 */
+		List<CountCommunityStat> list = statService.statMonthCommunity();
+		return list;
+	}
+	
+	@GetMapping(value = "/admin/api/stat/community/year")
+	@ResponseBody
+	public Object statYearCommunity() {
+		/*
+		 * 2021-09-11 34
+		 * 2021-09-13 12
+		 */
+		List<CountCommunityStat> list = statService.statYearCommunity();
+		return list;
+	}
+	
+	@GetMapping(value = "/admin/api/stat/community/hour")
+	@ResponseBody
+	public Object statHourCommunity() {
+		/*
+		 * 2021-09-11 34
+		 * 2021-09-13 12
+		 */
+		List<CountCommunityStat> list = statService.statHourCommunity();
 		return list;
 	}
 }

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import naver.ppojoji.blog.Util;
+import naver.ppojoji.blog.dto.CountCommunityStat;
 import naver.ppojoji.blog.dto.CountStat;
+import naver.ppojoji.blog.dto.PostStat;
 
 @Repository
 public class StatDao {
@@ -41,5 +43,34 @@ public class StatDao {
 				"user_ref", userSeq);
 		
 		session.insert("StatMapper.insertUserStat",param);
+	}
+	
+	public List<CountCommunityStat> statDayCommunity() {
+		List<CountCommunityStat> list = session.selectList("StatMapper.statDayCommunity");
+		return list;
+	}
+
+	public List<CountCommunityStat> statWeekCommunity() {
+		List<CountCommunityStat> list = session.selectList("StatMapper.statWeekCommunity");
+		return list;
+	}
+
+	public List<CountCommunityStat> statMonthCommunity() {
+		List<CountCommunityStat> list = session.selectList("StatMapper.statMonthCommunity");
+		return list;
+	}
+
+	public void insertPostStat(PostStat stat) {
+		session.insert("StatMapper.insertPostStat",stat);
+	}
+
+	public List<CountCommunityStat> statYearCommunity() {
+		List<CountCommunityStat> list = session.selectList("StatMapper.statYearCommunity");
+		return list;
+	}
+
+	public List<CountCommunityStat> statHourCommunity() {
+		List<CountCommunityStat> list = session.selectList("StatMapper.statHourCommunity");
+		return list;
 	}
 }

@@ -28,7 +28,7 @@
        	   <mapping path="/article/api/myinfo"/>
        	   
            <mapping path="/article/write"/>
-           <mapping path="/article/api/write"/>
+           <!-- <mapping path="/article/api/write"/> -->
            <mapping path="/article/update/**"/>
            <mapping path="/article/api/delete/**"/>
            <mapping path="/note/writeMessage/**"/>

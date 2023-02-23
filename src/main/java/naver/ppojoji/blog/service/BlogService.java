@@ -1,6 +1,8 @@
 package naver.ppojoji.blog.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import naver.ppojoji.blog.dto.Category;
 import naver.ppojoji.blog.dto.LocalUpFile;
 import naver.ppojoji.blog.dto.MultiSearch;
 import naver.ppojoji.blog.dto.Post;
+import naver.ppojoji.blog.dto.PostStat;
 import naver.ppojoji.blog.dto.Search;
 import naver.ppojoji.blog.dto.Tag;
 import naver.ppojoji.blog.dto.User;
@@ -49,6 +52,10 @@ public class BlogService {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	StatService statService;
+	
 	/*
 	List<Post> list = new ArrayList<>();
 	{
@@ -187,10 +194,34 @@ public class BlogService {
 			throw new BlogException(404, "NOT_ADMIN");
 		}
 		
+//		Date current = new Date(); // 현재 시간
+		/*
+		 * FIXME current 시간값을 글 작성에 반영해야함 
+		 */
 		Integer postSeq = blogDao.insertPost(title,contents, cateSeq, writerSeq); // 48
+		
+		
 		tagService.bindTags(postSeq,tagSeqs);
 		fileService.uploadSave(postSeq, files);
+
 		
+		Calendar current = Calendar.getInstance();
+		
+		PostStat stat = new PostStat();
+		stat.setMode("C");
+		stat.setStat_year(current.get(Calendar.YEAR));
+		stat.setStat_week(current.get(Calendar.WEEK_OF_YEAR));
+		stat.setStat_month(current.get(Calendar.MONTH) + 1);
+		stat.setStat_ymd(current.getTime());
+		stat.setStat_hour(current.get(Calendar.HOUR_OF_DAY));
+		
+		int apm = current.get(Calendar.AM_PM);
+		String ampm = apm == 0 ?  "AM" : "PM";
+		stat.setStat_ampm(ampm);
+		
+		stat.setRef(postSeq);
+		
+		statService.insertPostStat(stat);
 		//long seq = nextSeq();
 		//list.add(new Post(seq, title, contents, new Date(), 0));
 	}
@@ -304,12 +335,37 @@ public class BlogService {
 		List<Post> list =blogDao.delYn();
 		return list;
 	}
+	/**
+	 * 사용자가 글을 삭제함(soft delete)
+	 * 
+	 * @param userSeq
+	 * @param pid
+	 */
 	public void setAsdeleted(Integer userSeq, Integer pid) {
 		// pid의 작성자를 가져옴
 		Post post = this.readPosts(pid, false);
 		
 		if(userSeq == post.getWriter().getSeq()) {
 			blogDao.setAsdeleted(pid);
+			
+			Calendar current = Calendar.getInstance();
+			
+			PostStat stat = new PostStat();
+			
+			stat.setMode("D");
+			stat.setStat_year(current.get(Calendar.YEAR));
+			stat.setStat_week(current.get(Calendar.WEEK_OF_YEAR));
+			stat.setStat_month(current.get(Calendar.MONTH) + 1);
+			stat.setStat_ymd(current.getTime());
+			stat.setStat_hour(current.get(Calendar.HOUR_OF_DAY));
+			
+			int apm = current.get(Calendar.AM_PM);
+			String ampm = apm == 0 ?  "AM" : "PM";
+			stat.setStat_ampm(ampm);
+			
+			stat.setRef(post.getSeq());
+			
+			statService.insertPostStat(stat);
 		}else {
 			throw new BlogException(403, Error.NOT_OWNER_OF_POST);
 		}
