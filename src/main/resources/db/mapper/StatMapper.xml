@@ -3,12 +3,15 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="StatMapper">
-	<select id="statDayJoinUser" resultType="CountStat">
+	<select id="statDayJoinUser" resultType="CountStat" parameterType="map">
 		SELECT 
 			tu.joindate  AS `range`,
 		   SUM(CASE WHEN tu.`mode` = 'J' THEN 1 ELSE 0 END) AS joinCnt,
 		   SUM(CASE WHEN tu.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
 		FROM tb_stat_users tu
+		<![CDATA[
+			WHERE joindate >= #{start} and joindate < #{end} 
+		]]>
 		GROUP BY tu.joindate
 	</select>
 	
@@ -41,29 +44,33 @@
 		) 
 	</insert>
 	
-	<select id="statDayCommunity" resultType="CountCommunityStat">
+	<select id="statDayCommunity" resultType="CountCommunityStat" parameterType="map">
 		SELECT DATE_FORMAT(tc.stat_ymd,'%Y-%m-%d') AS `range`,
 		       SUM(CASE WHEN tc.`mode` = 'C' THEN 1 ELSE 0 END) AS postCnt,
 		       SUM(CASE WHEN tc.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
 		 FROM tb_stat_post tc
+		 WHERE stat_year = #{year}
+		  AND stat_month = #{month} 
 		 GROUP BY tc.stat_ymd
 	</select>
 	
-	<select id="statWeekCommunity" resultType="CountCommunityStat">
+	<select id="statWeekCommunity" resultType="CountCommunityStat" parameterType="map">
 		SELECT 
 			concat(tc.stat_year,'-',tc.stat_week) AS `range`,
 		   SUM(CASE WHEN tc.`mode` = 'C' THEN 1 ELSE 0 END) AS postCnt,
 		   SUM(CASE WHEN tc.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
 		FROM tb_stat_post tc
+		WHERE stat_year = #{year}
+		  AND stat_month = #{month} 
 		GROUP BY tc.stat_year,tc.stat_week 
 	</select>
-	
-	<select id="statMonthCommunity" resultType="CountCommunityStat">
+	<select id="statMonthCommunity" resultType="CountCommunityStat" parameterType="string">
 		SELECT 
 			CONCAT(stat_year,'-',stat_month) AS `range`,
 		   SUM(CASE WHEN tc.`mode` = 'C' THEN 1 ELSE 0 END) AS postCnt,
 		   SUM(CASE WHEN tc.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
 		FROM tb_stat_post tc
+		WHERE stat_year = #{year}
 		GROUP BY tc.stat_year, tc.stat_month
 	</select>
 	

@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.dao;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +21,12 @@ public class StatDao {
 	@Autowired
 	SqlSession session;
 	
-	public List<CountStat> statDayJoinUser() {
-		List<CountStat> list = session.selectList("StatMapper.statDayJoinUser");
+	public List<CountStat> statDayJoinUser(LocalDate start, LocalDate end) {
+		Map map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		List<CountStat> list = session.selectList("StatMapper.statDayJoinUser",map);
 		return list;
 	}
 
@@ -45,18 +50,26 @@ public class StatDao {
 		session.insert("StatMapper.insertUserStat",param);
 	}
 	
-	public List<CountCommunityStat> statDayCommunity() {
-		List<CountCommunityStat> list = session.selectList("StatMapper.statDayCommunity");
+	public List<CountCommunityStat> statDayCommunity(String year, String month) {
+		Map map = new HashMap<>();
+		map.put("year",year);
+		map.put("month",month);
+		
+		List<CountCommunityStat> list = session.selectList("StatMapper.statDayCommunity",map);
 		return list;
 	}
 
-	public List<CountCommunityStat> statWeekCommunity() {
-		List<CountCommunityStat> list = session.selectList("StatMapper.statWeekCommunity");
+	public List<CountCommunityStat> statWeekCommunity(String year, String month) {
+		Map map = new HashMap<>();
+		map.put("year",year);
+		map.put("month",month);
+		
+		List<CountCommunityStat> list = session.selectList("StatMapper.statWeekCommunity",map);
 		return list;
 	}
 
-	public List<CountCommunityStat> statMonthCommunity() {
-		List<CountCommunityStat> list = session.selectList("StatMapper.statMonthCommunity");
+	public List<CountCommunityStat> statMonthCommunity(String year) {
+		List<CountCommunityStat> list = session.selectList("StatMapper.statMonthCommunity",year);
 		return list;
 	}
 

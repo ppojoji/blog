@@ -1,5 +1,6 @@
 package naver.ppojoji.blog.service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import naver.ppojoji.blog.Util;
 import naver.ppojoji.blog.dao.StatDao;
 import naver.ppojoji.blog.dto.CountCommunityStat;
 import naver.ppojoji.blog.dto.CountStat;
@@ -24,10 +26,13 @@ public class StatService {
 	 * yyyy-mm-dd 23
 	 * yyyy-mm-dd 34
 	 * yyyy-mm-dd 09
+	 * @param month 
+	 * @param year 
 	 * 
 	 */
-	public List<CountStat> statDayJoinUser() {
-		List<CountStat> list = statDao.statDayJoinUser();
+	public List<CountStat> statDayJoinUser(String year, String month) {
+		LocalDate [] range = Util.getDateRange(year, month); // 
+		List<CountStat> list = statDao.statDayJoinUser(range[0], range[1]);
 		return list;
 	}
 
@@ -50,18 +55,18 @@ public class StatService {
 		statDao.insertUserStat(mode, joinDate, userSeq);
 	}
 	
-	public List<CountCommunityStat> statDayCommunity() {
-		List<CountCommunityStat> list = statDao.statDayCommunity();
+	public List<CountCommunityStat> statDayCommunity(String year, String month) {
+		List<CountCommunityStat> list = statDao.statDayCommunity(year,month);
 		return list;
 	}
 
-	public List<CountCommunityStat> statWeekCommunity() {
-		List<CountCommunityStat> list = statDao.statWeekCommunity();
+	public List<CountCommunityStat> statWeekCommunity(String year, String month) {
+		List<CountCommunityStat> list = statDao.statWeekCommunity(year,month);
 		return list;
 	}
 
-	public List<CountCommunityStat> statMonthCommunity() {
-		List<CountCommunityStat> list = statDao.statMonthCommunity();
+	public List<CountCommunityStat> statMonthCommunity(String year) {
+		List<CountCommunityStat> list = statDao.statMonthCommunity(year);
 		return list;
 	}
 

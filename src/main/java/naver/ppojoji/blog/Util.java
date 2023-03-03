@@ -3,8 +3,11 @@ package naver.ppojoji.blog;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -124,5 +127,20 @@ public class Util {
 		if (value == null || value.trim().equals("")) {
 			throw new BlogException(400, cause);
 		}
+	}
+	
+	public static LocalDate[] getDateRange(String year, String month) {
+		Integer y = Integer.parseInt(year);
+		Integer m = Integer.parseInt(month);
+		
+		LocalDate start = LocalDate.of(y, m, 1);
+		LocalDate end = start.plusMonths(1);
+		
+		LocalDate [] range = new LocalDate[2];
+		range[0]= start;
+		range[1] = end;
+		return range;
+		
+		
 	}
 }

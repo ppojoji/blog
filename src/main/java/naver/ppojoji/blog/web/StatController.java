@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import naver.ppojoji.blog.dto.CountCommunityStat;
@@ -28,12 +29,13 @@ public class StatController {
 	
 	@GetMapping(value = "/admin/api/stat/user/day")
 	@ResponseBody
-	public Object statDayJoinUser() {
+	public Object statDayJoinUser(@RequestParam (name="y") String year
+			,@RequestParam (name="m") String month) {
 		/*
 		 * 2021-09-11 34
 		 * 2021-09-13 12
 		 */
-		List<CountStat> list = statService.statDayJoinUser();
+		List<CountStat> list = statService.statDayJoinUser(year,month);
 		return list;
 	}
 	
@@ -58,37 +60,43 @@ public class StatController {
 		List<CountStat> list = statService.statMonthJoinUser();
 		return list;
 	}
-	
+	// /admin/api/stat/community/day
+	// /admin/api/stat/community/day ?y=dkdkd&m=333
+	// /admin/api/stat/community/day ?d=333&dsxx=3323323
 	@GetMapping(value = "/admin/api/stat/community/day")
 	@ResponseBody
-	public Object statDayCommunity() {
+	public Object statDayCommunity(
+			@RequestParam(name = "y") String year,
+			@RequestParam(name = "m") String month) {
 		/*
 		 * 2021-09-11 34
 		 * 2021-09-13 12
 		 */
-		List<CountCommunityStat> list = statService.statDayCommunity();
+		System.out.println("[adfkjflajf]" + year + ", month: " + month);
+		List<CountCommunityStat> list = statService.statDayCommunity(year,month);
 		return list;
 	}
 	
 	@GetMapping(value = "/admin/api/stat/community/week")
 	@ResponseBody
-	public Object statWeekCommunity() {
+	public Object statWeekCommunity(@RequestParam (name="y") String year 
+			,@RequestParam (name="m") String month) {
 		/*
 		 * 2021-09-11 34
 		 * 2021-09-13 12
 		 */
-		List<CountCommunityStat> list = statService.statWeekCommunity();
+		List<CountCommunityStat> list = statService.statWeekCommunity(year , month);
 		return list;
 	}
 	
 	@GetMapping(value = "/admin/api/stat/community/month")
 	@ResponseBody
-	public Object statMonthCommunity() {
+	public Object statMonthCommunity(@RequestParam (name="y") String year) {
 		/*
 		 * 2021-09-11 34
 		 * 2021-09-13 12
 		 */
-		List<CountCommunityStat> list = statService.statMonthCommunity();
+		List<CountCommunityStat> list = statService.statMonthCommunity(year);
 		return list;
 	}
 	
