@@ -15,21 +15,27 @@
 		GROUP BY tu.joindate
 	</select>
 	
-	<select id="statWeekJoinUser" resultType="CountStat">
+	<select id="statWeekJoinUser" resultType="CountStat" parameterType="map">
 		SELECT 
 			DATE_FORMAT(tu.joindate,'%Y-%U') AS `range`,
 		   SUM(CASE WHEN tu.`mode` = 'J' THEN 1 ELSE 0 END) AS joinCnt,
 		   SUM(CASE WHEN tu.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
 		FROM tb_stat_users tu
+		<![CDATA[
+			WHERE joindate >= #{start} and joindate < #{end} 
+		]]>
 		GROUP BY DATE_FORMAT(tu.joindate,'%Y-%U')
 	</select>
 	
-	<select id="statMonthJoinUser" resultType="CountStat">
+	<select id="statMonthJoinUser" parameterType="map" resultType="CountStat">
 		SELECT 
 			DATE_FORMAT(tu.joindate,'%Y-%m') AS `range`,
 		   SUM(CASE WHEN tu.`mode` = 'J' THEN 1 ELSE 0 END) AS joinCnt,
 		   SUM(CASE WHEN tu.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
 		FROM tb_stat_users tu
+		<![CDATA[
+			WHERE joindate >= #{start} and joindate < #{end} 
+		]]>
 		GROUP BY DATE_FORMAT(tu.joindate,'%Y-%m')
 	</select>
 	<insert id="insertUserStat" parameterType="map">
@@ -61,7 +67,6 @@
 		   SUM(CASE WHEN tc.`mode` = 'D' THEN 1 ELSE 0 END) AS delCnt
 		FROM tb_stat_post tc
 		WHERE stat_year = #{year}
-		  AND stat_month = #{month} 
 		GROUP BY tc.stat_year,tc.stat_week 
 	</select>
 	<select id="statMonthCommunity" resultType="CountCommunityStat" parameterType="string">

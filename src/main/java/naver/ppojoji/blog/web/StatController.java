@@ -41,23 +41,23 @@ public class StatController {
 	
 	@GetMapping(value = "/admin/api/stat/user/week")
 	@ResponseBody
-	public Object statWeekJoinUser() {
+	public Object statWeekJoinUser(@RequestParam (name="y") String year) {
 		/*
 		 * 2021-09-11 34
 		 * 2021-09-13 12
 		 */
-		List<CountStat> list = statService.statWeekJoinUser();
+		List<CountStat> list = statService.statWeekJoinUser(year);
 		return list;
 	}
 	
 	@GetMapping(value = "/admin/api/stat/user/month")
 	@ResponseBody
-	public Object statMonthJoinUser() {
+	public Object statMonthJoinUser(@RequestParam (name="y") String year) {
 		/*
 		 * 2021-09-11 34
 		 * 2021-09-13 12
 		 */
-		List<CountStat> list = statService.statMonthJoinUser();
+		List<CountStat> list = statService.statMonthJoinUser(year);
 		return list;
 	}
 	// /admin/api/stat/community/day
@@ -79,13 +79,12 @@ public class StatController {
 	
 	@GetMapping(value = "/admin/api/stat/community/week")
 	@ResponseBody
-	public Object statWeekCommunity(@RequestParam (name="y") String year 
-			,@RequestParam (name="m") String month) {
+	public Object statWeekCommunity(@RequestParam (name="y") String year) {
 		/*
 		 * 2021-09-11 34
 		 * 2021-09-13 12
 		 */
-		List<CountCommunityStat> list = statService.statWeekCommunity(year , month);
+		List<CountCommunityStat> list = statService.statWeekCommunity(year);
 		return list;
 	}
 	

@@ -30,13 +30,21 @@ public class StatDao {
 		return list;
 	}
 
-	public List<CountStat> statWeekJoinUser() {
-		List<CountStat> list = session.selectList("StatMapper.statWeekJoinUser");
+	public List<CountStat> statWeekJoinUser(LocalDate start, LocalDate end) {
+		Map map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		List<CountStat> list = session.selectList("StatMapper.statWeekJoinUser",map);
 		return list;
 	}
 
-	public List<CountStat> statMonthJoinUser() {
-		List<CountStat> list = session.selectList("StatMapper.statMonthJoinUser");
+	public List<CountStat> statMonthJoinUser(LocalDate start, LocalDate end) {
+		Map map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		List<CountStat> list = session.selectList("StatMapper.statMonthJoinUser",map);
 		return list;
 	}
 
@@ -51,18 +59,20 @@ public class StatDao {
 	}
 	
 	public List<CountCommunityStat> statDayCommunity(String year, String month) {
+	//public List<CountCommunityStat> statDayCommunity(LocalDate start, LocalDate end) {
 		Map map = new HashMap<>();
 		map.put("year",year);
 		map.put("month",month);
+		//map.put("start",start);
+		//map.put("end",end);
 		
 		List<CountCommunityStat> list = session.selectList("StatMapper.statDayCommunity",map);
 		return list;
 	}
 
-	public List<CountCommunityStat> statWeekCommunity(String year, String month) {
+	public List<CountCommunityStat> statWeekCommunity(String year) {
 		Map map = new HashMap<>();
 		map.put("year",year);
-		map.put("month",month);
 		
 		List<CountCommunityStat> list = session.selectList("StatMapper.statWeekCommunity",map);
 		return list;

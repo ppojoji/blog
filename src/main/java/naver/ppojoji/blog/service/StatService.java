@@ -36,13 +36,15 @@ public class StatService {
 		return list;
 	}
 
-	public List<CountStat> statWeekJoinUser() {
-		List<CountStat> list = statDao.statWeekJoinUser();
+	public List<CountStat> statWeekJoinUser(String year) {
+		LocalDate [] range = Util.getYearRange(year);
+		List<CountStat> list = statDao.statWeekJoinUser(range[0], range[1]);
 		return list;
 	}
 
-	public List<CountStat> statMonthJoinUser() {
-		List<CountStat> list = statDao.statMonthJoinUser();
+	public List<CountStat> statMonthJoinUser(String year) {
+		LocalDate [] range = Util.getYearRange(year);
+		List<CountStat> list = statDao.statMonthJoinUser(range[0],range[1]);
 		return list;
 	}
 	/**
@@ -56,16 +58,22 @@ public class StatService {
 	}
 	
 	public List<CountCommunityStat> statDayCommunity(String year, String month) {
+		//LocalDate [] range = Util.getDateRange(year, month);
+		//List<CountCommunityStat> list = statDao.statDayCommunity(range[0],range[1]);
 		List<CountCommunityStat> list = statDao.statDayCommunity(year,month);
 		return list;
 	}
 
-	public List<CountCommunityStat> statWeekCommunity(String year, String month) {
-		List<CountCommunityStat> list = statDao.statWeekCommunity(year,month);
+	public List<CountCommunityStat> statWeekCommunity(String year) {
+		//LocalDate [] range = Util.getDateRange(year, month);
+		//List<CountCommunityStat> list = statDao.statWeekCommunity(range[0],range[1]);
+		List<CountCommunityStat> list = statDao.statWeekCommunity(year);
 		return list;
 	}
 
 	public List<CountCommunityStat> statMonthCommunity(String year) {
+		//LocalDate [] range = Util.getYearRange(year);
+		//List<CountCommunityStat> list = statDao.statMonthCommunity(range[0],range[1]);
 		List<CountCommunityStat> list = statDao.statMonthCommunity(year);
 		return list;
 	}

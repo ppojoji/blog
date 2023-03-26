@@ -143,4 +143,18 @@ public class Util {
 		
 		
 	}
+	public static LocalDate[] getYearRange(String year) {
+		Integer y = Integer.parseInt(year);
+		
+		LocalDate start = LocalDate.of(y,1, 1);
+		LocalDate end = LocalDate.of(y+1,1, 1);
+		
+		LocalDate [] range = new LocalDate[2];
+		range[0]= start;
+		range[1] = end;
+		return range;
+		
+		
+	}
+	
 }
